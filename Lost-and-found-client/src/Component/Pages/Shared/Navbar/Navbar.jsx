@@ -4,13 +4,13 @@ import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
     return (
-        <div className="h-40 w-full bg-lime-700 mb-5 text-white">
+        <div className="h-40 w-full bg-[#000B58] mb-5 text-white">
 
             <div className=''>
                 <div className='ml-32 mr-32 flex justify-between p-5'>
                     <h1 className='mr-5'><NavLink to='/'>Lost & Found</NavLink></h1>
                     <div className='flex space-x-2 items-center'>
-                        <span className='text-5xl'><IoPersonCircleOutline /></span>
+                        <span className='text-5xl'><a href="/profile"><IoPersonCircleOutline /></a></span>
                         <NavLink to="/login">Login</NavLink>
                     </div>
                 </div>

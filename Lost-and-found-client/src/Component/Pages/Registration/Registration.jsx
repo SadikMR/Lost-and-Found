@@ -2,8 +2,8 @@ import React from 'react';
 
 const Registration = () => {
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
+        <div className="flex items-center justify-center bg-[#FAF7F0]">
+            <div className="max-w-5xl bg-[#EADBC8] rounded-lg shadow-lg p-8">
                 {/* Heading */}
                 <h2 className="text-2xl font-bold text-center text-gray-800">Registration</h2>
                 <p className="text-center text-gray-600 mt-2">Fill up the form to create your account</p>
@@ -12,123 +12,123 @@ const Registration = () => {
                 <form className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Full Name */}
                     <div>
-                        <label htmlFor="fullname" className="block text-sm font-medium text-gray-700">Full Name</label>
+                        <label htmlFor="fullname" className="block text-sm font-medium text-black">Full Name *</label>
                         <input
                             type="text"
                             id="fullname"
                             placeholder="Enter your full name"
                             required
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
                         />
                     </div>
 
                     {/* Username */}
                     <div>
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+                        <label htmlFor="username" className="block text-sm font-medium text-black">Username</label>
                         <input
                             type="text"
                             id="username"
                             placeholder="Enter your username"
                             required
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Email */}
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                        <label htmlFor="email" className="block text-sm font-medium text-black">Email</label>
                         <input
                             type="email"
                             id="email"
                             placeholder="Enter your email"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Phone Number */}
                     <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <label htmlFor="phone" className="block text-sm font-medium text-black">Phone Number</label>
                         <input
                             type="text"
                             id="phone"
                             placeholder="Enter your phone number"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Division */}
                     <div>
-                        <label htmlFor="division" className="block text-sm font-medium text-gray-700">Division</label>
+                        <label htmlFor="division" className="block text-sm font-medium text-black">Division</label>
                         <input
                             type="text"
                             id="division"
                             placeholder="Enter your division"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Zilla */}
                     <div>
-                        <label htmlFor="zilla" className="block text-sm font-medium text-gray-700">Zilla</label>
+                        <label htmlFor="zilla" className="block text-sm font-medium text-black">Zilla</label>
                         <input
                             type="text"
                             id="zilla"
                             placeholder="Enter your zilla"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Upzilla */}
                     <div>
-                        <label htmlFor="upzilla" className="block text-sm font-medium text-gray-700">Upzilla</label>
+                        <label htmlFor="upzilla" className="block text-sm font-medium text-black">Upzilla</label>
                         <input
                             type="text"
                             id="upzilla"
                             placeholder="Enter your upzilla"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Village */}
                     <div>
-                        <label htmlFor="village" className="block text-sm font-medium text-gray-700">Village</label>
+                        <label htmlFor="village" className="block text-sm font-medium text-black">Village</label>
                         <input
                             type="text"
                             id="village"
                             placeholder="Enter your village"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Password */}
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-black">Password</label>
                         <input
                             type="password"
                             id="password"
                             placeholder="Enter your password"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Confirm Password */}
                     <div>
-                        <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                        <label htmlFor="confirm-password" className="block text-sm font-medium text-black">Confirm Password</label>
                         <input
                             type="password"
                             id="confirm-password"
                             placeholder="Confirm your password"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
 
                     {/* Image Upload */}
                     <div className="md:col-span-2">
-                        <label htmlFor="image" className="block text-sm font-medium text-gray-700">Upload Image</label>
+                        <label htmlFor="image" className="block text-sm font-medium text-black">Upload Image</label>
                         <input
                             type="file"
                             id="image"
-                            className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-white"
                         />
                     </div>
                 </form>

@@ -2,8 +2,8 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <div className='max-w-6xl mx-auto'>
-            <footer className="footer bg-base-200 text-base-content p-5">
+        <div className=' mx-auto bg-[#445069] text-white opacity-80'>
+            <footer className="footer p-5">
                 <aside>
                     <svg
                         width="50"
@@ -44,7 +44,7 @@ const Footer = () => {
                 </nav>
 
             </footer>
-            <footer className="footer footer-center bg-base-200 text-base-content p-4">
+            <footer className="footer footer-center p-4">
                 <aside>
                     <p>Copyright © {new Date().getFullYear()} - All right reserved by ACME Industries Ltd</p>
                 </aside>

@@ -2,8 +2,8 @@ import React from 'react';
 
 const Login = () => {
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <div className="flex items-center justify-center bg-[#FAF7F0] min-h-screen">
+            <div className="w-full max-w-md bg-[#EADBC8] rounded-lg shadow-lg p-6">
                 {/* Heading */}
                 <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
                 <p className="text-center text-gray-600 mt-1">Welcome back! Please login to your account.</p>
@@ -16,7 +16,7 @@ const Login = () => {
                         id="email"
                         placeholder="Enter your email"
                         required
-                        className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
                     />
                 </div>
 
@@ -28,8 +28,9 @@ const Login = () => {
                         id="password"
                         placeholder="Enter your password"
                         required
-                        className="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black "
                     />
+
                 </div>
 
                 {/* Login Button */}
