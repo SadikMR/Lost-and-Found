@@ -1,54 +1,45 @@
-import React from 'react';
+import React from "react";
 import { IoPersonCircleOutline } from "react-icons/io5";
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import logo from "../../../../assets/logo.jpg";
 
 const Navbar = () => {
-    return (
-        <div className="h-40 w-full bg-[#000B58] mb-5 text-white">
+  return (
+    <div className="h-auto w-full bg-white text-black border-b-2 border-gray-300">
+      {/* Header Section */}
+      <div className="px-4 sm:px-8 lg:px-32 py-8">
+        <div className="flex flex-row justify-between items-start">
+          {/* Website Name */}
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-wide mb-4 lg:mb-0 text-gray-800">
+            <NavLink to="/" className="flex items-center space-x-2">
+              <img src={logo} alt="Lost & Found Logo" className="h-12 w-12" />
+              <span className="text-3xl font-semibold text-[#0A97B0] hover:text-black">
+                Lost & Found
+              </span>
+            </NavLink>
+          </h1>
 
-            <div className=''>
-                <div className='ml-32 mr-32 flex justify-between p-5'>
-                    <h1 className='mr-5'><NavLink to='/'>Lost & Found</NavLink></h1>
-                    <div className='flex space-x-2 items-center'>
-                        <span className='text-5xl'><a href="/profile"><IoPersonCircleOutline /></a></span>
-                        <NavLink to="/login">Login</NavLink>
-                    </div>
-                </div>
-                <form className="flex ml-40">
-                    {/* Category Input */}
-                    <input
-                        type="text"
-                        placeholder="Category"
-                        className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4"
-                    />
-
-                    {/* Location Input */}
-                    <input
-                        type="text"
-                        placeholder="Location"
-                        className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4"
-                    />
-
-                    {/* Lost or Found Dropdown */}
-                    <select
-                        value={status}
-                        className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4"
-                    >
-                        <option value="lost">Lost</option>
-                        <option value="found">Found</option>
-                    </select>
-
-                    {/* Search Button */}
-                    <button
-                        type="submit"
-                        className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-900 focus:outline-none w-full lg:w-auto"
-                    >
-                        Search
-                    </button>
-                </form>
-            </div>
+          {/* Profile & Login */}
+          <div className="flex items-center space-x-5">
+            <span className="text-3xl sm:text-4xl">
+              <a href="/profile">
+                <IoPersonCircleOutline />
+              </a>
+            </span>
+            <NavLink
+              to="/login"
+              className="text-lg sm:text-xl font-bold text-gray-700 hover:text-black hover:underline"
+            >
+              Login
+            </NavLink>
+          </div>
         </div>
-    );
+      </div>
+
+      {/* Horizontal Line */}
+      <div className="border-t-2 border-gray-300 w-full"></div>
+    </div>
+  );
 };
 
 export default Navbar;
