@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
+import pic1 from '../../assets/item.jpg'
 
 const Details = () => {
     return (
@@ -9,7 +10,7 @@ const Details = () => {
                 {/* Left Column */}
                 <div className="col-span-2">
                     <img
-                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                        src={pic1}
                         alt="Shoes"
                         className="w-full h-64 object-cover rounded-md"
                     />

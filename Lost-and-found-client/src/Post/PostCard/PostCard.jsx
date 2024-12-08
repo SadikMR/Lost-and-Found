@@ -33,7 +33,7 @@ const Post = () => {
           </ul>
           <div className="card-actions justify-end">
             <button className="btn bg-buttonColor1 text-white hover:bg-buttonColor3 hover:scale-105 transition-all duration-300">
-              Show more
+              <a href='/details'>Show more</a>
             </button>
           </div>
         </div>
@@ -68,7 +68,7 @@ const Post = () => {
           </ul>
           <div className="card-actions justify-end">
             <button className="btn bg-buttonColor1 text-white hover:bg-buttonColor3 hover:scale-105 transition-all duration-300">
-              Show more
+              <a href='/details'>Show more</a>
             </button>
           </div>
         </div>
@@ -103,7 +103,7 @@ const Post = () => {
           </ul>
           <div className="card-actions justify-end">
             <button className="btn bg-buttonColor1 text-white hover:bg-buttonColor3 hover:scale-105 transition-all duration-300">
-              Show more
+              <a href='/details'>Show more</a>
             </button>
           </div>
         </div>
@@ -138,7 +138,7 @@ const Post = () => {
           </ul>
           <div className="card-actions justify-end">
             <button className="btn bg-buttonColor1 text-white hover:bg-buttonColor3 hover:scale-105 transition-all duration-300">
-              Show more
+              <a href='/details'>Show more</a>
             </button>
           </div>
         </div>
