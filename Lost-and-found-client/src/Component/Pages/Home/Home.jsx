@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLoaderData } from "react-router-dom";
 import cover from "../../../assets/cover.jpg";
 import Post from "../../../Post/PostCard/PostCard";
 

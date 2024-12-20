@@ -18,15 +18,17 @@ export const router = createBrowserRouter([
       [
         {
           path: '/',
-          element: <Home></Home>
+          element: <Home></Home>,
         },
         {
           path: '/lost',
-          element: <PrivateRoute><LostPost></LostPost></PrivateRoute>
+          element: <PrivateRoute><LostPost></LostPost></PrivateRoute>,
+          loader: () => fetch('http://localhost:5000/lostpost')
         },
         {
           path: '/found',
-          element: <PrivateRoute><FoundPost></FoundPost></PrivateRoute>
+          element: <PrivateRoute><FoundPost></FoundPost></PrivateRoute>,
+          loader: () => fetch('http://localhost:5000/foundpost')
         },
         {
           path: '/details',
