@@ -3,7 +3,7 @@ import profile_img from '../../../assets/logo.jpg'
 
 const Profile = () => {
     return (
-        <div className="max-w-4xl mx-auto p-6 mb-5 bg-[#E5E1DA] shadow-md rounded-lg text-black">
+        <div className="max-w-4xl mx-auto p-6 m-5 bg-[#E5E1DA] shadow-md rounded-lg text-black">
             <div className="flex items-center gap-6">
                 <img
                     src={profile_img}

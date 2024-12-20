@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import logo from "../../../../assets/logo.jpg";
+import { AuthContext } from "../../../../AuthProviders/AuthProvider";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handlelogOut = () => {
+    logOut()
+      .then(() => { })
+      .catch(error => { console.error(error) })
+  }
+  const navoptions = <>
+    {
+      user ? <><button onClick={handlelogOut} className="text-lg sm:text-xl font-bold text-red-700 hover:text-black hover:underline">logOut</button></> :
+        <>
+          <NavLink
+            to="/login"
+            className="text-lg sm:text-xl font-bold text-gray-700 hover:text-black hover:underline"
+          >
+            Login
+          </NavLink>
+        </>
+    }
+  </>
   return (
     <div className="h-auto w-full bg-white text-black border-b-2 border-gray-300">
       {/* Header Section */}
@@ -21,17 +42,25 @@ const Navbar = () => {
 
           {/* Profile & Login */}
           <div className="flex items-center space-x-5">
-            <span className="text-3xl sm:text-4xl">
-              <a href="/profile">
-                <IoPersonCircleOutline />
-              </a>
-            </span>
-            <NavLink
-              to="/login"
-              className="text-lg sm:text-xl font-bold text-gray-700 hover:text-black hover:underline"
-            >
-              Login
-            </NavLink>
+            {
+              user ? (
+                <span className="text-2xl sm:text-3xl">
+                  <a href="/profile">
+                    {user.displayName}
+                  </a>
+                </span>
+              )
+                :
+                (
+                  <span className="text-3xl sm:text-4xl">
+                    <a>
+                      <IoPersonCircleOutline />
+                    </a>
+                  </span>
+                )
+            }
+
+            {navoptions}
           </div>
         </div>
       </div>

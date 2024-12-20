@@ -8,6 +8,7 @@ import FoundPost from "../Post/FoundPost/FoundPost";
 import Details from "../Post/Details/Details";
 import Profile from "../Component/Pages/Profile/Profile";
 import EditProfile from "../Component/Pages/Profile/EditProfile/EditProfile";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -21,19 +22,19 @@ export const router = createBrowserRouter([
         },
         {
           path: '/lost',
-          element: <LostPost></LostPost>
+          element: <PrivateRoute><LostPost></LostPost></PrivateRoute>
         },
         {
           path: '/found',
-          element: <FoundPost></FoundPost>
+          element: <PrivateRoute><FoundPost></FoundPost></PrivateRoute>
         },
         {
           path: '/details',
-          element: <Details></Details>
+          element: <PrivateRoute><Details></Details></PrivateRoute>
         },
         {
           path: "/profile",
-          element: <Profile></Profile>,
+          element: <PrivateRoute><Profile></Profile></PrivateRoute>
         },
         {
           path:"/profile/editProfile",
