@@ -1,74 +1,49 @@
-const express = require('express');
-const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const lostPostRoutes = require("./routes/lostPostRoutes");
+const foundPostRoutes = require("./routes/foundPostRoutes");
+const errorHandler = require("./middleware/errorHandler");
+
+dotenv.config();
+
+// MongoDB connection URI
+const DB_URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.8ouim.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+mongoose
+  .connect(DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error.message);
+    process.exit(1); // Exit the process with a failure code
+  });
+
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5002;
 
-
-// middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Routes
+app.use("/posts/lost", lostPostRoutes);
+app.use("/posts/found", foundPostRoutes);
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.8ouim.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
+// Health Check
+app.get("/", (req, res) => {
+  res.send("Lost and Found Server is running...");
 });
 
-async function run() {
-    try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+// Error Handling
+app.use(errorHandler);
 
-        const postCollection = client.db('Lost-Found').collection('lostPost');
-        const FoundpostCollection = client.db('Lost-Found').collection('foundPost');
-
-        app.get('/lostpost', async (req, res) => {
-            const result = await postCollection.find().toArray();
-            res.send(result);
-        })
-
-        app.post('/lostpost', async (req, res) => {
-            const lost = req.body;
-            // console.log(lost);
-            const result = await postCollection.insertOne(lost);
-            res.send(result);
-        })
-
-        app.get('/foundpost', async (req, res) => {
-            const result = await FoundpostCollection.find().toArray();
-            res.send(result);
-        })
-
-        app.post('/foundpost', async (req, res) => {
-            const found = req.body;
-            const result = await FoundpostCollection.insertOne(found);
-            res.send(result);
-        })
-
-        // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-        // Ensures that the client will close when you finish/error
-        // await client.close();
-    }
-}
-run().catch(console.dir);
-
-
-
-app.get("/", (req, res) => {
-    res.send("Lost and found server is running ....");
-})
-
-app.listen(port, () => {
-    console.log(`Server running on PORT : ${port}`);
-})
+// Start Server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

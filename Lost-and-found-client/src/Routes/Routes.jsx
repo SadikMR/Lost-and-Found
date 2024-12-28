@@ -14,42 +14,57 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
-    children:
-      [
-        {
-          path: '/',
-          element: <Home></Home>,
-        },
-        {
-          path: '/lost',
-          element: <PrivateRoute><LostPost></LostPost></PrivateRoute>,
-          loader: () => fetch('http://localhost:5000/lostpost')
-        },
-        {
-          path: '/found',
-          element: <PrivateRoute><FoundPost></FoundPost></PrivateRoute>,
-          loader: () => fetch('http://localhost:5000/foundpost')
-        },
-        {
-          path: '/details',
-          element: <PrivateRoute><Details></Details></PrivateRoute>
-        },
-        {
-          path: "/profile",
-          element: <PrivateRoute><Profile></Profile></PrivateRoute>
-        },
-        {
-          path:"/profile/editProfile",
-          element: <EditProfile></EditProfile>
-        }
-      ]
+    children: [
+      {
+        path: "/",
+        element: <Home></Home>,
+      },
+      {
+        path: "/lost",
+        element: (
+          <PrivateRoute>
+            <LostPost></LostPost>
+          </PrivateRoute>
+        ),
+        loader: () => fetch("http://localhost:5002/posts/lost"),
+      },
+      {
+        path: "/found",
+        element: (
+          <PrivateRoute>
+            <FoundPost></FoundPost>
+          </PrivateRoute>
+        ),
+        loader: () => fetch("http://localhost:5002/posts/found"),
+      },
+      {
+        path: "/details",
+        element: (
+          <PrivateRoute>
+            <Details></Details>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <PrivateRoute>
+            <Profile></Profile>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/profile/editProfile",
+        element: <EditProfile></EditProfile>,
+      },
+    ],
   },
   {
     path: "/login",
-    element: <Login></Login>
+    element: <Login></Login>,
   },
   {
     path: "/register",
-    element: <Registration></Registration>
-  }
+    element: <Registration></Registration>,
+  },
 ]);
