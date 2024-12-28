@@ -5,20 +5,46 @@ import Post from "../../../Post/PostCard/PostCard";
 
 const Home = () => {
   const [dateType, setDateType] = useState("text");
-  const [itemType, setItemType] = useState("lost");
+  const [itemType, setItemType] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleDateFocus = () => setDateType("date");
   const handleDateBlur = () => setDateType("text");
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    // Handle search logic here
-    console.log("Searching for:", {
+
+    const searchParams = {
       category: e.target.category.value,
-      location: e.target.location.value,
-      date: e.target.date.value,
-      type: itemType,
-    });
+      possibleLocation: e.target.location.value,
+      possibleDate: e.target.date.value,
+    };
+
+    let itemType = e.target.type.value || "lost"; // Default to "lost" if itemType is empty
+    const query = new URLSearchParams(searchParams).toString(); // Convert to query string
+
+    // Determine the API endpoint based on the item type
+    const searchUrl =
+      itemType === "lost"
+        ? `http://localhost:5002/posts/lost/search?${query}`
+        : `http://localhost:5002/posts/found/search?${query}`;
+
+    try {
+      // Perform the fetch request
+      const response = await fetch(searchUrl);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Response Data:", data);
+
+        // Handle search results (store in state or context)
+        setSearchResults(data.data);
+      } else {
+        console.error("Failed to fetch search results");
+      }
+    } catch (error) {
+      console.error("Error during search:", error);
+    }
   };
 
   return (
