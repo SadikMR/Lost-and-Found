@@ -1,15 +1,41 @@
-import React, { useState } from "react";
-import { NavLink, useLoaderData } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import cover from "../../../assets/cover.jpg";
 import Post from "../../../Post/PostCard/PostCard";
 
 const Home = () => {
   const [dateType, setDateType] = useState("text");
-  const [itemType, setItemType] = useState("");
+  const [itemType, setItemType] = useState("lost");
   const [searchResults, setSearchResults] = useState([]);
+  const [recentPosts, setRecentPosts] = useState([]); // Add state for recent lost posts
 
   const handleDateFocus = () => setDateType("date");
   const handleDateBlur = () => setDateType("text");
+
+  // Fetch recent lost and found posts by default
+  const fetchRecentPosts = async () => {
+    try {
+      const lostResponse = await fetch("http://localhost:5002/posts/lost");
+      const foundResponse = await fetch("http://localhost:5002/posts/found");
+
+      if (lostResponse.ok && foundResponse.ok) {
+        const lostData = await lostResponse.json();
+        const foundData = await foundResponse.json();
+
+        const mixedPosts = [...lostData.data, ...foundData.data];
+
+        mixedPosts.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        setRecentPosts(mixedPosts);
+      } else {
+        console.error("Failed to fetch recent posts");
+      }
+    } catch (error) {
+      console.error("Error during fetching recent posts:", error);
+    }
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -20,17 +46,15 @@ const Home = () => {
       possibleDate: e.target.date.value,
     };
 
-    let itemType = e.target.type.value || "lost"; // Default to "lost" if itemType is empty
-    const query = new URLSearchParams(searchParams).toString(); // Convert to query string
+    const itemType = e.target.type.value || "lost";
+    const query = new URLSearchParams(searchParams).toString();
 
-    // Determine the API endpoint based on the item type
     const searchUrl =
       itemType === "lost"
         ? `http://localhost:5002/posts/lost/search?${query}`
         : `http://localhost:5002/posts/found/search?${query}`;
 
     try {
-      // Perform the fetch request
       const response = await fetch(searchUrl);
 
       if (response.ok) {
@@ -39,6 +63,15 @@ const Home = () => {
 
         // Handle search results (store in state or context)
         setSearchResults(data.data);
+
+        if (data.data.length > 0) {
+          const firstResult = data.data[0]; // Assuming you want the first result
+          console.log(
+            `${firstResult.category}, ${firstResult.possibleLocation}`
+          );
+        } else {
+          alert("No results found");
+        }
       } else {
         console.error("Failed to fetch search results");
       }
@@ -47,6 +80,11 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    // Fetch recent posts when component mounts
+    fetchRecentPosts();
+  }, []);
+
   return (
     <div>
       {/* Cover Image Section */}
@@ -54,9 +92,7 @@ const Home = () => {
         className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-cover bg-center"
         style={{ backgroundImage: `url(${cover})` }}
       >
-        {/* Overlay for text and buttons */}
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-4 text-center space-y-8">
-          {/* Title Text */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white">
             Find What You Lost, Return What You Found
           </h1>
@@ -65,7 +101,6 @@ const Home = () => {
             owners.
           </p>
 
-          {/* Buttons */}
           <div className="flex gap-4 w-full max-w-md">
             <NavLink
               to="/lost"
@@ -89,44 +124,35 @@ const Home = () => {
           Search for Lost & Found Items
         </h2>
         <form onSubmit={handleSearch} className="flex justify-center gap-4">
-          {/* Category Input */}
           <input
             type="text"
             name="category"
             placeholder="Category"
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-grey-800 border-[#0A97B0]"
+            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
           />
-
-          {/* Location Input */}
           <input
             type="text"
             name="location"
             placeholder="Location"
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-grey-800 border-[#0A97B0]"
+            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
           />
-
-          {/* Date Input */}
           <input
             type={dateType}
             name="date"
             placeholder="Date"
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-grey-800 border-[#0A97B0]"
+            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
             onFocus={handleDateFocus}
             onBlur={handleDateBlur}
           />
-
-          {/* Lost or Found Dropdown */}
           <select
             name="type"
             value={itemType}
             onChange={(e) => setItemType(e.target.value)}
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-grey-800 border-[#0A97B0]"
+            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
           >
             <option value="lost">Lost</option>
             <option value="found">Found</option>
           </select>
-
-          {/* Search Button */}
           <button
             type="submit"
             className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#0A97B0] focus:outline-none w-full lg:w-auto"
@@ -141,7 +167,8 @@ const Home = () => {
         <div className="flex justify-between mb-6">
           <h1 className="text-2xl font-semibold text-gray-800">All Posts</h1>
         </div>
-        <Post />
+        {/* Render recent posts if search results are empty */}
+        <Post posts={searchResults.length > 0 ? searchResults : recentPosts} />
       </div>
     </div>
   );

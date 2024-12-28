@@ -4,7 +4,7 @@ const { handleSuccess, handleError } = require("../utils/responseHandler");
 // Get all found posts
 const getAllFoundPosts = async (req, res) => {
   try {
-    const foundPosts = await FoundPost.find();
+    const foundPosts = await FoundPost.find().sort({ createdAt: -1 });
     handleSuccess(res, foundPosts, "Found posts retrieved successfully");
   } catch (error) {
     handleError(res, error);
