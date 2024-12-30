@@ -1,8 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import lostItemImage from "../../assets/item.jpg"; // Adjust the path based on your directory structure
+import { useNavigate } from "react-router-dom";
 
 const Post = ({ posts }) => {
+  const navigate = useNavigate();
+  const handleShowMore = (post) => {
+    //alert(post.category);
+    navigate("/details", { state: { post } });
+  };
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 mb-5">
       {posts.map((post) => (
@@ -46,8 +52,11 @@ const Post = ({ posts }) => {
               </li>
             </ul>
             <div className="card-actions justify-end">
-              <button className="btn bg-buttonColor1 text-white hover:bg-buttonColor3 hover:scale-105 transition-all duration-300">
-                <a href="/details">Show more</a>
+              <button
+                className="btn bg-buttonColor1 text-white hover:bg-buttonColor3 hover:scale-105 transition-all duration-300"
+                onClick={() => handleShowMore(post)}
+              >
+                Show more
               </button>
             </div>
           </div>
