@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../AuthProviders/AuthProvider";
 
 const FoundPost = () => {
+  const { getCurrentUser } = useContext(AuthContext);
+  const user = getCurrentUser();
   const foundPostInfo = useLoaderData();
 
   const handleFoundPost = (e) => {
@@ -16,7 +19,9 @@ const FoundPost = () => {
     const possibleLocation = form.possibleLocation.value;
     const possibleDate = form.possibleDate.value;
     const image = form.image.value;
+    const firebase_uid = user.uid;
     const foundInfo = {
+      firebase_uid,
       category,
       productName,
       color,
@@ -27,6 +32,7 @@ const FoundPost = () => {
       image,
     };
     console.log(
+      firebase_uid,
       category,
       productName,
       color,

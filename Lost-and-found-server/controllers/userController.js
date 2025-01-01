@@ -1,38 +1,10 @@
-const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const { handleSuccess, handleError } = require("../utils/responseHandler"); // Import utilities
 
-// Registration API
 const saveInfo = async (req, res) => {
   try {
-    const {
-      firebase_uid, // Firebase UID (comes from the front-end or Firebase authentication)
-      fullname,
-      username,
-      email,
-      phone,
-      division,
-      zilla,
-      upzilla,
-      village,
-      image,
-    } = req.body;
+    const newUser = new User(req.body);
 
-    // Create a new user document
-    const newUser = new User({
-      firebase_uid, // Store Firebase UID
-      fullname,
-      username,
-      email,
-      phone,
-      division,
-      zilla,
-      upzilla,
-      village,
-      image,
-    });
-
-    // Save the user to MongoDB
     await newUser.save();
 
     handleSuccess(res, newUser, "User registered successfully");
