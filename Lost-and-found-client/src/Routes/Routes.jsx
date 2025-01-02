@@ -9,6 +9,7 @@ import Details from "../Post/Details/Details";
 import Profile from "../Component/Pages/Profile/Profile";
 import EditProfile from "../Component/Pages/Profile/EditProfile/EditProfile";
 import PrivateRoute from "./PrivateRoute";
+import Chat from "../Component/Pages/Chatting/Chat";
 
 export const router = createBrowserRouter([
   {
@@ -66,5 +67,14 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <Registration></Registration>,
+  },
+  {
+    path: "/chat",
+    element: (
+      <PrivateRoute>
+        <Chat></Chat>
+      </PrivateRoute>
+    ),
+    loader: () => fetch("http://localhost:5002"),
   },
 ]);
