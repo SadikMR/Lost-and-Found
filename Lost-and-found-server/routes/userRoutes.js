@@ -4,7 +4,6 @@ const validateUserInfo = require("../middleware/validateUserInfo");
 
 const router = express.Router();
 
-// Registration route
 router.post("/saveInfo", validateUserInfo, saveInfo);
 router.get("/getInfo/:firebase_uid", getInfo);
 

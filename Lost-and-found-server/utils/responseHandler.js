@@ -1,17 +1,22 @@
 const handleSuccess = (res, data, message = "Request successful") => {
-  res.status(200).json({
-    success: true,
-    message,
-    data,
-  });
+  if (!res.headersSent) {
+    return res.status(200).json({
+      success: true,
+      message,
+      data,
+    });
+  }
 };
 
 const handleError = (res, error, message = "An error occurred") => {
-  res.status(500).json({
-    success: false,
-    message,
-    error: error.message || message,
-  });
+  if (!res.headersSent) {
+    const errorMessage = error && error.message ? error.message : message;
+    return res.status(500).json({
+      success: false,
+      message,
+      error: errorMessage,
+    });
+  }
 };
 
 module.exports = { handleSuccess, handleError };

@@ -8,7 +8,7 @@ const validateRegistration = (req, res, next) => {
     });
   }
 
-  next(); // Proceed to the next middleware or controller
+  next();
 };
 
 module.exports = validateRegistration;
