@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import lostItemImage from "../../assets/item.jpg"; // Adjust the path based on your directory structure
+import lostItemImage from "../../assets/item.jpg";
 import { useNavigate } from "react-router-dom";
 
 const Post = ({ posts }) => {
@@ -18,10 +18,7 @@ const Post = ({ posts }) => {
         >
           <figure>
             {/* Using the image path from the post data */}
-            <img
-              src={post.imageUrl || lostItemImage} // Fallback to lostItemImage if no image URL is provided
-              alt={post.category}
-            />
+            <img src={post.imageUrl || lostItemImage} alt={post.category} />
           </figure>
           <div className="card-body">
             <h2 className="text-xl font-semibold">

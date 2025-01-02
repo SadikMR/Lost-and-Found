@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const foundPostSchema = new mongoose.Schema(
   {
+    firebase_uid: { type: String, required: true },
     category: { type: String, required: true },
     productName: { type: String, required: true },
     color: { type: String, default: "none" },
