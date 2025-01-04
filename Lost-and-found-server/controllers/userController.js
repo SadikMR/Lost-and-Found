@@ -31,4 +31,23 @@ const getInfo = async (req, res) => {
   }
 };
 
-module.exports = { saveInfo, getInfo };
+const updateInfo = async (req, res) => {
+  try {
+    const { firebase_uid } = req.params;
+
+    const user = await User.findOneAndUpdate({ firebase_uid }, req.body, {
+      new: true,
+    });
+
+    if (!user) {
+      handleSuccess(res, null, "No user found");
+    }
+
+    handleSuccess(res, user, "User information updated successfully");
+  } catch (error) {
+    console.error("Error updating user info:", error);
+    handleError(res, error, "Failed to update user information");
+  }
+};
+
+module.exports = { saveInfo, getInfo, updateInfo };
