@@ -12,6 +12,7 @@ const userRoutes = require("./routes/userRoutes");
 
 dotenv.config();
 
+const FRONTEND_URL = process.env.FRONTEND_URL.trim();
 const DB_URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.8ouim.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 //establishing mongodb connection
@@ -28,19 +29,17 @@ mongoose
     process.exit(1);
   });
 
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://lost-and-found-3ddca.web.app",
+    origin: FRONTEND_URL,
     methods: ["GET", "POST"],
   },
 });
 
 // Set 'io' globally to access it in the routes
 app.set("io", io);
-
 // Middleware
 app.use(cors());
 app.use(express.json());
