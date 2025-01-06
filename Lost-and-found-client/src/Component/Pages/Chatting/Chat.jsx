@@ -5,7 +5,9 @@ import axios from "axios";
 import "./chat.css";
 import image from "../../../assets/profilePic.jpg";
 
-const socket = socketIO.connect("http://localhost:5002");
+const endpoints = import.meta.env.VITE_backendUrl;
+
+const socket = socketIO.connect(`${endpoints}`);
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -27,7 +29,7 @@ const Chat = () => {
       const fetchMessages = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5002/chat/getMessages/${senderID}/${receiverID}`
+            `${endpoints}/chat/getMessages/${senderID}/${receiverID}`
           );
 
           if (response.data.success) {
@@ -63,7 +65,7 @@ const Chat = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5002/chat/sendMessage",
+        `${endpoints}/chat/sendMessage`,
         {
           senderID: senderID,
           receiverID: receiverID,

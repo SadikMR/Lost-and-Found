@@ -10,6 +10,7 @@ import Profile from "../Component/Pages/Profile/Profile";
 import EditProfile from "../Component/Pages/Profile/EditProfile/EditProfile";
 import PrivateRoute from "./PrivateRoute";
 import Chat from "../Component/Pages/Chatting/Chat";
+const endpoints = import.meta.env.VITE_backendUrl;
 
 export const router = createBrowserRouter([
   {
@@ -27,7 +28,7 @@ export const router = createBrowserRouter([
             <LostPost></LostPost>
           </PrivateRoute>
         ),
-        loader: () => fetch("http://localhost:5002/posts/lost"),
+        loader: () => fetch(`${endpoints}/posts/lost`),
       },
       {
         path: "/found",
@@ -36,7 +37,7 @@ export const router = createBrowserRouter([
             <FoundPost></FoundPost>
           </PrivateRoute>
         ),
-        loader: () => fetch("http://localhost:5002/posts/found"),
+        loader: () => fetch(`${endpoints}/posts/found`),
       },
       {
         path: "/details",
@@ -75,6 +76,6 @@ export const router = createBrowserRouter([
         <Chat></Chat>
       </PrivateRoute>
     ),
-    loader: () => fetch("http://localhost:5002"),
+    loader: () => fetch(`${endpoints}`),
   },
 ]);

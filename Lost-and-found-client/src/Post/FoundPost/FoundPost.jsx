@@ -3,6 +3,9 @@ import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../AuthProviders/AuthProvider";
 
+
+const endpoints = import.meta.env.VITE_backendUrl;
+
 const FoundPost = () => {
   const { getCurrentUser } = useContext(AuthContext);
   const user = getCurrentUser();
@@ -43,7 +46,7 @@ const FoundPost = () => {
       image
     );
 
-    fetch("http://localhost:5002/posts/found", {
+    fetch(`${endpoints}/posts/found`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

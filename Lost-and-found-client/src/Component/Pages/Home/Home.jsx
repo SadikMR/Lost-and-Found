@@ -3,6 +3,9 @@ import { NavLink } from "react-router-dom";
 import cover from "../../../assets/cover.jpg";
 import Post from "../../../Post/PostCard/PostCard";
 
+const endpoints = import.meta.env.VITE_backendUrl;
+
+
 const Home = () => {
   const [dateType, setDateType] = useState("text");
   const [itemType, setItemType] = useState("lost");
@@ -15,8 +18,8 @@ const Home = () => {
   // Fetch recent lost and found posts by default
   const fetchRecentPosts = async () => {
     try {
-      const lostResponse = await fetch("http://localhost:5002/posts/lost");
-      const foundResponse = await fetch("http://localhost:5002/posts/found");
+      const lostResponse = await fetch(`${endpoints}/posts/lost`);
+      const foundResponse = await fetch(`${endpoints}/posts/found`);
 
       if (lostResponse.ok && foundResponse.ok) {
         const lostData = await lostResponse.json();
@@ -51,8 +54,8 @@ const Home = () => {
 
     const searchUrl =
       itemType === "lost"
-        ? `http://localhost:5002/posts/lost/search?${query}`
-        : `http://localhost:5002/posts/found/search?${query}`;
+        ? `${endpoints}/posts/lost/search?${query}`
+        : `${endpoints}/posts/found/search?${query}`;
 
     try {
       const response = await fetch(searchUrl);

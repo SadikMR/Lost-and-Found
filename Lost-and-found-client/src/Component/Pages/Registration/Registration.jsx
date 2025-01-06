@@ -3,6 +3,8 @@ import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
+const endpoints = import.meta.env.VITE_backendUrl;
+
 const Registration = () => {
   const { createUser, updateUserProfile } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -93,7 +95,7 @@ const Registration = () => {
             };
 
             // Make API call to store user data in MongoDB
-            fetch("http://localhost:5002/user/saveInfo", {
+            fetch(`${endpoints}/user/saveInfo`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

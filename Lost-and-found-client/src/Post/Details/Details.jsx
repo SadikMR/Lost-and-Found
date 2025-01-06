@@ -7,6 +7,8 @@ import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../AuthProviders/AuthProvider";
 import axios from "axios";
 
+const endpoints = import.meta.env.VITE_backendUrl;
+
 const Details = () => {
   const { getCurrentUser } = useContext(AuthContext);
   const user = getCurrentUser();
@@ -24,12 +26,12 @@ const Details = () => {
     const fetchData = async () => {
       try {
         const senderResponse = await axios.get(
-          `http://localhost:5002/user/getInfo/${senderID}`
+          `${endpoints}/user/getInfo/${senderID}`
         );
         setSenderInfo(senderResponse.data);
 
         const receiverResponse = await axios.get(
-          `http://localhost:5002/user/getInfo/${receiverID}`
+          `${endpoints}/user/getInfo/${receiverID}`
         );
         setReceiverInfo(receiverResponse.data);
       } catch (error) {
