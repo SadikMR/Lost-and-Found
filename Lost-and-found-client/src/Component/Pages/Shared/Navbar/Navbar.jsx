@@ -9,12 +9,23 @@ const Navbar = () => {
 
   const handlelogOut = () => {
     logOut()
-      .then(() => { })
-      .catch(error => { console.error(error) })
-  }
-  const navoptions = <>
-    {
-      user ? <><button onClick={handlelogOut} className="text-lg sm:text-xl font-bold text-red-700 hover:text-black hover:underline">logOut</button></> :
+      .then(() => {})
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  const navoptions = (
+    <>
+      {user ? (
+        <>
+          <button
+            onClick={handlelogOut}
+            className="text-lg sm:text-xl font-bold text-red-700 hover:text-black hover:underline"
+          >
+            logOut
+          </button>
+        </>
+      ) : (
         <>
           <NavLink
             to="/login"
@@ -23,8 +34,9 @@ const Navbar = () => {
             Login
           </NavLink>
         </>
-    }
-  </>
+      )}
+    </>
+  );
   return (
     <div className="h-auto w-full bg-white text-black border-b-2 border-gray-300">
       {/* Header Section */}
@@ -42,23 +54,17 @@ const Navbar = () => {
 
           {/* Profile & Login */}
           <div className="flex items-center space-x-5">
-            {
-              user ? (
-                <span className="text-2xl sm:text-3xl">
-                  <a href="/profile">
-                    {user.displayName}
-                  </a>
-                </span>
-              )
-                :
-                (
-                  <span className="text-3xl sm:text-4xl">
-                    <a>
-                      <IoPersonCircleOutline />
-                    </a>
-                  </span>
-                )
-            }
+            {user ? (
+              <span className="text-2xl sm:text-3xl">
+                <NavLink to="/profile">{user.displayName}</NavLink>
+              </span>
+            ) : (
+              <span className="text-3xl sm:text-4xl">
+                <a>
+                  <IoPersonCircleOutline />
+                </a>
+              </span>
+            )}
 
             {navoptions}
           </div>
