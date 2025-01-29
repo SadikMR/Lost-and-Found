@@ -90,7 +90,7 @@ const LostPost = () => {
       <div className=" max-w-3xl bg-[#EADBC8] rounded-lg shadow-lg p-8">
         {/* Heading */}
         <h2 className="text-2xl font-bold text-center text-gray-800">
-          Lost Form : {lostpostInfo.length}
+          Lost Form
         </h2>
         <p className="text-center text-gray-600 mt-2">
           Fill out the form to submit a new post

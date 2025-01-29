@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import img from "../../../assets/logo.jpg"
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -24,15 +25,15 @@ const Registration = () => {
     const image = form.image.value;
     const person =
       (fullname,
-      username,
-      email,
-      password,
-      confirmPassword,
-      phone,
-      division,
-      zilla,
-      upzilla,
-      village);
+        username,
+        email,
+        password,
+        confirmPassword,
+        phone,
+        division,
+        zilla,
+        upzilla,
+        village);
 
     if (password !== confirmPassword) {
       alert("Password doesn't match");
@@ -141,7 +142,10 @@ const Registration = () => {
   return (
     <div className="bg-[#FAF7F0]">
       <NavLink to="/" className="text-black mt-5 mx-5 text-2xl">
-        Home
+        <div className="flex items-center">
+          <img className="w-8 h-8 ml-5 mr-2" src={img} alt="" />
+          <p>Lost&Found</p>
+        </div>
       </NavLink>
       <div className="flex items-center justify-center">
         <div className="w-full max-w-md bg-[#EADBC8] rounded-lg shadow-lg p-8">

@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const User = require("../models/userModel");
 const { handleSuccess, handleError } = require("../utils/responseHandler"); // Import utilities
 
@@ -49,5 +50,6 @@ const updateInfo = async (req, res) => {
     handleError(res, error, "Failed to update user information");
   }
 };
+
 
 module.exports = { saveInfo, getInfo, updateInfo };

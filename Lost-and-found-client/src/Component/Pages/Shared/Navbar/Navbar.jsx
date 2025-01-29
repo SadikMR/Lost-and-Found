@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
+import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import logo from "../../../../assets/logo.jpg";
 import { AuthContext } from "../../../../AuthProviders/AuthProvider";
 
@@ -9,7 +10,7 @@ const Navbar = () => {
 
   const handlelogOut = () => {
     logOut()
-      .then(() => {})
+      .then(() => { })
       .catch((error) => {
         console.error(error);
       });
@@ -55,9 +56,12 @@ const Navbar = () => {
           {/* Profile & Login */}
           <div className="flex items-center space-x-5">
             {user ? (
-              <span className="text-2xl sm:text-3xl">
-                <NavLink to="/profile">{user.displayName}</NavLink>
-              </span>
+              <div className="flex items-center space-x-5">
+                <ChatBubbleOvalLeftEllipsisIcon className="w-10 h-10" />
+                <span className="text-2xl sm:text-3xl">
+                  <NavLink to="/profile">{user.displayName}</NavLink>
+                </span>
+              </div>
             ) : (
               <span className="text-3xl sm:text-4xl">
                 <a>

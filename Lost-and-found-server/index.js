@@ -40,6 +40,7 @@ const io = new Server(server, {
 
 // Set 'io' globally to access it in the routes
 app.set("io", io);
+
 // Middleware
 app.use(cors());
 app.use(express.json());

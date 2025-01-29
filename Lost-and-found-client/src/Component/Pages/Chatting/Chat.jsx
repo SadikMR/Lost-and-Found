@@ -7,7 +7,7 @@ import image from "../../../assets/profilePic.jpg";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
-const socket = socketIO.connect(`${endpoints}`);
+const socket = socketIO.connect({endpoints});
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
