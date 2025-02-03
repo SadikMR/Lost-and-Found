@@ -95,6 +95,5 @@ export const router = createBrowserRouter([
         <Chat></Chat>
       </PrivateRoute>
     ),
-    loader: () => fetch({ endpoints }),
   },
 ]);
