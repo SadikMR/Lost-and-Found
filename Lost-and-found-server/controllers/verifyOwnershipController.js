@@ -1,8 +1,6 @@
 require("dotenv").config();
 const axios = require("axios");
 
-console.log("Gemini API Key:", process.env.GEMINI_API_KEY); // This will log your API key from the .env file
-
 const GEMINI_API_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
@@ -25,7 +23,6 @@ const verifyOwnership = async (req, res) => {
     console.log("Color Similarity:", colorSimilarity);
     console.log("Description Similarity:", descriptionSimilarity);
 
-    // Determine success based on threshold
     const success =
       colorSimilarity >= 0.8 &&
       (description.trim() === "" || descriptionSimilarity >= 0.5);
@@ -46,7 +43,6 @@ const verifyOwnership = async (req, res) => {
   }
 };
 
-// Function to calculate text similarity using Gemini API
 const calculateGeminiSimilarity = async (text1, text2) => {
   try {
     const response = await axios.post(
