@@ -15,14 +15,14 @@ const logQuery = require("../middleware/logQuery"); //
 // Get all lost posts
 router.get("/", getAllLostPosts);
 
+// Search lost posts based on query parameters
+router.get("/search", logQuery, searchLostPosts);
+
 // Search all lost posts for a specific user
 router.get("/:firebase_uid", getCurrentUserLostPosts);
 
 // Get specific lost post by post _id
 router.get("/getSpecificLostPosts/:_id", getSpecificLostPosts);
-
-// Search lost posts based on query parameters
-router.get("/search", logQuery, searchLostPosts);
 
 // Create a new lost post
 router.post("/", validatePost, createLostPost);
