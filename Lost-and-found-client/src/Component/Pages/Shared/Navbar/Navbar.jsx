@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const handlelogOut = () => {
     logOut()
-      .then(() => { })
+      .then(() => {})
       .catch((error) => {
         console.error(error);
       });
@@ -57,7 +57,9 @@ const Navbar = () => {
           <div className="flex items-center space-x-5">
             {user ? (
               <div className="flex items-center space-x-5">
-                <ChatBubbleOvalLeftEllipsisIcon className="w-10 h-10" />
+                <NavLink to="/conversations">
+                  <ChatBubbleOvalLeftEllipsisIcon className="w-10 h-10" />
+                </NavLink>
                 <span className="text-2xl sm:text-3xl">
                   <NavLink to="/profile">{user.displayName}</NavLink>
                 </span>

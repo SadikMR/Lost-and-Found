@@ -12,8 +12,12 @@ import PrivateRoute from "./PrivateRoute";
 import Chat from "../Component/Pages/Chatting/Chat";
 import FoundPostUpdate from "../Post/FoundPost/FoundPostUpdate";
 import LostPostUpdate from "../Post/LostPost/LostPostUpdate";
+<<<<<<< HEAD
 import VerifyEmail from "../Component/Pages/Registration/verifyEmail";
 
+=======
+import Conversations from "../Component/Pages/Chatting/Conversation";
+>>>>>>> b7ae1225d8b2c95fd511c0bea3f4ed8e5379d3fd
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -101,6 +105,13 @@ export const router = createBrowserRouter([
         <Chat></Chat>
       </PrivateRoute>
     ),
-    loader: () => fetch({ endpoints }),
+  },
+  {
+    path: "/conversations",
+    element: (
+      <PrivateRoute>
+        <Conversations></Conversations>
+      </PrivateRoute>
+    ),
   },
 ]);

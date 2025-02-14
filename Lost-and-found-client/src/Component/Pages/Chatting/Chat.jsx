@@ -7,7 +7,7 @@ import image from "../../../assets/profilePic.jpg";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
-const socket = socketIO.connect({endpoints});
+const socket = socketIO.connect(endpoints);
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -64,14 +64,11 @@ const Chat = () => {
     if (!message.trim()) return;
 
     try {
-      const response = await axios.post(
-        `${endpoints}/chat/sendMessage`,
-        {
-          senderID: senderID,
-          receiverID: receiverID,
-          message,
-        }
-      );
+      const response = await axios.post(`${endpoints}/chat/sendMessage`, {
+        senderID: senderID,
+        receiverID: receiverID,
+        message,
+      });
 
       if (response.data.success) {
         socket.emit("sendMessage", {
