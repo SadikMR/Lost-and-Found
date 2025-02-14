@@ -12,6 +12,8 @@ import PrivateRoute from "./PrivateRoute";
 import Chat from "../Component/Pages/Chatting/Chat";
 import FoundPostUpdate from "../Post/FoundPost/FoundPostUpdate";
 import LostPostUpdate from "../Post/LostPost/LostPostUpdate";
+import VerifyEmail from "../Component/Pages/Registration/verifyEmail";
+
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -87,6 +89,10 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <Registration></Registration>,
+  },
+  {
+    path: "/verifyEmail/:token",
+    element: <VerifyEmail></VerifyEmail>  // This is not defined in this file
   },
   {
     path: "/chat",

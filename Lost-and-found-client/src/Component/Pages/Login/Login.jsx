@@ -2,39 +2,67 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+const endpoints = import.meta.env.VITE_backendUrl;
 
 const Login = () => {
   const { logIn } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
+  const [profileInfo, setProfileInfo] = useState(null)
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from?.pathname || "/";
 
-  const handleLogin = (event) => {
+
+  const handleLogin = async (event) => {
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
 
-    logIn(email, password)
-      .then((result) => {
-        const user = result.user;
-        console.log("Logged in user:", user);
-        setErrorMessage(""); // Clear error on successful login
+    try {
+      const result = await logIn(email, password);
+      const user = result.user;
+
+      // Refresh user data to get updated email verification status
+      await user.reload();
+      const updatedUser = user; // Get the latest user info
+      console.log("Updated User:", updatedUser.uid);
+
+      //  Fetch user data from API
+      const response = await fetch(`${endpoints}/user/getInfo/${updatedUser.uid}`);
+      // console.log("First click", response.data);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+      const data = await response.json();
+      setProfileInfo(data.data); //  Update state (but don't use it immediately)
+      // console.log("Profile Info 1:", profileInfo.isVerified); //  Use data directly instead of profileInfo
+      console.log("Profile Info 1:", profileInfo); //  Use data directly instead of profileInfo
+
+      //  Use `data.isVerified` instead of `profileInfo.isVerified`
+      if (!data.data.isVerified) {
         Swal.fire({
-          title: "Login Successful",
-          icon: "success",
-          draggable: true,
+          title: "Email Not Verified",
+          text: "Please check your inbox and verify your email before logging in.",
+          icon: "warning",
         });
-        navigate(from, { replace: true });
-      })
-      .catch((error) => {
-        console.error("Login error:", error);
-        setErrorMessage(error.message); // Set error message
+        return;
+      }
+      setErrorMessage(""); // Clear error on successful login
+      Swal.fire({
+        title: "Login Successful",
+        icon: "success",
+        draggable: true,
       });
+
+      navigate(from, { replace: true });
+
+    } catch (error) {
+      setErrorMessage(error.message); // Show error message
+    }
   };
+
   return (
     <div className="bg-[#FAF7F0]">
       <NavLink to="/" className="text-black mt-5 mx-5 text-2xl">

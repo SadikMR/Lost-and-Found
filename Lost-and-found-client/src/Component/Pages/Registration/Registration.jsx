@@ -93,6 +93,8 @@ const Registration = () => {
               upzilla,
               village,
               image,
+              password,
+              confirmPassword,
             };
 
             // Make API call to store user data in MongoDB
@@ -108,6 +110,7 @@ const Registration = () => {
                 if (data.success) {
                   Swal.fire({
                     title: "User Registered Successfully",
+                    text: "Email Verification link has been sent to your email address.",
                     icon: "success",
                     draggable: true,
                   });
@@ -138,6 +141,8 @@ const Registration = () => {
       .catch((error) => {
         alert("An error occurred during registration: " + error.message);
       });
+
+
   };
   return (
     <div className="bg-[#FAF7F0]">

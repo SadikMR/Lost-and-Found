@@ -6,16 +6,24 @@ const userSchema = new mongoose.Schema(
     fullname: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, requied: true },
+    password: { type: String, required: true, select: false },  // ✅ Prevents password from being returned in queries
     phone: { type: String, required: true },
     division: { type: String },
     zilla: { type: String },
     upzilla: { type: String },
     village: { type: String },
     image: { type: String },
+    isVerified: { type: Boolean, default: false },
+    verificationToken: { type: String, select: false },  // ✅ Hides token from queries
   },
   { timestamps: true }
 );
+
+// Remove `verificationToken` after successful email verification
+userSchema.methods.clearVerificationToken = async function () {
+  this.verificationToken = undefined;
+  await this.save();
+};
 
 const User = mongoose.model("User", userSchema);
 
