@@ -2,12 +2,13 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const Login = () => {
   const { logIn } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
-  const [profileInfo, setProfileInfo] = useState(null)
+  // const [profileInfo, setProfileInfo] = useState(null)
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,7 +28,7 @@ const Login = () => {
       // Refresh user data to get updated email verification status
       await user.reload();
       const updatedUser = user; // Get the latest user info
-      console.log("Updated User:", updatedUser.uid);
+      // console.log("Updated User:", updatedUser.uid);
 
       //  Fetch user data from API
       const response = await fetch(`${endpoints}/user/getInfo/${updatedUser.uid}`);
@@ -36,9 +37,9 @@ const Login = () => {
         throw new Error("Failed to fetch user data");
       }
       const data = await response.json();
-      setProfileInfo(data.data); //  Update state (but don't use it immediately)
+      // setProfileInfo(data.data); //  Update state (but don't use it immediately)
       // console.log("Profile Info 1:", profileInfo.isVerified); //  Use data directly instead of profileInfo
-      console.log("Profile Info 1:", profileInfo); //  Use data directly instead of profileInfo
+      // console.log("Profile Info 1:", profileInfo); //  Use data directly instead of profileInfo
 
       //  Use `data.isVerified` instead of `profileInfo.isVerified`
       if (!data.data.isVerified) {
@@ -49,6 +50,7 @@ const Login = () => {
         });
         return;
       }
+
       setErrorMessage(""); // Clear error on successful login
       Swal.fire({
         title: "Login Successful",
@@ -60,6 +62,7 @@ const Login = () => {
 
     } catch (error) {
       setErrorMessage(error.message); // Show error message
+      alert("Invalid email or password");
     }
   };
 
@@ -112,6 +115,8 @@ const Login = () => {
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black "
               />
             </div>
+
+            <NavLink to="/login/forgotPassword"><p className="text-sm text-blue-700 mt-2 cursor-pointer ">Forgot password?</p></NavLink>
 
             {/* Login Button */}
             <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300">

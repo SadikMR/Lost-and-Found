@@ -2,9 +2,20 @@ const { emailVerifyGenerateToken } = require("../utils/emailVerifyGenerateToken"
 const { sendVerificationEmail } = require("../configuration/verifyEmailConfig");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const admin = require("firebase-admin");
+const serviceAccount = require("../lost-and-found-3ddca-firebase-adminsdk-jkthx-eeb0d5480a.json"); // Update path
+const dotenv = require("dotenv");
 const { default: mongoose } = require("mongoose");
 const User = require("../models/userModel");
 const { handleSuccess, handleError } = require("../utils/responseHandler"); // Import utilities
+
+// const endpoint = process.env.FRONTEND_URL.trim();
+
+// Initialize Firebase Admin SDK (if not already initialized)
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 const saveInfo = async (req, res) => {
   try {
@@ -76,6 +87,92 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+// After reset password, database password updated according to firebase password
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return handleError(res, null, "User not found");
+    }
+
+    const resetToken = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "10m" });
+
+    user.resetToken = resetToken;
+    await user.save();
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const resetLink = `${process.env.FRONTEND_URL.trim()}/login/resetPassword/${resetToken}`;
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: "Password Reset",
+      text: `Click the link to reset your password: ${resetLink}`,
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+      res.json({ message: "Password reset email sent" });
+    } catch (mailError) {
+      console.error("Error sending email:", mailError);
+      return res.status(500).json({ message: "Failed to send password reset email" });
+    }
+
+  } catch (error) {
+    console.error("Error in forgotPassword:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  try {
+
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findOne({ resetToken: token });
+
+    console.log("User of reset password ", user);
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // console.log("Reset Token in Database: ", user.resetToken);
+    // console.log("Token from URL: ", token);
+
+
+    user.password = hashedPassword;
+    user.resetToken = "";  // Clear the reset token after use
+    await user.save();
+
+    console.log("Updating Firebase password for:", user.email);
+
+    // Update password in Firebase Authentication
+    await admin.auth().updateUser(user.firebase_uid, { password });
+
+    res.json({ message: "Password reset successfully in both database and Firebase" });
+
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 const getInfo = async (req, res) => {
   try {
     const { firebase_uid } = req.params;
@@ -118,4 +215,4 @@ const updateInfo = async (req, res) => {
 
 
 
-module.exports = { saveInfo, getInfo, updateInfo, verifyEmail };
+module.exports = { saveInfo, getInfo, updateInfo, verifyEmail, forgotPassword, resetPassword };

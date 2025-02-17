@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema(
     image: { type: String },
     isVerified: { type: Boolean, default: false },
     verificationToken: { type: String, select: false },  // ✅ Hides token from queries
+    resetToken: { type: String, select: false , default: ""},  // ✅ Hides token from queries
   },
   { timestamps: true }
 );

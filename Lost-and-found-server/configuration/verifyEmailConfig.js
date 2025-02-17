@@ -23,9 +23,9 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (email, token) => {
     try {
         const mailOptions = {
-            from: `"Lost & Found Support" <${process.env.EMAIL_USER}>`,  // ✅ Adds sender name for credibility
+            from: `"Lost & Found Support" <${process.env.EMAIL_USER}>`,  //  Adds sender name for credibility
             to: email,
-            subject: "Verify Your Email - Lost & Found",
+            subject: "Verify Your Email Address",
             text: `Click the following link to verify your email: ${FRONTEND_URL}/verifyEmail/${token}`,
             html: `
                 <p>Hello,</p>

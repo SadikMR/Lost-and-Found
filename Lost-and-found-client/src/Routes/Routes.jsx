@@ -12,12 +12,11 @@ import PrivateRoute from "./PrivateRoute";
 import Chat from "../Component/Pages/Chatting/Chat";
 import FoundPostUpdate from "../Post/FoundPost/FoundPostUpdate";
 import LostPostUpdate from "../Post/LostPost/LostPostUpdate";
-<<<<<<< HEAD
 import VerifyEmail from "../Component/Pages/Registration/verifyEmail";
-
-=======
 import Conversations from "../Component/Pages/Chatting/Conversation";
->>>>>>> b7ae1225d8b2c95fd511c0bea3f4ed8e5379d3fd
+import ForgotPassword from "../Component/Pages/Login/PasswordRecovery/ForgotPassword";
+import ResetPassword from "../Component/Pages/Login/PasswordRecovery/ResetPassword";
+
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -91,9 +90,18 @@ export const router = createBrowserRouter([
     element: <Login></Login>,
   },
   {
+    path: "/login/forgotPassword",
+    element: <ForgotPassword></ForgotPassword>
+  },
+  {
+    path: "/login/resetPassword/:token",
+    element: <ResetPassword></ResetPassword>
+  },
+  {
     path: "/register",
     element: <Registration></Registration>,
   },
+  
   {
     path: "/verifyEmail/:token",
     element: <VerifyEmail></VerifyEmail>  // This is not defined in this file
