@@ -2,12 +2,16 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Eye, EyeOff } from "lucide-react";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const Login = () => {
   const { logIn } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+
   // const [profileInfo, setProfileInfo] = useState(null)
   const navigate = useNavigate();
   const location = useLocation();
@@ -100,23 +104,27 @@ const Login = () => {
             </div>
 
             {/* Password Input */}
-            <div className="mt-4">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
+            <div className="relative mt-3">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
-                placeholder="Enter your password"
+                placeholder="Enter password"
                 required
-                className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black "
+                className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black pr-10"
               />
+              <button
+                type="button"
+                className="absolute right-3 top-9 text-gray-500"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
 
-            <NavLink to="/login/forgotPassword"><p className="text-sm text-blue-700 mt-2 cursor-pointer ">Forgot password?</p></NavLink>
+            <NavLink to="/login/forgotPassword"><p className="text-sm text-blue-700 mt-2 cursor-pointer text-right ">Forgot password?</p></NavLink>
 
             {/* Login Button */}
             <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300">

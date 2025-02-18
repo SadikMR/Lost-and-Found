@@ -1,13 +1,45 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import img from "../../../assets/logo.jpg"
+import bdLocations from "../../../../bdLocation.json";
+import { Eye, EyeOff } from "lucide-react";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const Registration = () => {
   const { createUser, updateUserProfile } = useContext(AuthContext);
+
+  const [selectedDivision, setSelectedDivision] = useState("");
+  const [selectedZilla, setSelectedZilla] = useState("");
+  const [zillas, setZillas] = useState([]);
+  const [upzillas, setUpzillas] = useState([]);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+
+  const handleDivisionChange = (event) => {
+    const division = event.target.value;
+    setSelectedDivision(division);
+    setSelectedZilla("");
+    setUpzillas([]);
+
+    // Find the selected division's zillas
+    const selectedDivisionData = bdLocations.find((d) => d.division === division);
+    setZillas(selectedDivisionData ? selectedDivisionData.zillas : []);
+  };
+
+  const handleZillaChange = (event) => {
+    const zilla = event.target.value;
+    setSelectedZilla(zilla);
+
+    // Find the selected zilla's upzillas
+    const selectedZillaData = zillas.find((z) => z.name === zilla);
+    setUpzillas(selectedZillaData ? selectedZillaData.upzillas : []);
+  };
+
   const navigate = useNavigate();
   const handleSignUp = (event) => {
     event.preventDefault();
@@ -235,52 +267,58 @@ const Registration = () => {
               />
             </div>
 
-            {/* Division */}
+            {/* Division dropdown */}
             <div>
-              <label
-                htmlFor="division"
-                className="block text-sm font-medium text-black"
-              >
-                Division
-              </label>
-              <input
-                type="text"
-                id="division"
-                placeholder="Enter your division"
+              <label className="block text-sm font-medium text-black">Division</label>
+              <select
+                value={selectedDivision}
+                onChange={handleDivisionChange}
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
-              />
+                required
+              >
+                <option value="">Select Division</option>
+                {bdLocations.map((division) => (
+                  <option key={division.division} value={division.division}>
+                    {division.division}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Zilla */}
+            {/* Zilla Dropdown */}
             <div>
-              <label
-                htmlFor="zilla"
-                className="block text-sm font-medium text-black"
-              >
-                Zilla
-              </label>
-              <input
-                type="text"
-                id="zilla"
-                placeholder="Enter your zilla"
+              <label className="block text-sm font-medium text-black">Zilla</label>
+              <select
+                value={selectedZilla}
+                onChange={handleZillaChange}
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
-              />
+                required
+                disabled={!selectedDivision}
+              >
+                <option value="">Select Zilla</option>
+                {zillas.map((zilla) => (
+                  <option key={zilla.name} value={zilla.name}>
+                    {zilla.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Upzilla */}
+            {/* Upzilla Dropdown */}
             <div>
-              <label
-                htmlFor="upzilla"
-                className="block text-sm font-medium text-black"
-              >
-                Upzilla
-              </label>
-              <input
-                type="text"
-                id="upzilla"
-                placeholder="Enter your upzilla"
+              <label className="block text-sm font-medium text-black">Upzilla</label>
+              <select
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
-              />
+                required
+                disabled={!selectedZilla}
+              >
+                <option value="">Select Upzilla</option>
+                {upzillas.map((upzilla) => (
+                  <option key={upzilla} value={upzilla}>
+                    {upzilla}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Village */}
@@ -300,37 +338,45 @@ const Registration = () => {
             </div>
 
             {/* Password */}
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-black"
-              >
+            <div className="relative">
+              <label htmlFor="password" className="block text-sm font-medium text-black">
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
-                placeholder="Enter your password"
+                placeholder="Enter password"
                 required
-                className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
+                className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black pr-10"
               />
+              <button
+                type="button"
+                className="absolute right-3 top-9 text-gray-500"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
 
             {/* Confirm Password */}
-            <div>
-              <label
-                htmlFor="confirm-password"
-                className="block text-sm font-medium text-black"
-              >
+            <div className="relative">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-black">
                 Confirm Password
               </label>
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
-                placeholder="Confirm your password"
+                placeholder="Confirm password"
                 required
-                className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
+                className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black pr-10"
               />
+              <button
+                type="button"
+                className="absolute right-3 top-9 text-gray-500"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
 
             {/* Image Upload */}

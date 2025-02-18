@@ -17,12 +17,13 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
+
 const saveInfo = async (req, res) => {
   try {
     // Extract all fields from req.body
     const userData = req.body;
 
-    console.log("User data: ", userData);
+    // console.log("User data: ", userData);
 
     // Check if email already exists
     const existingUser = await User.findOne({ email: userData.email });
@@ -35,7 +36,7 @@ const saveInfo = async (req, res) => {
       return handleError(res, null, "Password is missing");
     }
 
-    console.log("User data: shahin ", userData.email, userData.password);
+    // console.log("User data: shahin ", userData.email, userData.password);
     // Hash the password before storing
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
@@ -142,7 +143,7 @@ const resetPassword = async (req, res) => {
 
     const user = await User.findOne({ resetToken: token });
 
-    console.log("User of reset password ", user);
+    // console.log("User of reset password ", user);
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });
@@ -151,19 +152,14 @@ const resetPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // console.log("Reset Token in Database: ", user.resetToken);
-    // console.log("Token from URL: ", token);
 
 
     user.password = hashedPassword;
     user.resetToken = "";  // Clear the reset token after use
     await user.save();
 
-    console.log("Updating Firebase password for:", user.email);
-
     // Update password in Firebase Authentication
     await admin.auth().updateUser(user.firebase_uid, { password });
-
     res.json({ message: "Password reset successfully in both database and Firebase" });
 
   } catch (error) {
