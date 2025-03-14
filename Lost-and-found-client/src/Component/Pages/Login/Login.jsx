@@ -32,20 +32,16 @@ const Login = () => {
       // Refresh user data to get updated email verification status
       await user.reload();
       const updatedUser = user; // Get the latest user info
-      // console.log("Updated User:", updatedUser.uid);
+  
 
       //  Fetch user data from API
       const response = await fetch(`${endpoints}/user/getInfo/${updatedUser.uid}`);
-      // console.log("First click", response.data);
+ 
       if (!response.ok) {
         throw new Error("Failed to fetch user data");
       }
       const data = await response.json();
-      // setProfileInfo(data.data); //  Update state (but don't use it immediately)
-      // console.log("Profile Info 1:", profileInfo.isVerified); //  Use data directly instead of profileInfo
-      // console.log("Profile Info 1:", profileInfo); //  Use data directly instead of profileInfo
-
-      //  Use `data.isVerified` instead of `profileInfo.isVerified`
+     
       if (!data.data.isVerified) {
         Swal.fire({
           title: "Email Not Verified",

@@ -65,7 +65,8 @@ const Registration = () => {
         division,
         zilla,
         upzilla,
-        village);
+        village,
+        image);
 
     if (password !== confirmPassword) {
       alert("Password doesn't match");
@@ -82,7 +83,8 @@ const Registration = () => {
       !division ||
       !zilla ||
       !upzilla ||
-      !village
+      !village ||
+      !image
     ) {
       alert("All fields are required");
       return;
@@ -94,8 +96,7 @@ const Registration = () => {
       return;
     }
 
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       alert(
         "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
@@ -272,6 +273,7 @@ const Registration = () => {
               <label className="block text-sm font-medium text-black">Division</label>
               <select
                 value={selectedDivision}
+                id= "division"
                 onChange={handleDivisionChange}
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
                 required
@@ -290,6 +292,7 @@ const Registration = () => {
               <label className="block text-sm font-medium text-black">Zilla</label>
               <select
                 value={selectedZilla}
+                id="zilla"
                 onChange={handleZillaChange}
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
                 required
@@ -310,6 +313,7 @@ const Registration = () => {
               <select
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
                 required
+                id="upzilla"
                 disabled={!selectedZilla}
               >
                 <option value="">Select Upzilla</option>
@@ -389,6 +393,7 @@ const Registration = () => {
               </label>
               <input
                 type="file"
+                accept="image/*"
                 id="image"
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
               />

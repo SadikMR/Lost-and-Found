@@ -14,8 +14,11 @@ const { handleSuccess, handleError } = require("../utils/responseHandler"); // I
 
 // Initialize Firebase Admin SDK (if not already initialized)
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: "lost-and-found-3ddca.appspot.com",
 });
+
+const bucket = admin.storage().bucket();
 
 
 const saveInfo = async (req, res) => {
@@ -40,6 +43,16 @@ const saveInfo = async (req, res) => {
     // Hash the password before storing
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
+    let imageUrl = "";
+    if (req.file) {
+      const file = req.file;
+      const fileName = `profilePictures/${email}-${Date.now()}.jpg`;
+      const fileRef = bucket.file(fileName);
+
+      await fileRef.save(file.buffer, { contentType: file.mimetype });
+      imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+    }
+
     // Generate verification token
     const verificationToken = emailVerifyGenerateToken(userData.email, userData._id);
 
@@ -47,6 +60,7 @@ const saveInfo = async (req, res) => {
     const newUser = new User({
       ...userData,  // Spread all request body values
       password: hashedPassword, // Replace plain password with hashed password
+      image: imageUrl, // Add image URL
       verificationToken, // Add verification token
       isVerified: false, // Ensure the user isn't verified at registration
     });
@@ -62,6 +76,27 @@ const saveInfo = async (req, res) => {
   } catch (error) {
     console.error("Error during user registration:", error);
     handleError(res, error, "Failed to register user");
+  }
+};
+
+// Update Profile Picture
+const updateImage = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!req.file) return res.status(400).json({ message: "No image uploaded" });
+
+    const file = req.file;
+    const fileName = `profilePictures/${userId}-${Date.now()}.jpg`;
+    const fileRef = bucket.file(fileName);
+    
+    await fileRef.save(file.buffer, { contentType: file.mimetype });
+    const imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+
+    const updatedUser = await User.findByIdAndUpdate(userId, { profilePic: imageUrl }, { new: true });
+    res.status(200).json({ message: "Profile picture updated", user: updatedUser });
+  } catch (error) {
+    console.error("Update Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -211,4 +246,4 @@ const updateInfo = async (req, res) => {
 
 
 
-module.exports = { saveInfo, getInfo, updateInfo, verifyEmail, forgotPassword, resetPassword };
+module.exports = { saveInfo, getInfo, updateInfo, verifyEmail, forgotPassword, resetPassword, updateImage };

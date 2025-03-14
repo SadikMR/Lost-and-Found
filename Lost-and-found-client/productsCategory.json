@@ -1,0 +1,121 @@
+[
+    {
+        "categories": "Electronics",
+        "brands": [
+            "Apple",
+            "Samsung",
+            "Sony",
+            "LG",
+            "Dell",
+            "HP",
+            "Asus",
+            "Lenovo",
+            "Acer",
+            "Xiaomi",
+            "OnePlus",
+            "Oppo",
+            "Vivo",
+            "Realme",
+            "Nokia",
+            "Motorola",
+            "Google",
+            "Huawei",
+            "Casio",
+            "Canon",
+            "Nikon",
+            "Sony",
+            "Panasonic",
+            "Sharp",
+            "Null"
+        ]
+    },
+    {
+        "categories": "Cloths",
+        "brands": [
+            "Nike",
+            "Adidas",
+            "Puma",
+            "Zara",
+            "H&M",
+            "Levi's",
+            "Gucci",
+            "Versace",
+            "Armani",
+            "Calvin Klein",
+            "Tommy Hilfiger",
+            "Easy",
+            "Bata",
+            "Apex",
+            "Rang",
+            "Lotto",
+            "Null"
+        ]
+    },
+    {
+        "categories": "Property",
+        "brands": []
+    },
+    {
+        "categories": "Vehicles",
+        "brands": [
+            "Toyota",
+            "Honda",
+            "Ford",
+            "BMW",
+            "Tesla",
+            "Mercedes",
+            "Null"
+        ]
+    },
+    {
+        "categories": "Educations",
+        "brands": [
+            "Pencil",
+            "Pen",
+            "Book",
+            "Notebook",
+            "Calculator",
+            "Eraser",
+            "Sharpner",
+            "Stapler",
+            "Ruler",
+            "Scissors",
+            "Bag",
+            "Novel",
+            "Textbook",
+            "Dictionary",
+            "Poetry book",
+            "Story book",
+            "Science book",
+            "Null"
+        ]
+    },
+    {
+        "categories": "Sports",
+        "brands": [
+            "Nike",
+            "Adidas",
+            "Puma",
+            "Reebok",
+            "Decathlon",
+            "Null"
+        ]
+    },
+    {
+        "categories": "Animals",
+        "brands": []
+    },
+    {
+        "categories": "Foods",
+        "brands": [
+            "Apple",
+            "Lunch box",
+            "Water bottle",
+            "Null"
+        ]
+    },
+    {
+        "categories": "Others",
+        "brands": []
+    }
+]

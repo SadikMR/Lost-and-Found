@@ -63,6 +63,9 @@ const Navbar = () => {
                 <span className="text-2xl sm:text-3xl">
                   <NavLink to="/profile">{user.displayName}</NavLink>
                 </span>
+                <span className="text-2xl sm:text-3xl">
+                  <NavLink to="/profile">{user.image}</NavLink>
+                </span>
               </div>
             ) : (
               <span className="text-3xl sm:text-4xl">

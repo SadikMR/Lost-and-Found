@@ -1,14 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../AuthProviders/AuthProvider";
+import productCategories from "../../../productsCategory.json";
+
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const LostPost = () => {
   const { getCurrentUser } = useContext(AuthContext);
+  const [selectCategory, setSelectCategory] = useState("");
+  const [selectBrand, setSelectBrand] = useState([]);
   const user = getCurrentUser();
   const lostpostInfo = useLoaderData();
+
+  const handleCategoryChange = (e) => {
+    const selected = e.target.value;
+    setSelectCategory(selected);
+
+    // Find brands based on selected category
+    const category = productCategories.find((cat) => cat.categories === selected);
+    setSelectBrand(category ? category.brands : []);
+  };
 
   const handleLostpost = (e) => {
     e.preventDefault();
@@ -101,21 +114,24 @@ const LostPost = () => {
           onSubmit={handleLostpost}
           className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"
         >
+
           {/* Category */}
           <div>
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium text-black"
-            >
-              Category *
-            </label>
-            <input
-              type="text"
+            <label className="block text-sm font-medium text-black">Category *</label>
+            <select
+              value={selectCategory}
+              onChange={handleCategoryChange}
               id="category"
-              placeholder="Enter category"
               required
               className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            />
+            >
+              <option value="">Select Category</option>
+              {productCategories.map((category) => (
+                <option key={category.categories} value={category.categories}>
+                  {category.categories}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Product Name */}
@@ -137,35 +153,42 @@ const LostPost = () => {
 
           {/* Color */}
           <div>
-            <label
-              htmlFor="color"
-              className="block text-sm font-medium text-black"
-            >
+            <label htmlFor="color" className="block text-sm font-medium text-black">
               Color
             </label>
-            <input
-              type="text"
+            <select
               id="color"
-              placeholder="Enter color"
               className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            />
+            >
+              <option value="">Select Color</option>
+              <option value="Red">Red</option>
+              <option value="Blue">Blue</option>
+              <option value="Green">Green</option>
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="Yellow">Yellow</option>
+              <option value="Purple">Purple</option>
+            </select>
           </div>
 
+
           {/* Brand */}
-          <div>
-            <label
-              htmlFor="brand"
-              className="block text-sm font-medium text-black"
-            >
-              Brand
-            </label>
-            <input
-              type="text"
-              id="brand"
-              placeholder="Enter brand"
-              className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+          {selectBrand.length > 0 && (
+            <div >
+              <label className="block text-sm font-medium text-black">Brand</label>
+              <select
+                id="brand"
+                className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Select Brand</option>
+                {selectBrand.map((brand) => (
+                  <option key={brand} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Possible Location */}
           <div>

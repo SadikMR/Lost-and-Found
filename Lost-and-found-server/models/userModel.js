@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
     zilla: { type: String },
     upzilla: { type: String },
     village: { type: String },
-    image: { type: String },
+    image: { type: String, default: "" },
     isVerified: { type: Boolean, default: false },
     verificationToken: { type: String, select: false },  // ✅ Hides token from queries
     resetToken: { type: String, select: false , default: ""},  // ✅ Hides token from queries
