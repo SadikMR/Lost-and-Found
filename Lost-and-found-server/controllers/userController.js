@@ -1,4 +1,6 @@
-const { emailVerifyGenerateToken } = require("../utils/emailVerifyGenerateToken");
+const {
+  emailVerifyGenerateToken,
+} = require("../utils/emailVerifyGenerateToken");
 const { sendVerificationEmail } = require("../configuration/verifyEmailConfig");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -19,7 +21,6 @@ admin.initializeApp({
 });
 
 const bucket = admin.storage().bucket();
-
 
 const saveInfo = async (req, res) => {
   try {
@@ -43,22 +44,20 @@ const saveInfo = async (req, res) => {
     // Hash the password before storing
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    let imageUrl = "";
-    if (req.file) {
-      const file = req.file;
-      const fileName = `profilePictures/${email}-${Date.now()}.jpg`;
-      const fileRef = bucket.file(fileName);
-
-      await fileRef.save(file.buffer, { contentType: file.mimetype });
-      imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+    let imageBase64 = "";
+    if (image) {
+      imageBase64 = image.buffer.toString("base64"); // Convert the buffer to Base64 string
     }
 
     // Generate verification token
-    const verificationToken = emailVerifyGenerateToken(userData.email, userData._id);
+    const verificationToken = emailVerifyGenerateToken(
+      userData.email,
+      userData._id
+    );
 
     // Create new user with all request body fields
     const newUser = new User({
-      ...userData,  // Spread all request body values
+      ...userData, // Spread all request body values
       password: hashedPassword, // Replace plain password with hashed password
       image: imageUrl, // Add image URL
       verificationToken, // Add verification token
@@ -72,38 +71,20 @@ const saveInfo = async (req, res) => {
     await sendVerificationEmail(userData.email, verificationToken);
 
     // Success response
-    handleSuccess(res, newUser, "User registered successfully. Please verify your email.");
+    handleSuccess(
+      res,
+      newUser,
+      "User registered successfully. Please verify your email."
+    );
   } catch (error) {
     console.error("Error during user registration:", error);
     handleError(res, error, "Failed to register user");
   }
 };
 
-// Update Profile Picture
-const updateImage = async (req, res) => {
-  try {
-    const { userId } = req.body;
-    if (!req.file) return res.status(400).json({ message: "No image uploaded" });
-
-    const file = req.file;
-    const fileName = `profilePictures/${userId}-${Date.now()}.jpg`;
-    const fileRef = bucket.file(fileName);
-    
-    await fileRef.save(file.buffer, { contentType: file.mimetype });
-    const imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-
-    const updatedUser = await User.findByIdAndUpdate(userId, { profilePic: imageUrl }, { new: true });
-    res.status(200).json({ message: "Profile picture updated", user: updatedUser });
-  } catch (error) {
-    console.error("Update Error:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
-
 const verifyEmail = async (req, res) => {
   const { token } = req.params;
   try {
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findOneAndUpdate(
@@ -133,7 +114,9 @@ const forgotPassword = async (req, res) => {
       return handleError(res, null, "User not found");
     }
 
-    const resetToken = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "10m" });
+    const resetToken = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "10m",
+    });
 
     user.resetToken = resetToken;
     await user.save();
@@ -159,21 +142,20 @@ const forgotPassword = async (req, res) => {
       res.json({ message: "Password reset email sent" });
     } catch (mailError) {
       console.error("Error sending email:", mailError);
-      return res.status(500).json({ message: "Failed to send password reset email" });
+      return res
+        .status(500)
+        .json({ message: "Failed to send password reset email" });
     }
-
   } catch (error) {
     console.error("Error in forgotPassword:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-
 const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
   try {
-
     // const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findOne({ resetToken: token });
@@ -187,22 +169,20 @@ const resetPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-
-
     user.password = hashedPassword;
-    user.resetToken = "";  // Clear the reset token after use
+    user.resetToken = ""; // Clear the reset token after use
     await user.save();
 
     // Update password in Firebase Authentication
     await admin.auth().updateUser(user.firebase_uid, { password });
-    res.json({ message: "Password reset successfully in both database and Firebase" });
-
+    res.json({
+      message: "Password reset successfully in both database and Firebase",
+    });
   } catch (error) {
     console.error("Error in resetPassword:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 const getInfo = async (req, res) => {
   try {
@@ -227,14 +207,23 @@ const getInfo = async (req, res) => {
 
 const updateInfo = async (req, res) => {
   try {
+    // Log the received request body
+    console.log("Received request body:", req.body);
+
     const { firebase_uid } = req.params;
 
+    // Handle Base64 image if provided in request body
+    if (req.body.image) {
+      console.log("Received Base64 image");
+    }
+
+    // Find and update the user
     const user = await User.findOneAndUpdate({ firebase_uid }, req.body, {
       new: true,
     });
 
     if (!user) {
-      handleSuccess(res, null, "No user found");
+      return handleSuccess(res, null, "No user found");
     }
 
     handleSuccess(res, user, "User information updated successfully");
@@ -244,6 +233,11 @@ const updateInfo = async (req, res) => {
   }
 };
 
-
-
-module.exports = { saveInfo, getInfo, updateInfo, verifyEmail, forgotPassword, resetPassword, updateImage };
+module.exports = {
+  saveInfo,
+  getInfo,
+  updateInfo,
+  verifyEmail,
+  forgotPassword,
+  resetPassword,
+};
