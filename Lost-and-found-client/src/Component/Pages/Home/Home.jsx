@@ -127,21 +127,117 @@ const Home = () => {
           Search for Lost & Found Items
         </h2>
         <form onSubmit={handleSearch} className="flex justify-center gap-4">
-          <input
+          {/* <input
             type="text"
+            name="category"
+            id="category"
+            placeholder="Category"
+            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
+          /> */}
+          <select
+            id="category"
             name="category"
             placeholder="Category"
             className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
-          />
-          <input
+          >
+            <option value="">Select Category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Cloths">Cloths</option>
+            <option value="Property">Property</option>
+            <option value="Vehicles">Vehicles</option>
+            <option value="Educations">Educations</option>
+            <option value="Sports">Sports</option>
+            <option value="Animals">Animals</option>
+            <option value="Foods">Foods</option>
+            <option value="Others">Others</option>
+          </select>
+
+          {/* <input
             type="text"
+            name="location"
+            id="location"
+            placeholder="Location"
+            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
+          /> */}
+          <select
+            id="location"
             name="location"
             placeholder="Location"
             className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
-          />
+          >
+            <option value="">Select Location</option>
+            <option value="Dhaka">Dhaka</option>
+            <option value="Chattogram">Chattogram</option>
+            <option value="Sylhet">Sylhet</option>
+            <option value="Rajshahi">Rajshahi</option>
+            <option value="Khulna">Khulna</option>
+            <option value="Barishal">Barishal</option>
+            <option value="Rangpur">Rangpur</option>
+            <option value="Mymensingh">Mymensingh</option>
+            <option value="Comilla">Comilla</option>
+            <option value="Rangamati">Rangamati</option>
+            <option value="Cox's Bazar">Cox's Bazar</option>
+            <option value="Bandarban">Bandarban</option>
+            <option value="Sundarban">Sundarban</option>
+            <option value="Khagrachari">Khagrachari</option>
+            <option value="Brahmanbaria">Brahmanbaria</option>
+            <option value="Feni">Feni</option>
+            <option value="Noakhali">Noakhali</option>
+            <option value="Lakshmipur">Lakshmipur</option>
+            <option value="Chandpur">Chandpur</option>
+            <option value="Cox's Bazar">Cox's Bazar</option>
+            <option value="Bagerhat">Bagerhat</option>
+            <option value="Jhalokathi">Jhalokathi</option>
+            <option value="Patuakhali">Patuakhali</option>
+            <option value="Pirojpur">Pirojpur</option>
+            <option value="Barguna">Barguna</option>
+            <option value="Bhola">Bhola</option>
+            <option value="Jashore">Jashore</option>
+            <option value="Jhenaidah">Jhenaidah</option>
+            <option value="Magura">Magura</option>
+            <option value="Meherpur">Meherpur</option>
+            <option value="Narail">Narail</option>
+            <option value="Satkhira">Satkhira</option>
+            <option value ="Faridpur">Faridpur</option>
+            <option value="Gopalganj">Gopalganj</option>
+            <option value="Madaripur">Madaripur</option>
+            <option value="Rajbari">Rajbari</option>
+            <option value="Shariatpur">Shariatpur</option>
+            <option value="Tangail">Tangail</option>
+            <option value="Kishoreganj">Kishoreganj</option>
+            <option value="Manikganj">Manikganj</option>
+            <option value="Narayanganj">Narayanganj</option>
+            <option value="Gazipur">Gazipur</option>
+            <option value="Munshiganj">Munshiganj</option>
+            <option value="Narsingdi">Narsingdi</option>
+            <option value="Tangail">Tangail</option>
+            <option value="Bogura">Bogura</option>
+            <option value="Joypurhat">Joypurhat</option>
+            <option value="Natore">Natore</option>
+            <option value="Pabna">Pabna</option>
+            <option value="sirajganj">Sirajganj</option>
+            <option value="Dinajpur">Dinajpur</option>
+            <option value="Gaibandha">Gaibandha</option>
+            <option value="Kurigram">Kurigram</option>
+            <option value="Lalmonirhat">Lalmonirhat</option>
+            <option value="Nilphamari">Nilphamari</option>
+            <option value="Panchagarh">Panchagarh</option>
+            <option value="Thakurgaon">Thakurgaon</option>
+            <option value="Jamalpur">Jamalpur</option>
+            <option value="Netrokona">Netrokona</option>
+            <option value="Sherpur">Sherpur</option>
+            <option value="Sunamganj">Sunamganj</option>
+            <option value="Sylhet">Sylhet</option>
+            <option value="Moulvibazar">Moulvibazar</option>
+            <option value="Habiganj">Habiganj</option>
+
+
+          </select>
+
           <input
             type={dateType}
             name="date"
+            id="date"
             placeholder="Date"
             className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
             onFocus={handleDateFocus}
@@ -149,6 +245,7 @@ const Home = () => {
           />
           <select
             name="type"
+            id="type"
             value={itemType}
             onChange={(e) => setItemType(e.target.value)}
             className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"

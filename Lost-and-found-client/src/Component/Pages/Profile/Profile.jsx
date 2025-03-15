@@ -368,9 +368,9 @@ const Profile = () => {
               <tbody>
                 {currentUserFoundPost.map((found, index) => (
                   <tr key={index} className="bg-white hover:bg-blue-100">
+                    <td className="px-8 py-2">{found.category}</td>
                     <td className="pl-10 py-2">{found.productName}</td>
                     <td className="px-4 py-2">{found.zilla}</td>
-                    <td className="px-4 py-2">{found.possibleLocation}</td>
                     <td className="px-4 py-2">{found.possibleDate}</td>
                     <td className="px-4 py-2 relative">
                       <div className="dropdown dropdown-hover">

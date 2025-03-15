@@ -3,6 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../AuthProviders/AuthProvider";
 import productCategories from "../../../productsCategory.json";
+import bdLocations from "../../../bdLocation.json";
 
 
 const endpoints = import.meta.env.VITE_backendUrl;
@@ -11,6 +12,12 @@ const LostPost = () => {
   const { getCurrentUser } = useContext(AuthContext);
   const [selectCategory, setSelectCategory] = useState("");
   const [selectBrand, setSelectBrand] = useState([]);
+
+  const [selectedDivision, setSelectedDivision] = useState("");
+  const [selectedZilla, setSelectedZilla] = useState("");
+  const [zillas, setZillas] = useState([]);
+  const [upzillas, setUpzillas] = useState([]);
+
   const user = getCurrentUser();
   const lostpostInfo = useLoaderData();
 
@@ -23,6 +30,26 @@ const LostPost = () => {
     setSelectBrand(category ? category.brands : []);
   };
 
+  const handleDivisionChange = (event) => {
+    const division = event.target.value;
+    setSelectedDivision(division);
+    setSelectedZilla("");
+    setUpzillas([]);
+
+    // Find the selected division's zillas
+    const selectedDivisionData = bdLocations.find((d) => d.division === division);
+    setZillas(selectedDivisionData ? selectedDivisionData.zillas : []);
+  };
+
+  const handleZillaChange = (event) => {
+    const zilla = event.target.value;
+    setSelectedZilla(zilla);
+
+    // Find the selected zilla's upzillas
+    const selectedZillaData = zillas.find((z) => z.name === zilla);
+    setUpzillas(selectedZillaData ? selectedZillaData.upzillas : []);
+  };
+
   const handleLostpost = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -31,7 +58,9 @@ const LostPost = () => {
     const color = form.color.value;
     const brand = form.brand.value;
     const description = form.description.value;
-    const possibleLocation = form.possibleLocation.value;
+    const division = form.division.value;
+    const zilla = form.zilla.value;
+    const upzilla = form.upzilla.value;
     const possibleDate = form.possibleDate.value;
     const image = form.image.value;
     const firebase_uid = user.uid;
@@ -42,7 +71,9 @@ const LostPost = () => {
       color,
       brand,
       description,
-      possibleLocation,
+      division,
+      zilla,
+      upzilla,
       possibleDate,
       image,
     };
@@ -53,7 +84,9 @@ const LostPost = () => {
       color,
       brand,
       description,
-      possibleLocation,
+      division,
+      zilla,
+      upzilla,
       possibleDate,
       image
     );
@@ -190,21 +223,61 @@ const LostPost = () => {
             </div>
           )}
 
-          {/* Possible Location */}
+          {/* Division dropdown */}
           <div>
-            <label
-              htmlFor="possibleLocation"
-              className="block text-sm font-medium text-black"
-            >
-              Possible Location *
-            </label>
-            <input
-              type="text"
-              id="possibleLocation"
-              placeholder="Enter possible location"
+            <label className="block text-sm font-medium text-black">Division</label>
+            <select
+              value={selectedDivision}
+              id="division"
+              onChange={handleDivisionChange}
+              className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
               required
-              className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            />
+            >
+              <option value="">Select Division</option>
+              {bdLocations.map((division) => (
+                <option key={division.division} value={division.division}>
+                  {division.division}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Zilla Dropdown */}
+          <div>
+            <label className="block text-sm font-medium text-black">Zilla</label>
+            <select
+              value={selectedZilla}
+              id="zilla"
+              onChange={handleZillaChange}
+              className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
+              required
+              disabled={!selectedDivision}
+            >
+              <option value="">Select Zilla</option>
+              {zillas.map((zilla) => (
+                <option key={zilla.name} value={zilla.name}>
+                  {zilla.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Upzilla Dropdown */}
+          <div>
+            <label className="block text-sm font-medium text-black">Upzilla</label>
+            <select
+              className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
+              required
+              id="upzilla"
+              disabled={!selectedZilla}
+            >
+              <option value="">Select Upzilla</option>
+              {upzillas.map((upzilla) => (
+                <option key={upzilla} value={upzilla}>
+                  {upzilla}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Possible Date */}

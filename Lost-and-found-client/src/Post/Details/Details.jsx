@@ -98,7 +98,7 @@ const Details = () => {
             </p>
             <p>
               <span className="font-semibold">Location:</span>
-              {post.possibleLocation}
+              {post.division}, {post.zilla}, {post.upzilla}
             </p>
             <p>
               <span className="font-semibold">Date:</span> {post.possibleDate}
