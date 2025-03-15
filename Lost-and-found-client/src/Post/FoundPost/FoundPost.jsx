@@ -16,6 +16,8 @@ const FoundPost = () => {
   const [zillas, setZillas] = useState([]);
   const [upzillas, setUpzillas] = useState([]);
 
+  const [imagePreview, setImagePreview] = useState(null);
+
   const user = getCurrentUser();
 
   const handleCategoryChange = (e) => {
@@ -23,7 +25,9 @@ const FoundPost = () => {
     setSelectCategory(selected);
 
     // Find brands based on selected category
-    const category = productCategories.find((cat) => cat.categories === selected);
+    const category = productCategories.find(
+      (cat) => cat.categories === selected
+    );
     setSelectBrand(category ? category.brands : []);
   };
 
@@ -34,7 +38,9 @@ const FoundPost = () => {
     setUpzillas([]);
 
     // Find the selected division's zillas
-    const selectedDivisionData = bdLocations.find((d) => d.division === division);
+    const selectedDivisionData = bdLocations.find(
+      (d) => d.division === division
+    );
     setZillas(selectedDivisionData ? selectedDivisionData.zillas : []);
   };
 
@@ -47,6 +53,28 @@ const FoundPost = () => {
     setUpzillas(selectedZillaData ? selectedZillaData.upzillas : []);
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Check if the file size is greater than 10MB
+      if (file.size > 10 * 1024 * 1024) {
+        Swal.fire({
+          title: "Error!",
+          text: "Image size is too large. Please upload an image smaller than 5MB.",
+          icon: "error",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Image = reader.result; // Get the Base64 encoded image
+        setImagePreview(base64Image);
+      };
+      reader.readAsDataURL(file); // Convert the image to base64 without compression
+    }
+  };
 
   const handleFoundPost = (e) => {
     e.preventDefault();
@@ -54,13 +82,13 @@ const FoundPost = () => {
     const category = form.category.value;
     const productName = form.productName.value;
     const color = form.color.value;
-    const brand = form.brand.value;
+    const brand = form.brand ? form.brand.value : "";
     const description = form.description.value;
     const division = form.division.value;
     const zilla = form.zilla.value;
     const upzilla = form.upzilla.value;
     const possibleDate = form.possibleDate.value;
-    const image = form.image.value;
+    const image = imagePreview;
     const firebase_uid = user.uid;
     const foundInfo = {
       firebase_uid,
@@ -147,7 +175,9 @@ const FoundPost = () => {
         >
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-black">Category *</label>
+            <label className="block text-sm font-medium text-black">
+              Category *
+            </label>
             <select
               value={selectCategory}
               onChange={handleCategoryChange}
@@ -183,7 +213,10 @@ const FoundPost = () => {
 
           {/* Color */}
           <div>
-            <label htmlFor="color" className="block text-sm font-medium text-black">
+            <label
+              htmlFor="color"
+              className="block text-sm font-medium text-black"
+            >
               Color
             </label>
             <select
@@ -201,11 +234,12 @@ const FoundPost = () => {
             </select>
           </div>
 
-
           {/* Brand */}
           {selectBrand.length > 0 && (
-            <div >
-              <label className="block text-sm font-medium text-black">Brand</label>
+            <div>
+              <label className="block text-sm font-medium text-black">
+                Brand
+              </label>
               <select
                 id="brand"
                 className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
@@ -222,7 +256,9 @@ const FoundPost = () => {
 
           {/* Division dropdown */}
           <div>
-            <label className="block text-sm font-medium text-black">Division</label>
+            <label className="block text-sm font-medium text-black">
+              Division
+            </label>
             <select
               value={selectedDivision}
               id="division"
@@ -241,7 +277,9 @@ const FoundPost = () => {
 
           {/* Zilla Dropdown */}
           <div>
-            <label className="block text-sm font-medium text-black">Zilla</label>
+            <label className="block text-sm font-medium text-black">
+              Zilla
+            </label>
             <select
               value={selectedZilla}
               id="zilla"
@@ -261,7 +299,9 @@ const FoundPost = () => {
 
           {/* Upzilla Dropdown */}
           <div>
-            <label className="block text-sm font-medium text-black">Upzilla</label>
+            <label className="block text-sm font-medium text-black">
+              Upzilla
+            </label>
             <select
               className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
               required
@@ -321,7 +361,17 @@ const FoundPost = () => {
               type="file"
               id="image"
               className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              onChange={handleImageUpload}
             />
+            {imagePreview && (
+              <div className="mt-4">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover"
+                />
+              </div>
+            )}
           </div>
           {/* Submit Button */}
           <div className="md:col-span-2">
