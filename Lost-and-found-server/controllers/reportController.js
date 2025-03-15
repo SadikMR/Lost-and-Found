@@ -1,4 +1,5 @@
 const ReportedUsers = require("../models/reportedUsersModel");
+const ReportedPosts = require("../models/reportedPostsModel");
 
 // Function to report a user
 const reportUser = async (req, res) => {
@@ -56,5 +57,53 @@ const reportUser = async (req, res) => {
   }
 };
 
+const reportPost = async (req, res) => {
+  try {
+    const { postId, postType, reporterUserId, reason, specifiedReason } =
+      req.body;
+
+    // Log the incoming request body to the console
+    console.log("Request Body:", req.body);
+
+    // Validate input
+    if (!postId || !postType || !reporterUserId || !reason) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required.",
+      });
+    }
+
+    // Ensure `specifiedReason` is required when "Other" is selected
+    if (reason === "Other" && !specifiedReason) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide more details for 'Other' reason.",
+      });
+    }
+
+    // Create a new report
+    const newReport = new ReportedPosts({
+      postId,
+      postType,
+      reporterUserId,
+      reason,
+      specifiedReason: specifiedReason || "",
+    });
+
+    await newReport.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "User reported successfully.",
+    });
+  } catch (error) {
+    console.error("Error reporting user:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
+    });
+  }
+};
+
 // Export the function
-module.exports = { reportUser };
+module.exports = { reportUser, reportPost };
