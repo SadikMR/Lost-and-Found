@@ -19,13 +19,17 @@ const getSpecificFoundPosts = async (req, res) => {
 
     // Ensure the _id is converted to ObjectId
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return res.status(400).json({ success: false, message: "Invalid ID format" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid ID format" });
     }
 
     const specificFoundPost = await FoundPost.findOne({ _id });
 
     if (!specificFoundPost) {
-      return res.status(404).json({ success: false, message: "Found post not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Found post not found" });
     }
 
     // Respond with the found post
@@ -40,12 +44,15 @@ const getSpecificFoundPosts = async (req, res) => {
   }
 };
 
-
 const getCurrentUserFoundPosts = async (req, res) => {
   try {
     const { firebase_uid } = req.params;
     const UserFoundposts = await FoundPost.find({ firebase_uid });
-    handleSuccess(res, UserFoundposts, "Current user Found posts retrieved successfully");
+    handleSuccess(
+      res,
+      UserFoundposts,
+      "Current user Found posts retrieved successfully"
+    );
   } catch (error) {
     handleError(res, error);
   }
@@ -87,7 +94,7 @@ const updatefoundpost = async (req, res) => {
   };
   const result = await FoundPost.updateOne(filter, updateMatch, options);
   handleSuccess(res, result, "Found post updated successfully");
-}
+};
 
 // delete a specific found post
 const deleteFoundPost = async (req, res) => {
@@ -98,11 +105,23 @@ const deleteFoundPost = async (req, res) => {
   handleSuccess(res, result, "Found post deleted successfully");
 };
 
-
-//search based on query
 const searchFoundPosts = async (req, res) => {
   try {
-    const foundPosts = await FoundPost.find(req.query);
+    const { category, zilla, possibleDate } = req.query;
+
+    // Prepare the query object
+    let query = {};
+
+    if (category) query.category = category;
+    if (zilla) query.zilla = zilla;
+
+    // If possibleDate is provided, filter posts with date <= possibleDate
+    if (possibleDate) {
+      query.possibleDate = { $lte: possibleDate }; // This ensures we get posts with the same or earlier date
+    }
+
+    // Fetch posts from the database based on the query
+    const foundPosts = await FoundPost.find(query);
 
     if (foundPosts.length === 0) {
       return handleSuccess(
@@ -118,4 +137,12 @@ const searchFoundPosts = async (req, res) => {
   }
 };
 
-module.exports = { getAllFoundPosts, getSpecificFoundPosts, createFoundPost, updatefoundpost, deleteFoundPost, searchFoundPosts, getCurrentUserFoundPosts };
+module.exports = {
+  getAllFoundPosts,
+  getSpecificFoundPosts,
+  createFoundPost,
+  updatefoundpost,
+  deleteFoundPost,
+  searchFoundPosts,
+  getCurrentUserFoundPosts,
+};
