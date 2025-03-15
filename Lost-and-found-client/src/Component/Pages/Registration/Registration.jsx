@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import img from "../../../assets/logo.jpg"
+import img from "../../../assets/logo.jpg";
 import bdLocations from "../../../../bdLocation.json";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -19,6 +19,7 @@ const Registration = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleDivisionChange = (event) => {
     const division = event.target.value;
@@ -27,7 +28,9 @@ const Registration = () => {
     setUpzillas([]);
 
     // Find the selected division's zillas
-    const selectedDivisionData = bdLocations.find((d) => d.division === division);
+    const selectedDivisionData = bdLocations.find(
+      (d) => d.division === division
+    );
     setZillas(selectedDivisionData ? selectedDivisionData.zillas : []);
   };
 
@@ -38,6 +41,29 @@ const Registration = () => {
     // Find the selected zilla's upzillas
     const selectedZillaData = zillas.find((z) => z.name === zilla);
     setUpzillas(selectedZillaData ? selectedZillaData.upzillas : []);
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Check if the file size is greater than 10MB
+      if (file.size > 10 * 1024 * 1024) {
+        Swal.fire({
+          title: "Error!",
+          text: "Image size is too large. Please upload an image smaller than 5MB.",
+          icon: "error",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Image = reader.result; // Get the Base64 encoded image
+        setImagePreview(base64Image);
+      };
+      reader.readAsDataURL(file); // Convert the image to base64 without compression
+    }
   };
 
   const navigate = useNavigate();
@@ -54,19 +80,19 @@ const Registration = () => {
     const zilla = form.zilla.value;
     const upzilla = form.upzilla.value;
     const village = form.village.value;
-    const image = form.image.value;
+    const image = imagePreview;
     const person =
       (fullname,
-        username,
-        email,
-        password,
-        confirmPassword,
-        phone,
-        division,
-        zilla,
-        upzilla,
-        village,
-        image);
+      username,
+      email,
+      password,
+      confirmPassword,
+      phone,
+      division,
+      zilla,
+      upzilla,
+      village,
+      image);
 
     if (password !== confirmPassword) {
       alert("Password doesn't match");
@@ -96,7 +122,8 @@ const Registration = () => {
       return;
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       alert(
         "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
@@ -174,8 +201,6 @@ const Registration = () => {
       .catch((error) => {
         alert("An error occurred during registration: " + error.message);
       });
-
-
   };
   return (
     <div className="bg-[#FAF7F0]">
@@ -270,10 +295,12 @@ const Registration = () => {
 
             {/* Division dropdown */}
             <div>
-              <label className="block text-sm font-medium text-black">Division</label>
+              <label className="block text-sm font-medium text-black">
+                Division
+              </label>
               <select
                 value={selectedDivision}
-                id= "division"
+                id="division"
                 onChange={handleDivisionChange}
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
                 required
@@ -289,7 +316,9 @@ const Registration = () => {
 
             {/* Zilla Dropdown */}
             <div>
-              <label className="block text-sm font-medium text-black">Zilla</label>
+              <label className="block text-sm font-medium text-black">
+                Zilla
+              </label>
               <select
                 value={selectedZilla}
                 id="zilla"
@@ -309,7 +338,9 @@ const Registration = () => {
 
             {/* Upzilla Dropdown */}
             <div>
-              <label className="block text-sm font-medium text-black">Upzilla</label>
+              <label className="block text-sm font-medium text-black">
+                Upzilla
+              </label>
               <select
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
                 required
@@ -343,7 +374,10 @@ const Registration = () => {
 
             {/* Password */}
             <div className="relative">
-              <label htmlFor="password" className="block text-sm font-medium text-black">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-black"
+              >
                 Password
               </label>
               <input
@@ -364,7 +398,10 @@ const Registration = () => {
 
             {/* Confirm Password */}
             <div className="relative">
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-black">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-black"
+              >
                 Confirm Password
               </label>
               <input
@@ -396,7 +433,18 @@ const Registration = () => {
                 accept="image/*"
                 id="image"
                 className="bg-white mt-1 w-full p-2 border border-gray-300 rounded-lg text-black"
+                onChange={handleImageUpload}
               />
+
+              {imagePreview && (
+                <div className="mt-4">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover"
+                  />
+                </div>
+              )}
             </div>
             {/* Register Button */}
             <div className="md:col-span-2">

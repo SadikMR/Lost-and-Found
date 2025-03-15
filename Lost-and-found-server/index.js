@@ -10,6 +10,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const userRoutes = require("./routes/userRoutes");
 const verificationRoutes = require("./routes/verificationRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 
 dotenv.config();
 
@@ -44,7 +45,10 @@ app.set("io", io);
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Routes
 app.use("/posts/lost", lostPostRoutes);
@@ -52,6 +56,7 @@ app.use("/posts/found", foundPostRoutes);
 app.use("/chat", chatRoutes);
 app.use("/user", userRoutes);
 app.use("/Verify", verificationRoutes);
+app.use("/report", reportRoutes);
 
 // Health Check
 app.get("/", (req, res) => {
