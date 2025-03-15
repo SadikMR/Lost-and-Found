@@ -2,6 +2,18 @@ const mongoose = require("mongoose");
 const LostPost = require("../models/lostPostModel");
 const { handleSuccess, handleError } = require("../utils/responseHandler");
 
+const hasPostedWithin24Hours = async (firebase_uid) => {
+  const twentyFourHoursAgo = new Date();
+  twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24); // Subtract 24 hours
+
+  const existingPost = await LostPost.findOne({
+    firebase_uid: firebase_uid,
+    createdAt: { $gte: twentyFourHoursAgo }, // Check if a post exists within 24 hours
+  });
+
+  return !!existingPost; // Return true if a post exists, false otherwise
+};
+
 // Get all lost posts
 const getAllLostPosts = async (req, res) => {
   try {
@@ -63,6 +75,15 @@ const getCurrentUserLostPosts = async (req, res) => {
 // Create a new lost post
 const createLostPost = async (req, res) => {
   try {
+    const { firebase_uid } = req.body;
+    // Check if the user has posted a lost post in the last 24 hours
+    if (await hasPostedWithin24Hours(firebase_uid)) {
+      return res.status(400).json({
+        success: false,
+        message: "Limit Over",
+      });
+    }
+
     const newLostPost = new LostPost(req.body);
     const savedPost = await newLostPost.save();
     handleSuccess(res, savedPost, "Lost post created successfully");

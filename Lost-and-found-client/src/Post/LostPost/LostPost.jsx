@@ -139,6 +139,13 @@ const LostPost = () => {
           }).then(() => {
             form.reset();
           });
+        } else if (data.message === "Limit Over") {
+          Swal.fire({
+            title: "Sorry!",
+            text: "You can only post one lost item every 24 hours. Please try again later.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
         } else {
           Swal.fire({
             title: "Error!",

@@ -2,6 +2,18 @@ const FoundPost = require("../models/foundPostModel");
 const mongoose = require("mongoose");
 const { handleSuccess, handleError } = require("../utils/responseHandler");
 
+const hasPostedWithin24Hours = async (firebase_uid) => {
+  const twentyFourHoursAgo = new Date();
+  twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24); // Subtract 24 hours
+
+  const existingPost = await FoundPost.findOne({
+    firebase_uid: firebase_uid,
+    createdAt: { $gte: twentyFourHoursAgo }, // Check if a post exists within 24 hours
+  });
+
+  return !!existingPost; // Return true if a post exists, false otherwise
+};
+
 // Get all found posts
 const getAllFoundPosts = async (req, res) => {
   try {
@@ -61,6 +73,14 @@ const getCurrentUserFoundPosts = async (req, res) => {
 // Create a new found post
 const createFoundPost = async (req, res) => {
   try {
+    const { firebase_uid } = req.body;
+    // Check if the user has posted a found post in the last 24 hours
+    if (await hasPostedWithin24Hours(firebase_uid)) {
+      return res.status(400).json({
+        success: false,
+        message: "Limit Over",
+      });
+    }
     console.log("Received new found post data:", req.body);
     const newFoundPost = new FoundPost(req.body);
     const savedPost = await newFoundPost.save();
