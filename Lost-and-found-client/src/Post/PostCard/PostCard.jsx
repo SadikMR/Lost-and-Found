@@ -52,7 +52,7 @@ const Post = ({ posts }) => {
                 <strong>Category:</strong> {post.category}
               </li>
               <li>
-                <strong>Location:</strong> {post.possibleLocation}
+                <strong>Location:</strong> {post.division}, {post.zilla} 
               </li>
               <li>
                 <strong>Date:</strong> {post.possibleDate}

@@ -107,12 +107,7 @@
     },
     {
         "categories": "Foods",
-        "brands": [
-            "Apple",
-            "Lunch box",
-            "Water bottle",
-            "Null"
-        ]
+        "brands": []
     },
     {
         "categories": "Others",

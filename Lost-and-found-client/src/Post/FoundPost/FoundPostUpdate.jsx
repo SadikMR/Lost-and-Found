@@ -98,7 +98,7 @@ const FoundPostUpdate = () => {
                     onSubmit={handleFoundPostUpdate}
                     className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"
                 >
-                    {/* Category */}
+                    {/* Category
                     <div>
                         <label htmlFor="category" className="block text-sm font-medium text-black">
                             Category *
@@ -111,7 +111,7 @@ const FoundPostUpdate = () => {
                             required
                             className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                         />
-                    </div>
+                    </div> */}
 
                     {/* Product Name */}
                     <div>
@@ -133,16 +133,24 @@ const FoundPostUpdate = () => {
                         <label htmlFor="color" className="block text-sm font-medium text-black">
                             Color
                         </label>
-                        <input
-                            type="text"
+                        <select
                             id="color"
                             value={currentfoundpostInfo.color || ""}
                             onChange={handleInputChange}
                             className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
+                        >
+                            <option value="">Select Color</option>
+                            <option value="Red">Red</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Green">Green</option>
+                            <option value="Black">Black</option>
+                            <option value="White">White</option>
+                            <option value="Yellow">Yellow</option>
+                            <option value="Purple">Purple</option>
+                        </select>
                     </div>
 
-                    {/* Brand */}
+                    {/* Brand
                     <div>
                         <label htmlFor="brand" className="block text-sm font-medium text-black">
                             Brand
@@ -154,9 +162,9 @@ const FoundPostUpdate = () => {
                             onChange={handleInputChange}
                             className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                         />
-                    </div>
+                    </div> */}
 
-                    {/* Possible Location */}
+                    {/* Possible Location
                     <div>
                         <label htmlFor="possibleLocation" className="block text-sm font-medium text-black">
                             Possible Location *
@@ -169,9 +177,9 @@ const FoundPostUpdate = () => {
                             required
                             className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                         />
-                    </div>
+                    </div> */}
 
-                    {/* Possible Date */}
+                    {/* Possible Date
                     <div>
                         <label htmlFor="possibleDate" className="block text-sm font-medium text-black">
                             Possible Date *
@@ -184,7 +192,7 @@ const FoundPostUpdate = () => {
                             required
                             className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                         />
-                    </div>
+                    </div> */}
 
                     {/* Short Description */}
                     <div className="md:col-span-2">
@@ -200,7 +208,7 @@ const FoundPostUpdate = () => {
                         ></textarea>
                     </div>
 
-                    {/* Image Upload */}
+                    {/* Image Upload
                     <div className="md:col-span-2">
                         <label htmlFor="image" className="block text-sm font-medium text-black">
                             Upload Image
@@ -212,7 +220,7 @@ const FoundPostUpdate = () => {
                             onChange={handleInputChange}
                             className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                         />
-                    </div>
+                    </div> */}
 
                     {/* Submit Button */}
                     <div className="md:col-span-2">
