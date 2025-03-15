@@ -44,11 +44,6 @@ const saveInfo = async (req, res) => {
     // Hash the password before storing
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    let imageBase64 = "";
-    if (image) {
-      imageBase64 = image.buffer.toString("base64"); // Convert the buffer to Base64 string
-    }
-
     // Generate verification token
     const verificationToken = emailVerifyGenerateToken(
       userData.email,
@@ -59,7 +54,6 @@ const saveInfo = async (req, res) => {
     const newUser = new User({
       ...userData, // Spread all request body values
       password: hashedPassword, // Replace plain password with hashed password
-      image: imageUrl, // Add image URL
       verificationToken, // Add verification token
       isVerified: false, // Ensure the user isn't verified at registration
     });
