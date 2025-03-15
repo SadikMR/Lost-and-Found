@@ -4,7 +4,9 @@ import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./modal.css";
-
+import { Flag } from "lucide-react"; // Report icon
+import ReportModal from "./reportModal";
+import { MoreVertical } from "lucide-react";
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const Profile = () => {
@@ -17,6 +19,14 @@ const Profile = () => {
   const [currentUserLostPost, setCurrentUserLostPost] = useState([]);
   const user = getCurrentUser();
   const currentuser_id = user.uid;
+
+  const [showMenu, setShowMenu] = useState(false);
+  const [showReport, setShowReport] = useState(false);
+
+  const handleCopyURL = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Profile URL copied! 📋");
+  };
 
   const navigate = useNavigate();
   const handleShowMore = (post) => {
@@ -213,20 +223,78 @@ const Profile = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 m-5 bg-[#E5E1DA] shadow-md rounded-lg text-black">
       <div>
-        <div className="flex items-center gap-6">
-          <img
-            src={profileInfo.data.image}
-            alt="User"
-            className="w-24 h-24 rounded-full border border-gray-300 cursor-pointer"
-            onClick={() => handleImageClick(profileInfo.data.image)}
-          />
-          <div>
-            <h2 className="text-2xl font-bold">
-              {profileInfo.data.fullname || "Name"}
-            </h2>
-            <p>{profileInfo.data.username || "Nickname"}</p>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            {/* User Profile Picture */}
+            <img
+              src={profileInfo.data.image}
+              alt="User"
+              className="w-24 h-24 rounded-full border border-gray-300 cursor-pointer hover:opacity-80"
+              onClick={() => handleImageClick(profileInfo.data.image)}
+            />
+
+            <div className="flex flex-col justify-center">
+              {/* Full Name */}
+              <h2 className="text-xl sm:text-2xl font-semibold text-black">
+                {profileInfo.data.fullname}
+              </h2>
+
+              {/* Username */}
+              <p className="text-sm text-gray-600 mt-1">
+                <span className="text-gray-500">@</span>
+                {profileInfo.data.username || "Nickname"}
+              </p>
+            </div>
+          </div>
+
+          {/* Three-dot menu */}
+          <div className="relative">
+            <button
+              className="p-2 rounded-full hover:bg-gray-200"
+              onClick={() => setShowMenu(!showMenu)}
+            >
+              <MoreVertical size={22} />
+            </button>
+
+            {/* Dropdown Menu */}
+            {showMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
+                <button
+                  className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    setShowReport(true);
+                    setShowMenu(false);
+                  }}
+                >
+                  Report
+                </button>
+                <button
+                  className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    // Handle block action here
+                  }}
+                >
+                  Block
+                </button>
+                <button
+                  className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                  onClick={handleCopyURL}
+                >
+                  Copy URL
+                </button>
+                <button
+                  className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    // Handle message action here
+                  }}
+                >
+                  Send Message
+                </button>
+              </div>
+            )}
           </div>
         </div>
+
         <div className="mt-6 space-y-3">
           <p>
             <span className="font-semibold">Division:</span>{" "}
@@ -258,6 +326,14 @@ const Profile = () => {
             Edit Profile
           </NavLink>
         </div>
+        {/* Report Modal */}
+        {showReport && (
+          <ReportModal
+            reportedUserId={profileInfo.data.firebase_uid}
+            reporterUserId={currentuser_id}
+            onClose={() => setShowReport(false)}
+          />
+        )}
         {/* Modal for full image view */}
         <div
           className={`modal-overlay ${isModalOpen ? "active" : ""}`}

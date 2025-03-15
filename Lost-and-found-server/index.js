@@ -10,6 +10,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const userRoutes = require("./routes/userRoutes");
 const verificationRoutes = require("./routes/verificationRoutes");
+const reportRoutes = require("./routes/reportRoutes");
 
 dotenv.config();
 
@@ -55,6 +56,7 @@ app.use("/posts/found", foundPostRoutes);
 app.use("/chat", chatRoutes);
 app.use("/user", userRoutes);
 app.use("/Verify", verificationRoutes);
+app.use("/report", reportRoutes);
 
 // Health Check
 app.get("/", (req, res) => {
