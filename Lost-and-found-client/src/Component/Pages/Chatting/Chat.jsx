@@ -22,6 +22,8 @@ const Chat = () => {
   const senderInfo = JSON.parse(queryParams.get("senderInfo"));
   const receiverInfo = JSON.parse(queryParams.get("receiverInfo"));
 
+  console.log(receiverInfo);
+
   useEffect(() => {
     if (senderID && receiverID) {
       socket.emit("setup", { id: senderID });
@@ -108,12 +110,12 @@ const Chat = () => {
         {/* Header displaying receiver's full name */}
         <div className="flex items-center mb-6">
           <img
-            src={image}
+            src={receiverInfo?.image}
             alt="Receiver"
             className="w-12 h-12 rounded-full mr-4"
           />
           <h1 className="text-2xl font-bold text-gray-800">
-            {receiverInfo?.data?.fullname}
+            {receiverInfo?.fullname}
           </h1>
         </div>
 
@@ -126,14 +128,14 @@ const Chat = () => {
               <div
                 key={index}
                 className={`flex mb-4 ${
-                  isSender ? "justify-start" : "justify-end"
+                  isSender ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
                   className={`max-w-xs p-3 rounded-lg ${
                     isSender
-                      ? "bg-gray-200 text-black rounded-br-none"
-                      : "bg-buttonColor1 text-white rounded-bl-none"
+                      ? "bg-buttonColor1 text-white rounded-bl-none"
+                      : "bg-gray-200 text-black rounded-br-none"
                   }`}
                   onClick={() => setShowDate(showDate === index ? null : index)}
                 >
