@@ -2,6 +2,18 @@ const mongoose = require("mongoose");
 const LostPost = require("../models/lostPostModel");
 const { handleSuccess, handleError } = require("../utils/responseHandler");
 
+const hasPostedWithin24Hours = async (firebase_uid) => {
+  const twentyFourHoursAgo = new Date();
+  twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24); // Subtract 24 hours
+
+  const existingPost = await LostPost.findOne({
+    firebase_uid: firebase_uid,
+    createdAt: { $gte: twentyFourHoursAgo }, // Check if a post exists within 24 hours
+  });
+
+  return !!existingPost; // Return true if a post exists, false otherwise
+};
+
 // Get all lost posts
 const getAllLostPosts = async (req, res) => {
   try {
@@ -19,13 +31,17 @@ const getSpecificLostPosts = async (req, res) => {
 
     // Ensure the _id is converted to ObjectId
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return res.status(400).json({ success: false, message: "Invalid ID format" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid ID format" });
     }
 
     const specificLostPost = await LostPost.findOne({ _id });
 
     if (!specificLostPost) {
-      return res.status(404).json({ success: false, message: "Found post not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Found post not found" });
     }
 
     // Respond with the found post
@@ -45,7 +61,11 @@ const getCurrentUserLostPosts = async (req, res) => {
   try {
     const { firebase_uid } = req.params;
     const UserLostposts = await LostPost.find({ firebase_uid });
-    handleSuccess(res, UserLostposts, "Current user Lost posts retrieved successfully");
+    handleSuccess(
+      res,
+      UserLostposts,
+      "Current user Lost posts retrieved successfully"
+    );
   } catch (error) {
     console.error("Error getting user lost posts info:", error);
     handleError(res, error, "Failed to retrieve user lost posts information");
@@ -55,6 +75,15 @@ const getCurrentUserLostPosts = async (req, res) => {
 // Create a new lost post
 const createLostPost = async (req, res) => {
   try {
+    const { firebase_uid } = req.body;
+    // Check if the user has posted a lost post in the last 24 hours
+    if (await hasPostedWithin24Hours(firebase_uid)) {
+      return res.status(400).json({
+        success: false,
+        message: "Limit Over",
+      });
+    }
+
     const newLostPost = new LostPost(req.body);
     const savedPost = await newLostPost.save();
     handleSuccess(res, savedPost, "Lost post created successfully");
@@ -62,7 +91,6 @@ const createLostPost = async (req, res) => {
     handleError(res, error);
   }
 };
-
 
 // update a specific found post
 const updateLostpost = async (req, res) => {
@@ -90,7 +118,6 @@ const updateLostpost = async (req, res) => {
   handleSuccess(res, result, "Found post updated successfully");
 };
 
-
 // Delete a specific lost post by post _id
 const deleteLostPost = async (req, res) => {
   try {
@@ -101,12 +128,26 @@ const deleteLostPost = async (req, res) => {
   } catch (error) {
     handleError(res, error);
   }
-}
+};
 
 //search based on query
 const searchLostPosts = async (req, res) => {
   try {
-    const lostPosts = await LostPost.find(req.query);
+    const { category, zilla, possibleDate } = req.query;
+
+    // Prepare the query object
+    let query = {};
+
+    if (category) query.category = category;
+    if (zilla) query.zilla = zilla;
+
+    // If possibleDate is provided, filter posts with date <= possibleDate
+    if (possibleDate) {
+      query.possibleDate = { $lte: possibleDate }; // This ensures we get posts with the same or earlier date
+    }
+
+    // Fetch posts from the database based on the query
+    const lostPosts = await LostPost.find(query);
 
     if (lostPosts.length === 0) {
       return handleSuccess(
@@ -122,4 +163,12 @@ const searchLostPosts = async (req, res) => {
   }
 };
 
-module.exports = { getAllLostPosts, createLostPost, getSpecificLostPosts, updateLostpost, deleteLostPost, searchLostPosts, getCurrentUserLostPosts };
+module.exports = {
+  getAllLostPosts,
+  createLostPost,
+  getSpecificLostPosts,
+  updateLostpost,
+  deleteLostPost,
+  searchLostPosts,
+  getCurrentUserLostPosts,
+};

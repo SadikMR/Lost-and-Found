@@ -2,10 +2,13 @@ import { React, useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
+import { Flag } from "lucide-react"; // Report icon
+import { MoreVertical } from "lucide-react";
 import pic1 from "../../assets/item.jpg";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../AuthProviders/AuthProvider";
 import axios from "axios";
+import ReportModal from "./reportPostModal";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -21,6 +24,9 @@ const Details = () => {
   const [senderInfo, setSenderInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [showMenu, setShowMenu] = useState(false);
+  const [showReport, setShowReport] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +81,11 @@ const Details = () => {
     });
   };
 
+  const handleCopyURL = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Profile URL copied! 📋");
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-4">
       <div className="grid grid-cols-3 gap-4 bg-[#E5E1DA] text-black shadow-md rounded-lg p-6">
@@ -115,13 +126,59 @@ const Details = () => {
           {/* Receiver Info Header */}
           <div className="bg-white p-4 rounded-lg shadow-md">
             {/* Name and Verified Badge in one row */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between w-full">
               <h2 className="text-2xl font-semibold text-gray-800">
                 {receiverInfo?.data?.fullname}
               </h2>
-              <div className="flex items-center text-sm text-blue-500">
-                <CheckBadgeIcon className="w-4 h-4" />
-                <span className="font-small">Verified</span>
+
+              {/* Three-dot menu */}
+              <div className="relative">
+                <button
+                  className="p-2 rounded-full hover:bg-gray-200"
+                  onClick={() => setShowMenu(!showMenu)}
+                >
+                  <MoreVertical size={22} />
+                </button>
+
+                {/* Dropdown Menu */}
+                {showMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
+                    <button
+                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                      onClick={() => {
+                        // Handle report post action here
+                        setShowReport(true);
+                        setShowMenu(false);
+                      }}
+                    >
+                      Report Post
+                    </button>
+                    <button
+                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                      onClick={() => {
+                        // Handle view profile action here
+                        setShowMenu(false);
+                      }}
+                    >
+                      View Profile
+                    </button>
+                    <button
+                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                      onClick={handleCopyURL}
+                    >
+                      Copy URL
+                    </button>
+                    <button
+                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                      onClick={() => {
+                        // Handle chat action here
+                        setShowMenu(false);
+                      }}
+                    >
+                      Chat
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -169,6 +226,16 @@ const Details = () => {
               </button>
             </div>
           </div>
+
+          {/* Report Modal */}
+          {showReport && (
+            <ReportModal
+              postId={post._id}
+              postType={post.type}
+              reporterUserId={receiverID}
+              onClose={() => setShowReport(false)}
+            />
+          )}
 
           {/* Display error message if exists */}
           {error && <p className="text-red-500 mt-2">{error}</p>}
