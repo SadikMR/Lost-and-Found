@@ -14,6 +14,7 @@ const VerificationModal = ({ isOpen, onClose, post, onSuccess }) => {
 
   const [attempts, setAttempts] = useState(0);
   const [limitReached, setLimitReached] = useState(false);
+  const [dailyAttempts, setDailyAttempts] = useState(0);
   const MAX_ATTEMPTS = 2;
 
   // Fetch attempts function
@@ -44,17 +45,52 @@ const VerificationModal = ({ isOpen, onClose, post, onSuccess }) => {
     }
   };
 
+  const fetchDailyAttempts = async () => {
+    try {
+      console.log("Fetching daily attempts for:", {
+        userId: user.uid,
+        postId: post._id,
+      });
+
+      // Call the API to get daily attempts (last 24 hours)
+      const response = await axios.get(
+        `${endpoints}/verify/getDailyAttempts/${user.uid}`
+      );
+      console.log("Daily Attempts API Response:", response.data);
+
+      const dailyAttemptsData = response.data.attempts;
+      setDailyAttempts(dailyAttemptsData);
+    } catch (error) {
+      console.error("Error fetching daily attempts:", error);
+    }
+  };
+
   // Fetch attempts when modal opens
   useEffect(() => {
     if (isOpen) {
       fetchAttempts();
+      fetchDailyAttempts();
     }
   }, [isOpen, post._id, user.uid]);
 
   // Handle verification logic
   const handleVerification = async () => {
+    await fetchDailyAttempts();
     if (limitReached) {
-      setVerificationResult("You have reached the maximum number of attempts.");
+      setVerificationResult(
+        "You have reached the maximum number of attempts for this post"
+      );
+      return;
+    }
+
+    if (dailyAttempts >= 3) {
+      Swal.fire({
+        title: "Daily Limit Reached",
+        text: "You have reached the daily limit for attempts. Try again later.",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      setLimitReached(true);
       return;
     }
 

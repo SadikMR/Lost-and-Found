@@ -112,4 +112,27 @@ const getAttempts = async (req, res) => {
   }
 };
 
-module.exports = { verifyOwnership, getAttempts };
+const getDailyAttempts = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Calculate the timestamp for 24 hours ago
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
+    // Fetch all attempts in the last 24 hours for this user and post
+    const attempts = await Attempt.find({
+      userId,
+      createdAt: { $gte: twentyFourHoursAgo },
+    });
+
+    // Count the number of attempts
+    const attemptsCount = attempts.length;
+
+    return res.status(200).json({ attempts: attemptsCount });
+  } catch (error) {
+    console.error("Error fetching daily attempts:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+module.exports = { verifyOwnership, getAttempts, getDailyAttempts };
