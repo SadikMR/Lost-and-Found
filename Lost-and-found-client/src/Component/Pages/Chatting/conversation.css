@@ -1,0 +1,129 @@
+/* Header Styling */
+.conversations-header {
+  background: linear-gradient(90deg, #1c92d2, #f2fcfe);
+  background-clip: text;
+  color: transparent;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f2fcfe; /* Adding underline */
+  animation: fadeInHeader 1s ease-in-out;
+}
+
+/* Animation for Header */
+@keyframes fadeInHeader {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modern Design for Conversations */
+.modern-conversation {
+  background: linear-gradient(135deg, #5f6fa5, #4e5d77);
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modern-conversation:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modern-conversation .conversation-info {
+  padding-left: 1rem;
+}
+
+.modern-conversation img {
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+}
+
+.modern-conversation .conversation-info h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.modern-conversation .conversation-info p {
+  font-size: 1rem;
+  color: #d1d1d1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.modern-conversation .conversation-date {
+  font-size: 0.75rem;
+  color: #f0f0f0;
+}
+
+.modern-conversation .unread-count {
+  background-color: #ff6347;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50%;
+  min-width: 20px;
+  min-height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* Classic Design for Conversations */
+.classic-conversation {
+  background-color: #f0f0f0;
+  border: 2px solid #dcdcdc;
+  color: #333;
+}
+
+.classic-conversation .conversation-info {
+  padding-left: 1rem;
+}
+
+.classic-conversation img {
+  border-radius: 50%;
+  border: 2px solid #cccccc;
+}
+
+.classic-conversation .conversation-info h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+.classic-conversation .conversation-info p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.classic-conversation .conversation-date {
+  font-size: 0.875rem;
+  color: #777;
+}
+
+.classic-conversation .unread-count {
+  background-color: #3498db;
+  color: white;
+  font-size: 0.9rem;
+  padding: 0.4rem;
+  border-radius: 50%;
+  min-width: 24px;
+  min-height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
