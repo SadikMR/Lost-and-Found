@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../../AuthProviders/AuthProvider";
 import Swal from "sweetalert2";
-import Compressor from "compressorjs"; // Import image compressor
+// import Compressor from "compressorjs"; // Import image compressor
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -79,6 +79,7 @@ const EditProfile = () => {
 
     // Log the JSON request body to the console for debugging
     console.log("Request Body:", requestBody);
+    console.log("User ID:", userId);
 
     try {
       const response = await fetch(`${endpoints}/user/updateInfo/${userId}`, {

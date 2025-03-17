@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import cover from "../../../assets/cover.jpg";
 import Post from "../../../Post/PostCard/PostCard";
 
+
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const Home = () => {
@@ -10,6 +11,8 @@ const Home = () => {
   const [itemType, setItemType] = useState("lost");
   const [searchResults, setSearchResults] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]); // Add state for recent lost posts
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 9;
 
   const handleDateFocus = () => setDateType("date");
   const handleDateBlur = () => setDateType("text");
@@ -93,6 +96,25 @@ const Home = () => {
     // Fetch recent posts when component mounts
     fetchRecentPosts();
   }, []);
+  // Determine which posts to show based on pagination
+  const allPosts = searchResults.length > 0 ? searchResults : recentPosts;
+  const totalPages = Math.ceil(allPosts.length / postsPerPage);
+  const startIndex = (currentPage - 1) * postsPerPage;
+  const displayedPosts = allPosts.slice(startIndex, startIndex + postsPerPage);
+
+  // Handle Next Page
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  // Handle Previous Page
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
 
   return (
     <div>
@@ -133,13 +155,6 @@ const Home = () => {
           Search for Lost & Found Items
         </h2>
         <form onSubmit={handleSearch} className="flex justify-center gap-4">
-          {/* <input
-            type="text"
-            name="category"
-            id="category"
-            placeholder="Category"
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
-          /> */}
           <select
             id="category"
             name="category"
@@ -158,13 +173,6 @@ const Home = () => {
             <option value="Others">Others</option>
           </select>
 
-          {/* <input
-            type="text"
-            name="location"
-            id="location"
-            placeholder="Location"
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
-          /> */}
           <select
             id="location"
             name="location"
@@ -272,12 +280,34 @@ const Home = () => {
 
       {/* Posts Section */}
       <div className="px-4 sm:px-8 lg:px-32 py-8">
-        <div className="flex justify-between mb-6">
-          <h1 className="text-2xl font-semibold text-gray-800">All Posts</h1>
-        </div>
-        {/* Render recent posts if search results are empty */}
-        <Post posts={searchResults.length > 0 ? searchResults : recentPosts} />
+      <div className="flex justify-between mb-6">
+        <h1 className="text-2xl font-semibold text-gray-800">All Posts</h1>
       </div>
+
+      {/* Render paginated posts */}
+      <Post posts={displayedPosts} />
+
+      {/* Pagination Buttons */}
+      <div className="flex justify-center space-x-4 mt-6">
+        {currentPage > 1 && (
+          <button
+            onClick={handlePreviousPage}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+          >
+            ← Previous
+          </button>
+        )}
+
+        {currentPage < totalPages && (
+          <button
+            onClick={handleNextPage}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Next →
+          </button>
+        )}
+      </div>
+    </div>
     </div>
   );
 };

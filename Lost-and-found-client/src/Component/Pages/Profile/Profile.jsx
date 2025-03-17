@@ -229,19 +229,19 @@ const Profile = () => {
             <img
               src={profileInfo.data.image}
               alt="User"
-              className="w-24 h-24 rounded-full border border-gray-300 cursor-pointer hover:opacity-80"
+              className="w-32 h-32 rounded-full border border-gray-300 cursor-pointer hover:opacity-80"
               onClick={() => handleImageClick(profileInfo.data.image)}
             />
 
             <div className="flex flex-col justify-center">
               {/* Full Name */}
-              <h2 className="text-xl sm:text-2xl font-semibold text-black">
+              <h2 className="text-xl sm:text-3xl font-semibold text-black">
                 {profileInfo.data.fullname}
               </h2>
 
               {/* Username */}
-              <p className="text-sm text-gray-600 mt-1">
-                <span className="text-gray-500">@</span>
+              <p className=" text-gray-600 mt-1 font-serif font-semibold text-xl">
+                <span className="text-gray-500">@ </span>
                 {profileInfo.data.username || "Nickname"}
               </p>
             </div>
@@ -425,7 +425,7 @@ const Profile = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-gray-500 text-center">No lost items found.</p>
+            <p className="text-center text-red-600">No found items found.</p>
           )}
         </div>
 
@@ -503,7 +503,7 @@ const Profile = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-gray-500 text-center">No lost items found.</p>
+            <p className="text-red-600 text-center">No lost items found.</p>
           )}
         </div>
       </div>

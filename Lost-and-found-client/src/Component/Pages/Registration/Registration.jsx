@@ -83,16 +83,16 @@ const Registration = () => {
     const image = imagePreview;
     const person =
       (fullname,
-      username,
-      email,
-      password,
-      confirmPassword,
-      phone,
-      division,
-      zilla,
-      upzilla,
-      village,
-      image);
+        username,
+        email,
+        password,
+        confirmPassword,
+        phone,
+        division,
+        zilla,
+        upzilla,
+        village,
+        image);
 
     if (password !== confirmPassword) {
       alert("Password doesn't match");
@@ -122,8 +122,7 @@ const Registration = () => {
       return;
     }
 
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       alert(
         "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
@@ -170,8 +169,11 @@ const Registration = () => {
                 if (data.success) {
                   Swal.fire({
                     title: "User Registered Successfully",
-                    text: "Email Verification link has been sent to your email address.",
+                    html: '<p style="color: red; font-weight: bold;">Email Verification link has been sent to your email address.</p>',
                     icon: "success",
+                    customClass: {
+                      popup: "custom-swal-popup",
+                    },
                     draggable: true,
                   });
                   navigate("/login");

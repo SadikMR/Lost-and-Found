@@ -3,6 +3,7 @@ import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Eye, EyeOff } from "lucide-react";
+import img from "../../../assets/logo.jpg";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -32,16 +33,16 @@ const Login = () => {
       // Refresh user data to get updated email verification status
       await user.reload();
       const updatedUser = user; // Get the latest user info
-  
+
 
       //  Fetch user data from API
       const response = await fetch(`${endpoints}/user/getInfo/${updatedUser.uid}`);
- 
+
       if (!response.ok) {
         throw new Error("Failed to fetch user data");
       }
       const data = await response.json();
-     
+
       if (!data.data.isVerified) {
         Swal.fire({
           title: "Email Not Verified",
@@ -69,7 +70,10 @@ const Login = () => {
   return (
     <div className="bg-[#FAF7F0]">
       <NavLink to="/" className="text-black mt-5 mx-5 text-2xl">
-        Home
+        <div className="flex items-center">
+          <img className="w-8 h-8 ml-5 mr-2" src={img} alt="" />
+          <p>Lost&Found</p>
+        </div>
       </NavLink>
       <div className="flex items-center justify-center min-h-screen">
         <div className="w-full max-w-md bg-[#EADBC8] rounded-lg shadow-lg p-6">
@@ -133,15 +137,15 @@ const Login = () => {
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
             </div>
-            <div className="relative flex justify-center text-sm">
+            {/* <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-white text-gray-500 rounded">
                 Or continue with
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Third-Party Login */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* <div className="grid grid-cols-3 gap-4">
             <button className="flex items-center justify-center p-2 border rounded-lg hover:bg-gray-100 transition">
               <img
                 src="https://img.icons8.com/color/24/google-logo.png"
@@ -160,7 +164,7 @@ const Login = () => {
                 alt="LinkedIn"
               />
             </button>
-          </div>
+          </div> */}
 
           {/* Footer */}
           <p className="text-center text-sm text-gray-500 mt-6">
