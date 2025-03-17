@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const admin = require("firebase-admin");
-const serviceAccount = require("../lost-and-found-3ddca-firebase-adminsdk-jkthx-eeb0d5480a.json"); // Update path
 const dotenv = require("dotenv");
 const { default: mongoose } = require("mongoose");
 const User = require("../models/userModel");
@@ -15,12 +14,6 @@ const { handleSuccess, handleError } = require("../utils/responseHandler"); // I
 // const endpoint = process.env.FRONTEND_URL.trim();
 
 // Initialize Firebase Admin SDK (if not already initialized)
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: "lost-and-found-3ddca.appspot.com",
-});
-
-const bucket = admin.storage().bucket();
 
 const saveInfo = async (req, res) => {
   try {
@@ -218,7 +211,6 @@ const getUserInfo = async (req, res) => {
     handleError(res, error, "Failed to retrieve user information");
   }
 };
-
 
 const updateInfo = async (req, res) => {
   try {
