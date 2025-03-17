@@ -1,14 +1,22 @@
 require("dotenv").config();
 const axios = require("axios");
+const Attempt = require("../models/verificationAttemptModel");
 
 const GEMINI_API_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
 const verifyOwnership = async (req, res) => {
-  const { color, description, answer1, answer2 } = req.body;
+  const { color, description, answer1, answer2, userId, postId } = req.body;
 
   try {
-    console.log("Received data:", { color, description, answer1, answer2 });
+    console.log("Received data:", {
+      color,
+      description,
+      answer1,
+      answer2,
+      userId,
+      postId,
+    });
 
     const colorSimilarity = await calculateGeminiSimilarity(answer1, color);
 
@@ -26,6 +34,15 @@ const verifyOwnership = async (req, res) => {
     const success =
       colorSimilarity >= 0.8 &&
       (description.trim() === "" || descriptionSimilarity >= 0.5);
+
+    // **Store Attempt**
+    await Attempt.create({
+      userId,
+      postId,
+      answer1,
+      answer2,
+      isSuccess: success,
+    });
 
     return res.status(200).json({
       success,
@@ -75,4 +92,47 @@ const calculateGeminiSimilarity = async (text1, text2) => {
   }
 };
 
-module.exports = { verifyOwnership };
+const getAttempts = async (req, res) => {
+  const { userId, postId } = req.params;
+
+  try {
+    // Find attempts by userId and postId
+    const attempts = await Attempt.find({ userId, postId });
+
+    // Count the length of the result array
+    const attemptsCount = attempts.length;
+
+    // Return the result
+    res.json({ success: true, attempts: attemptsCount });
+  } catch (error) {
+    console.error("Error counting attempts:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching attempts" });
+  }
+};
+
+const getDailyAttempts = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Calculate the timestamp for 24 hours ago
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
+    // Fetch all attempts in the last 24 hours for this user and post
+    const attempts = await Attempt.find({
+      userId,
+      createdAt: { $gte: twentyFourHoursAgo },
+    });
+
+    // Count the number of attempts
+    const attemptsCount = attempts.length;
+
+    return res.status(200).json({ attempts: attemptsCount });
+  } catch (error) {
+    console.error("Error fetching daily attempts:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+module.exports = { verifyOwnership, getAttempts, getDailyAttempts };

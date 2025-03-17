@@ -176,7 +176,7 @@ const Registration = () => {
                     },
                     draggable: true,
                   });
-                  navigate("/login");
+                  navigate("/confirmation");
                 } else {
                   Swal.fire({
                     title: "Registration Failed",

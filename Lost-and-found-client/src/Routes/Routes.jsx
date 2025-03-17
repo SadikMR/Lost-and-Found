@@ -13,10 +13,10 @@ import Chat from "../Component/Pages/Chatting/Chat";
 import FoundPostUpdate from "../Post/FoundPost/FoundPostUpdate";
 import LostPostUpdate from "../Post/LostPost/LostPostUpdate";
 import VerifyEmail from "../Component/Pages/Registration/verifyEmail";
+import ConfirmationPage from "../Component/Pages/Registration/confirmationPage";
 import Conversations from "../Component/Pages/Chatting/Conversation";
 import ForgotPassword from "../Component/Pages/Login/PasswordRecovery/ForgotPassword";
 import ResetPassword from "../Component/Pages/Login/PasswordRecovery/ResetPassword";
-
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -91,20 +91,20 @@ export const router = createBrowserRouter([
   },
   {
     path: "/login/forgotPassword",
-    element: <ForgotPassword></ForgotPassword>
+    element: <ForgotPassword></ForgotPassword>,
   },
   {
     path: "/login/resetPassword/:token",
-    element: <ResetPassword></ResetPassword>
+    element: <ResetPassword></ResetPassword>,
   },
   {
     path: "/register",
     element: <Registration></Registration>,
   },
-  
+
   {
     path: "/verifyEmail/:token",
-    element: <VerifyEmail></VerifyEmail>  // This is not defined in this file
+    element: <VerifyEmail></VerifyEmail>, // This is not defined in this file
   },
   {
     path: "/chat",
@@ -121,5 +121,9 @@ export const router = createBrowserRouter([
         <Conversations></Conversations>
       </PrivateRoute>
     ),
+  },
+  {
+    path: "/confirmation",
+    element: <ConfirmationPage></ConfirmationPage>,
   },
 ]);
