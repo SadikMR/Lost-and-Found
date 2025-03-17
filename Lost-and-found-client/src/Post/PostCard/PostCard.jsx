@@ -2,6 +2,8 @@ import { React, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import lostItemImage from "../../assets/item.jpg";
 import VerificationModal from "../verificationModal"; // Import the modal
+import { Flag } from "lucide-react"; // Import the Flag icon
+import ReportModal from "../Details/reportPostModal";
 import { AuthContext } from "../../AuthProviders/AuthProvider";
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -10,7 +12,9 @@ const Post = ({ posts }) => {
   const { getCurrentUser } = useContext(AuthContext);
   const user = getCurrentUser();
   const [modalOpen, setModalOpen] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [showReport, setShowReport] = useState(false);
 
   const fetchAttempts = async (post) => {
     try {
@@ -51,6 +55,11 @@ const Post = ({ posts }) => {
     navigate("/details", { state: { post: selectedPost } });
   };
 
+  const handleReportClick = (post) => {
+    setSelectedPost(post);
+    setShowReport(true);
+  };
+
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 mb-5">
       {posts.map((post) => (
@@ -62,20 +71,30 @@ const Post = ({ posts }) => {
             <img src={post.imageUrl || lostItemImage} alt={post.category} />
           </figure>
           <div className="card-body">
-            <h2 className="text-xl font-semibold">
-              <span
-                className={
-                  post.type === "lost"
-                    ? "text-red-600 text-2xl"
-                    : "text-green-600 text-2xl"
-                }
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">
+                <span
+                  className={
+                    post.type === "lost"
+                      ? "text-red-600 text-2xl"
+                      : "text-green-600 text-2xl"
+                  }
+                >
+                  {post.type.charAt(0).toUpperCase() + post.type.slice(1)}
+                </span>{" "}
+                <span className="text-2xl text-buttonColor1">
+                  {post.productName}
+                </span>
+              </h2>
+              {/* Report Button (Right-Aligned) */}
+              <button
+                className="flex items-center gap-1 text-red-500 hover:text-red-700 transition-all duration-300"
+                onClick={() => handleReportClick(post)}
               >
-                {post.type.charAt(0).toUpperCase() + post.type.slice(1)}
-              </span>{" "}
-              <span className="text-2xl text-buttonColor1">
-                {post.productName}
-              </span>
-            </h2>
+                <Flag size={18} />
+                <span className="text-sm font-medium">Report</span>
+              </button>
+            </div>
 
             <ul className="text-lg text-gray-400">
               <li>
@@ -105,6 +124,15 @@ const Post = ({ posts }) => {
           onClose={() => setModalOpen(false)}
           post={selectedPost}
           onSuccess={handleVerificationSuccess}
+        />
+      )}
+
+      {showReport && selectedPost && (
+        <ReportModal
+          postId={selectedPost._id}
+          postType={selectedPost.type}
+          reporterUserId={user.uid} // Assuming user.uid is the reporter's ID
+          onClose={() => setShowReport(false)}
         />
       )}
     </div>

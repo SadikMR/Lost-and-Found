@@ -85,16 +85,16 @@ const Registration = () => {
     const image = imagePreview;
     const person =
       (fullname,
-        username,
-        email,
-        password,
-        confirmPassword,
-        phone,
-        division,
-        zilla,
-        upzilla,
-        village,
-        image);
+      username,
+      email,
+      password,
+      confirmPassword,
+      phone,
+      division,
+      zilla,
+      upzilla,
+      village,
+      image);
 
     if (password !== confirmPassword) {
       alert("Password doesn't match");
@@ -124,7 +124,8 @@ const Registration = () => {
       return;
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       alert(
         "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
@@ -215,7 +216,7 @@ const Registration = () => {
           <p>Lost&Found</p>
         </div>
       </NavLink>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="w-full max-w-md bg-[#EADBC8] rounded-lg shadow-lg p-8">
           {/* Heading */}
           <h2 className="text-2xl font-bold text-center text-gray-800">

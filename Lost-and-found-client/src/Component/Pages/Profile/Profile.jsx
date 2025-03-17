@@ -297,27 +297,27 @@ const Profile = () => {
 
         <div className="mt-6 space-y-3">
           <p>
-            <span className="font-semibold">Division:</span>{" "}
+            <span className="text-lg font-semibold">Division:</span>{" "}
             {profileInfo.data.division || "N/A"}
           </p>
           <p>
-            <span className="font-semibold">Zilla:</span>{" "}
+            <span className="text-lg font-semibold">Zilla:</span>{" "}
             {profileInfo.data.zilla || "N/A"}
           </p>
           <p>
-            <span className="font-semibold">Upzilla:</span>{" "}
+            <span className="text-lg font-semibold">Upzilla:</span>{" "}
             {profileInfo.data.upzilla || "N/A"}
           </p>
           <p>
-            <span className="font-semibold">Village:</span>{" "}
+            <span className="text-lg font-semibold">Village:</span>{" "}
             {profileInfo.data.village || "N/A"}
           </p>
           <p>
-            <span className="font-semibold">Contact Number:</span>{" "}
+            <span className="text-lg font-semibold">Contact Number:</span>{" "}
             {profileInfo.data.phone || "N/A"}
           </p>
           <p>
-            <span className="font-semibold">Email:</span>{" "}
+            <span className="text-lg font-semibold">Email:</span>{" "}
             {profileInfo.data.email || "N/A"}
           </p>
         </div>
