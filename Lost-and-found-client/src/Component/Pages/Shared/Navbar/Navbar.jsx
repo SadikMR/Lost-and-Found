@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import logo from "../../../../assets/logo.jpg";
 import { AuthContext } from "../../../../AuthProviders/AuthProvider";
+
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -15,6 +16,7 @@ const Navbar = () => {
         console.error(error);
       });
   };
+
   const navoptions = (
     <>
       {user ? (
@@ -63,9 +65,9 @@ const Navbar = () => {
                 <span className="text-2xl sm:text-3xl">
                   <NavLink to="/profile">{user.displayName}</NavLink>
                 </span>
-                <span className="text-2xl sm:text-3xl">
+                {/* <span className="text-2xl sm:text-3xl">
                   <NavLink to="/profile">{user.image}</NavLink>
-                </span>
+                </span> */}
               </div>
             ) : (
               <span className="text-3xl sm:text-4xl">

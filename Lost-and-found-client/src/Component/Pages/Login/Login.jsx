@@ -36,7 +36,7 @@ const Login = () => {
 
 
       //  Fetch user data from API
-      const response = await fetch(`${endpoints}/user/getInfo/${updatedUser.uid}`);
+      const response = await fetch(`${endpoints}/user/getUserInfo/${email}`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch user data");

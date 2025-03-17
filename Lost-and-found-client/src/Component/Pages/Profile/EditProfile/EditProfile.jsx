@@ -131,19 +131,6 @@ const EditProfile = () => {
           />
         </div>
 
-        {/* User Name */}
-        <div>
-          <label className="block text-sm font-semibold text-black">
-            User Name
-          </label>
-          <input
-            type="text"
-            id="username"
-            value={editProfileInfo?.username || ""}
-            onChange={handleInputChange}
-            className="text-black bg-white mt-1 block w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
 
         {/* Division */}
         <div>

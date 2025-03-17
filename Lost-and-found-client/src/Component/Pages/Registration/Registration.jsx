@@ -5,7 +5,9 @@ import Swal from "sweetalert2";
 import img from "../../../assets/logo.jpg";
 import bdLocations from "../../../../bdLocation.json";
 import { Eye, EyeOff } from "lucide-react";
+import { getAuth, signOut } from "firebase/auth";
 
+const auth = getAuth();
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const Registration = () => {
@@ -176,6 +178,7 @@ const Registration = () => {
                     },
                     draggable: true,
                   });
+                  signOut(auth);
                   navigate("/confirmation");
                 } else {
                   Swal.fire({
