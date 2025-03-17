@@ -1,7 +1,7 @@
 import { React, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import lostItemImage from "../../assets/item.jpg";
-import VerificationModal from "../VerificationModal"; // Import the modal
+import VerificationModal from "../verificationModal"; // Import the modal
 import { AuthContext } from "../../AuthProviders/AuthProvider";
 const endpoints = import.meta.env.VITE_backendUrl;
 
