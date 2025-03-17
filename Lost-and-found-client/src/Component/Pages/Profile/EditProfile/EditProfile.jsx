@@ -131,7 +131,6 @@ const EditProfile = () => {
           />
         </div>
 
-
         {/* Division */}
         <div>
           <label className="block text-sm font-semibold text-black">
@@ -205,7 +204,7 @@ const EditProfile = () => {
         {/* Image Upload */}
         <div>
           <label className="block text-sm font-semibold text-black">
-            Upload Profile Picture
+            Change Profile Picture
           </label>
           <input
             type="file"
