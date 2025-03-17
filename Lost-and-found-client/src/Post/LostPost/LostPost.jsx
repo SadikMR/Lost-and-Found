@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../../AuthProviders/AuthProvider";
 import productCategories from "../../../productsCategory.json";
 import bdLocations from "../../../bdLocation.json";
-import { Calendar } from 'lucide-react';
+import { Calendar } from "lucide-react";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -339,11 +339,8 @@ const LostPost = () => {
               type="date"
               id="possibleDate"
               required
-              className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              className="bg-blue-500 text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
             />
-            <div className="absolute ">
-                <Calendar size={20} color="black" />
-              </div>
           </div>
 
           {/* Short Description */}

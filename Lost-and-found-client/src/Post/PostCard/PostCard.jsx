@@ -1,6 +1,6 @@
 import { React, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import lostItemImage from "../../assets/item.jpg";
+import lostItemImage from "../../assets/item2.jpg";
 import VerificationModal from "../verificationModal"; // Import the modal
 import { Flag } from "lucide-react"; // Import the Flag icon
 import ReportModal from "../Details/reportPostModal";
@@ -67,8 +67,14 @@ const Post = ({ posts }) => {
           key={post._id}
           className="card card-compact bg-base-100 shadow-xl p-4"
         >
-          <figure>
-            <img src={post.imageUrl || lostItemImage} alt={post.category} />
+          <figure className="h-72 w-full overflow-hidden">
+            <img
+              src={
+                post.type === "lost" && post.image ? post.image : lostItemImage
+              }
+              alt={post.category}
+              className="w-full h-full object-cover"
+            />
           </figure>
           <div className="card-body">
             <div className="flex justify-between items-center">
