@@ -102,8 +102,18 @@ const getAttempts = async (req, res) => {
     // Count the length of the result array
     const attemptsCount = attempts.length;
 
+    // Check if there's any successful attempt (any attempt with isSuccess: true)
+    const successfulAttempt = attempts.some(
+      (attempt) => attempt.isSuccess === true
+    );
+
     // Return the result
-    res.json({ success: true, attempts: attemptsCount });
+    res.json({
+      success: true,
+      allAttempts: attempts,
+      attempts: attemptsCount,
+      successfulAttempt: successfulAttempt,
+    });
   } catch (error) {
     console.error("Error counting attempts:", error);
     res

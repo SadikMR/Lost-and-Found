@@ -61,8 +61,10 @@ const Details = () => {
       navigate({
         pathname: "/chat",
         search: `?senderID=${senderID}&receiverID=${receiverID}&senderInfo=${encodeURIComponent(
-          JSON.stringify(senderInfo)
-        )}&receiverInfo=${encodeURIComponent(JSON.stringify(receiverInfo))}`,
+          JSON.stringify(senderInfo.data)
+        )}&receiverInfo=${encodeURIComponent(
+          JSON.stringify(receiverInfo.data)
+        )}`,
       });
     }
   };

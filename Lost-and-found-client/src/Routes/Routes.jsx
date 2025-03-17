@@ -12,7 +12,7 @@ import PrivateRoute from "./PrivateRoute";
 import Chat from "../Component/Pages/Chatting/Chat";
 import FoundPostUpdate from "../Post/FoundPost/FoundPostUpdate";
 import LostPostUpdate from "../Post/LostPost/LostPostUpdate";
-import VerifyEmail from "../Component/Pages/Registration/verifyEmail";
+import VerifyEmail from "../Component/Pages/Registration/VerifyEmail";
 import ConfirmationPage from "../Component/Pages/Registration/confirmationPage";
 import Conversations from "../Component/Pages/Chatting/Conversation";
 import ForgotPassword from "../Component/Pages/Login/PasswordRecovery/ForgotPassword";
