@@ -28,10 +28,15 @@ const Footer = () => {
                     <a className="link link-hover">Press kit</a>
                 </nav>
                 <nav>
-                    <h6 className="footer-title">Legal</h6>
-                    <a className="link link-hover">Terms of use</a>
-                    <a className="link link-hover">Privacy policy</a>
-                    <a className="link link-hover">Cookie policy</a>
+                    <h6 className="footer-title">Contributors</h6>
+                    <div>
+                        <h3>Md. Shahin Hossain</h3>
+                        <p>200131.cse@student.just.edu.bd</p>
+                    </div>
+                    <div>
+                        <h3>Md. Sadik Mahmud Raihan</h3>
+                        <p>200132.cse@student.just.edu.bd</p>
+                    </div>
                 </nav>
 
             </footer>

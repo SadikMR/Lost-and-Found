@@ -5,10 +5,14 @@ import Navbar from '../Component/Pages/Shared/Navbar/Navbar';
 
 const Main = () => {
     return (
-        <div className='bg-[#FAF7F0]'>
+        <div className="flex flex-col min-h-screen bg-[#FAF7F0]">
             <Navbar></Navbar>
-            <Outlet></Outlet>
+            <div className="flex-grow">
+                <Outlet />
+            </div>
+            <div className='w-full'>
             <Footer></Footer>
+            </div>
         </div>
     );
 };

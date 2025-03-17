@@ -67,6 +67,9 @@ const Details = () => {
     }
   };
 
+  const receiverDataId = receiverInfo?.data?.firebase_uid;
+  console.log("receiverDataId 12",receiverDataId);
+
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
 
@@ -94,7 +97,7 @@ const Details = () => {
           <img
             src={post.image || pic1}
             alt="Shoes"
-            className="w-full h-64 object-cover rounded-md"
+            className="w-80 h-64 object-cover rounded-md"
           />
           <div className="mt-4 space-y-3">
             <h2 className="text-xl font-bold">{post.productName}</h2>
@@ -127,9 +130,10 @@ const Details = () => {
           <div className="bg-white p-4 rounded-lg shadow-md">
             {/* Name and Verified Badge in one row */}
             <div className="flex items-center justify-between w-full">
-              <h2 className="text-2xl font-semibold text-gray-800">
+              
+              <NavLink to = {`/OtherProfile/${receiverDataId}`} className="text-2xl font-semibold text-gray-800"><h2 >
                 {receiverInfo?.data?.fullname}
-              </h2>
+              </h2></NavLink>
 
               {/* Three-dot menu */}
               <div className="relative">

@@ -17,6 +17,7 @@ import ConfirmationPage from "../Component/Pages/Registration/confirmationPage";
 import Conversations from "../Component/Pages/Chatting/Conversation";
 import ForgotPassword from "../Component/Pages/Login/PasswordRecovery/ForgotPassword";
 import ResetPassword from "../Component/Pages/Login/PasswordRecovery/ResetPassword";
+import OtherProfile from "../Component/Pages/Profile/OtherProfile";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
@@ -126,4 +127,8 @@ export const router = createBrowserRouter([
     path: "/confirmation",
     element: <ConfirmationPage></ConfirmationPage>,
   },
+  {
+    path: "/otherProfile/:receiverDataId",
+    element: <OtherProfile></OtherProfile>
+  }
 ]);
