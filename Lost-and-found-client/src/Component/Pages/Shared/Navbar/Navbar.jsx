@@ -11,7 +11,7 @@ const Navbar = () => {
 
   const handlelogOut = () => {
     logOut()
-      .then(() => {})
+      .then(() => { })
       .catch((error) => {
         console.error(error);
       });
@@ -43,34 +43,32 @@ const Navbar = () => {
   return (
     <div className="h-auto w-full bg-white text-black border-b-2 border-gray-300">
       {/* Header Section */}
-      <div className="px-4 sm:px-8 lg:px-32 py-8">
-        <div className="flex flex-row justify-between items-start">
+      <div className="px-4 sm:px-6 lg:px-16 xl:px-32 py-4 sm:py-6">
+        <div className="flex flex-row justify-between items-center">
           {/* Website Name */}
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-wide mb-4 lg:mb-0 text-gray-800">
+          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-wide text-gray-800">
             <NavLink to="/" className="flex items-center space-x-2">
-              <img src={logo} alt="Lost & Found Logo" className="h-12 w-12" />
-              <span className="text-3xl font-semibold text-[#0A97B0] hover:text-black">
+              {/* Logo with responsive size */}
+              <img src={logo} alt="Lost & Found Logo" className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12" />
+              <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-[#0A97B0] hover:text-black">
                 Lost & Found
               </span>
             </NavLink>
           </h1>
 
           {/* Profile & Login */}
-          <div className="flex items-center space-x-5">
+          <div className="flex items-center space-x-3 sm:space-x-5">
             {user ? (
-              <div className="flex items-center space-x-5">
+              <div className="flex items-center space-x-3 sm:space-x-5">
                 <NavLink to="/conversations">
-                  <ChatBubbleOvalLeftEllipsisIcon className="w-10 h-10" />
+                  <ChatBubbleOvalLeftEllipsisIcon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </NavLink>
-                <span className="text-2xl sm:text-3xl">
+                <span className="text-sm sm:text-lg md:text-3xl">
                   <NavLink to="/profile">{user.displayName}</NavLink>
                 </span>
-                {/* <span className="text-2xl sm:text-3xl">
-                  <NavLink to="/profile">{user.image}</NavLink>
-                </span> */}
               </div>
             ) : (
-              <span className="text-3xl sm:text-4xl">
+              <span className="text-xl sm:text-2xl">
                 <a>
                   <IoPersonCircleOutline />
                 </a>

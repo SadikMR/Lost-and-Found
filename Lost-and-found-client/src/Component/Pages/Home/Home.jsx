@@ -151,15 +151,16 @@ const Home = () => {
 
       {/* Search Form Section */}
       <div className="px-4 sm:px-8 lg:px-32 py-8 bg-gray-100">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6">
           Search for Lost & Found Items
         </h2>
-        <form onSubmit={handleSearch} className="flex justify-center gap-4">
+
+        <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <select
             id="category"
             name="category"
             placeholder="Category"
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
+            className="p-2 border rounded-lg focus:outline-none w-full bg-white text-black placeholder-gray-400 border-[#0A97B0]"
           >
             <option value="">Select Category</option>
             <option value="Electronics">Electronics</option>
@@ -177,7 +178,7 @@ const Home = () => {
             id="location"
             name="location"
             placeholder="Location"
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
+            className="p-2 border rounded-lg focus:outline-none w-full bg-white text-black placeholder-gray-400 border-[#0A97B0]"
           >
             <option value="" disabled selected hidden>
               Select Location
@@ -255,59 +256,62 @@ const Home = () => {
             name="date"
             id="date"
             placeholder="Date"
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
+            className="p-2 border rounded-lg focus:outline-none w-full bg-white text-black placeholder-gray-400 border-[#0A97B0]"
             onFocus={handleDateFocus}
             onBlur={handleDateBlur}
           />
+
           <select
             name="type"
             id="type"
             value={itemType}
             onChange={(e) => setItemType(e.target.value)}
-            className="p-2 border rounded-lg focus:outline-none w-full lg:w-1/4 bg-white text-black placeholder-gray-400 border-[#0A97B0]"
+            className="p-2 border rounded-lg focus:outline-none w-full bg-white text-black placeholder-gray-400 border-[#0A97B0]"
           >
             <option value="lost">Lost</option>
             <option value="found">Found</option>
           </select>
+
           <button
             type="submit"
-            className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#0A97B0] focus:outline-none w-full lg:w-auto"
+            className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none w-full sm:w-auto"
           >
             Search
           </button>
         </form>
       </div>
 
+
       {/* Posts Section */}
       <div className="px-4 sm:px-8 lg:px-32 py-8">
-      <div className="flex justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">All Posts</h1>
+        <div className="flex justify-between mb-6">
+          <h1 className="text-2xl font-semibold text-gray-800">All Posts</h1>
+        </div>
+
+        {/* Render paginated posts */}
+        <Post posts={displayedPosts} />
+
+        {/* Pagination Buttons */}
+        <div className="flex justify-center space-x-4 mt-6">
+          {currentPage > 1 && (
+            <button
+              onClick={handlePreviousPage}
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+            >
+              ← Previous
+            </button>
+          )}
+
+          {currentPage < totalPages && (
+            <button
+              onClick={handleNextPage}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Next →
+            </button>
+          )}
+        </div>
       </div>
-
-      {/* Render paginated posts */}
-      <Post posts={displayedPosts} />
-
-      {/* Pagination Buttons */}
-      <div className="flex justify-center space-x-4 mt-6">
-        {currentPage > 1 && (
-          <button
-            onClick={handlePreviousPage}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
-          >
-            ← Previous
-          </button>
-        )}
-
-        {currentPage < totalPages && (
-          <button
-            onClick={handleNextPage}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Next →
-          </button>
-        )}
-      </div>
-    </div>
     </div>
   );
 };

@@ -352,38 +352,98 @@ const Profile = () => {
       {/* Current user posts section */}
       <div>
         {/* Found Items Section */}
-        <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">Found Items</h2>
+        <div className="p-2 md:p-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Found Items</h2>
           {currentUserFoundPost.length > 0 ? (
-            <table className="table-auto w-full">
-              <thead>
-                <tr className="bg-gray-500 text-white">
-                  <th className="px-4 py-2">Category</th>
-                  <th className="px-4 py-2">Product Name</th>
-                  <th className="px-4 py-2">Location</th>
-                  <th className="px-4 py-2">Date</th>
-                  <th className="px-4 py-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
+            <div className="overflow-x-auto">
+              {/* Table for medium and larger screens */}
+              <table className="hidden md:table table-auto w-full">
+                <thead>
+                  <tr className="bg-gray-500 text-white">
+                    <th className="px-2 md:px-4 py-2">Category</th>
+                    <th className="px-2 md:px-4 py-2">Product Name</th>
+                    <th className="px-2 md:px-4 py-2">Location</th>
+                    <th className="px-2 md:px-4 py-2">Date</th>
+                    <th className="px-2 md:px-4 py-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentUserFoundPost.map((found, index) => (
+                    <tr key={index} className="bg-white hover:bg-blue-100">
+                      <td className="px-2 md:px-8 py-2">{found.category}</td>
+                      <td className="px-2 md:pl-10 py-2">{found.productName}</td>
+                      <td className="px-2 md:px-4 py-2">{found.zilla}</td>
+                      <td className="px-2 md:px-4 py-2">{found.possibleDate}</td>
+                      <td className="px-2 md:px-4 py-2 relative">
+                        <div className="dropdown dropdown-hover">
+                          <div
+                            tabIndex={index}
+                            role="button"
+                            className="ml-2 md:ml-10 font-bold text-xl"
+                          >
+                            &#x22EE;
+                          </div>
+                          <ul
+                            tabIndex={index}
+                            className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow"
+                          >
+                            <li>
+                              <button
+                                onClick={() => handleShowMore(found)}
+                                className="hover:bg-gray-300 font-semibold"
+                              >
+                                Show Details
+                              </button>
+                            </li>
+                            <li>
+                              <NavLink
+                                to={`/foundPostUpdate/${found._id}`}
+                                className="hover:bg-gray-300 font-semibold"
+                              >
+                                Update
+                              </NavLink>
+                            </li>
+                            <li>
+                              <button
+                                onClick={() => handleFoundPostDelete(found._id)}
+                                className="hover:bg-gray-300 font-semibold"
+                              >
+                                Delete
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                to="/done"
+                                className="hover:bg-gray-300 font-semibold"
+                              >
+                                Done
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* Card view for small screens */}
+              <div className="grid grid-cols-1 gap-4 md:hidden">
                 {currentUserFoundPost.map((found, index) => (
-                  <tr key={index} className="bg-white hover:bg-blue-100">
-                    <td className="px-8 py-2">{found.category}</td>
-                    <td className="pl-10 py-2">{found.productName}</td>
-                    <td className="px-4 py-2">{found.zilla}</td>
-                    <td className="px-4 py-2">{found.possibleDate}</td>
-                    <td className="px-4 py-2 relative">
+                  <div key={index} className="bg-white p-4 rounded shadow hover:bg-blue-50">
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="font-bold">{found.productName}</div>
                       <div className="dropdown dropdown-hover">
                         <div
                           tabIndex={index}
                           role="button"
-                          className="ml-10 font-bold text-xl"
+                          className="font-bold text-xl"
                         >
                           &#x22EE;
                         </div>
                         <ul
                           tabIndex={index}
-                          className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow"
+                          className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow right-0"
                         >
                           <li>
                             <button
@@ -419,49 +479,117 @@ const Profile = () => {
                           </li>
                         </ul>
                       </div>
-                    </td>
-                  </tr>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="font-semibold">Category:</div>
+                      <div>{found.category}</div>
+                      <div className="font-semibold">Location:</div>
+                      <div>{found.zilla}</div>
+                      <div className="font-semibold">Date:</div>
+                      <div>{found.possibleDate}</div>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
           ) : (
             <p className="text-center text-red-600">No found items found.</p>
           )}
         </div>
 
         {/* Lost Items Section */}
-        <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">Lost Items</h2>
+        <div className="p-2 md:p-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Lost Items</h2>
           {currentUserLostPost.length > 0 ? (
-            <table className="table-auto w-full">
-              <thead>
-                <tr className="bg-gray-500 text-white">
-                  <th className="px-4 py-2">Category</th>
-                  <th className="px-4 py-2">Product Name</th>
-                  <th className="px-4 py-2">Location</th>
-                  <th className="px-4 py-2">Date</th>
-                  <th className="px-4 py-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
+            <div className="overflow-x-auto">
+              {/* Table for medium and larger screens */}
+              <table className="hidden md:table table-auto w-full">
+                <thead>
+                  <tr className="bg-gray-500 text-white">
+                    <th className="px-2 md:px-4 py-2">Category</th>
+                    <th className="px-2 md:px-4 py-2">Product Name</th>
+                    <th className="px-2 md:px-4 py-2">Location</th>
+                    <th className="px-2 md:px-4 py-2">Date</th>
+                    <th className="px-2 md:px-4 py-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentUserLostPost.map((lost, index) => (
+                    <tr key={index} className="bg-white hover:bg-blue-100">
+                      <td className="px-2 md:px-8 py-2">{lost.category}</td>
+                      <td className="px-2 md:pl-10 py-2">{lost.productName}</td>
+                      <td className="px-2 md:px-4 py-2">{lost.zilla}</td>
+                      <td className="px-2 md:px-4 py-2">{lost.possibleDate}</td>
+                      <td className="px-2 md:px-4 py-2 relative">
+                        <div className="dropdown dropdown-hover">
+                          <div
+                            tabIndex={index}
+                            role="button"
+                            className="ml-2 md:ml-10 font-bold text-xl"
+                          >
+                            &#x22EE;
+                          </div>
+                          <ul
+                            tabIndex={index}
+                            className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow"
+                          >
+                            <li>
+                              <button
+                                onClick={() => handleShowMore(lost)}
+                                className="hover:bg-gray-300 font-semibold"
+                              >
+                                Show Details
+                              </button>
+                            </li>
+                            <li>
+                              <NavLink
+                                to={`/lostPostUpdate/${lost._id}`}
+                                className="hover:bg-gray-300 font-semibold"
+                              >
+                                Update
+                              </NavLink>
+                            </li>
+                            <li>
+                              <button
+                                onClick={() => handleLostPostDelete(lost._id)}
+                                className="hover:bg-gray-300 font-semibold"
+                              >
+                                Delete
+                              </button>
+                            </li>
+                            <li>
+                              <NavLink
+                                to="/done"
+                                className="hover:bg-gray-300 font-semibold"
+                              >
+                                Done
+                              </NavLink>
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* Card view for small screens */}
+              <div className="grid grid-cols-1 gap-4 md:hidden">
                 {currentUserLostPost.map((lost, index) => (
-                  <tr key={index} className="bg-white hover:bg-blue-100">
-                    <td className="px-8 py-2">{lost.category}</td>
-                    <td className="pl-10 py-2">{lost.productName}</td>
-                    <td className="px-4 py-2">{lost.zilla}</td>
-                    <td className="px-4 py-2">{lost.possibleDate}</td>
-                    <td className="px-4 py-2 relative">
+                  <div key={index} className="bg-white p-4 rounded shadow hover:bg-blue-50">
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="font-bold">{lost.productName}</div>
                       <div className="dropdown dropdown-hover">
                         <div
                           tabIndex={index}
                           role="button"
-                          className="ml-10 font-bold text-xl"
+                          className="font-bold text-xl"
                         >
                           &#x22EE;
                         </div>
                         <ul
                           tabIndex={index}
-                          className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow"
+                          className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow right-0"
                         >
                           <li>
                             <button
@@ -497,11 +625,19 @@ const Profile = () => {
                           </li>
                         </ul>
                       </div>
-                    </td>
-                  </tr>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="font-semibold">Category:</div>
+                      <div>{lost.category}</div>
+                      <div className="font-semibold">Location:</div>
+                      <div>{lost.zilla}</div>
+                      <div className="font-semibold">Date:</div>
+                      <div>{lost.possibleDate}</div>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
           ) : (
             <p className="text-red-600 text-center">No lost items found.</p>
           )}
