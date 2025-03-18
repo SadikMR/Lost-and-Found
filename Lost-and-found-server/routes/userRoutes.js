@@ -3,6 +3,7 @@ const {
   saveInfo,
   getInfo,
   getUserInfo,
+  getOtherUserInfo,
   updateInfo,
   verifyEmail,
   resetPassword,
@@ -15,6 +16,7 @@ const router = express.Router();
 router.post("/saveInfo", validateUserInfo, saveInfo);
 router.get("/getInfo/:firebase_uid", getInfo);
 router.get("/getUserInfo/:email", getUserInfo);
+router.get("/getOtherUserInfo/:_id", getOtherUserInfo);
 router.put("/updateInfo/:firebase_uid", updateInfo);
 
 router.get("/verifyEmail/:token", verifyEmail);

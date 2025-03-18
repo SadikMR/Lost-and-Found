@@ -73,6 +73,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/details/otherProfile/:receiverDataId",
+        element: <OtherProfile></OtherProfile>
+      },
+      {
         path: "/profile",
         element: (
           <PrivateRoute>
@@ -126,9 +130,5 @@ export const router = createBrowserRouter([
   {
     path: "/confirmation",
     element: <ConfirmationPage></ConfirmationPage>,
-  },
-  {
-    path: "/otherProfile/:receiverDataId",
-    element: <OtherProfile></OtherProfile>
   }
 ]);

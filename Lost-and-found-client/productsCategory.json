@@ -69,26 +69,7 @@
     },
     {
         "categories": "Educations",
-        "brands": [
-            "Pencil",
-            "Pen",
-            "Book",
-            "Notebook",
-            "Calculator",
-            "Eraser",
-            "Sharpner",
-            "Stapler",
-            "Ruler",
-            "Scissors",
-            "Bag",
-            "Novel",
-            "Textbook",
-            "Dictionary",
-            "Poetry book",
-            "Story book",
-            "Science book",
-            "Null"
-        ]
+        "brands": []
     },
     {
         "categories": "Sports",

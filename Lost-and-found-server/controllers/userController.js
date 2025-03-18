@@ -212,6 +212,26 @@ const getUserInfo = async (req, res) => {
   }
 };
 
+const getOtherUserInfo = async (req, res) => {
+  try {
+    const { _id } = req.params;
+
+    console.log("Email received: ", _id);
+
+    const user = await User.findOne({ _id });
+    console.log("User found: ", user);
+
+    if (!user) {
+      handleSuccess(res, null, "No user found");
+    }
+
+    handleSuccess(res, user, "User information retrieved successfully");
+  } catch (error) {
+    console.error("Error getting user info:", error);
+    handleError(res, error, "Failed to retrieve user information");
+  }
+};
+
 const updateInfo = async (req, res) => {
   try {
     // Log the received request body
@@ -244,6 +264,7 @@ module.exports = {
   saveInfo,
   getInfo,
   getUserInfo,
+  getOtherUserInfo,
   updateInfo,
   verifyEmail,
   forgotPassword,

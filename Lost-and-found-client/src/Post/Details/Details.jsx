@@ -69,7 +69,7 @@ const Details = () => {
     }
   };
 
-  const receiverDataId = receiverInfo?.data?.firebase_uid;
+  const receiverDataId = receiverInfo?.data?._id;
   console.log("receiverDataId 12",receiverDataId);
 
   const formatDate = (timestamp) => {
@@ -133,7 +133,7 @@ const Details = () => {
             {/* Name and Verified Badge in one row */}
             <div className="flex items-center justify-between w-full">
               
-              <NavLink to = {`/OtherProfile/${receiverDataId}`} className="text-2xl font-semibold text-gray-800"><h2 >
+              <NavLink to = {`/details/otherProfile/${receiverDataId}`} state={{ receiverInfo }} className="text-2xl font-semibold text-gray-800"><h2 >
                 {receiverInfo?.data?.fullname}
               </h2></NavLink>
 
