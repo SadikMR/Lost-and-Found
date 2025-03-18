@@ -67,7 +67,7 @@ const Post = ({ posts }) => {
           key={post._id}
           className="card card-compact bg-base-100 shadow-xl p-4"
         >
-          <figure className="h-72 w-full overflow-hidden">
+          <figure className="h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 w-full overflow-hidden">
             <img
               src={
                 post.type === "lost" && post.image ? post.image : lostItemImage
