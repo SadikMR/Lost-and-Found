@@ -23,6 +23,8 @@ const Registration = () => {
 
   const [imagePreview, setImagePreview] = useState(null);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleDivisionChange = (event) => {
     const division = event.target.value;
     setSelectedDivision(division);
@@ -71,6 +73,7 @@ const Registration = () => {
   const navigate = useNavigate();
   const handleSignUp = (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
     const form = event.target;
     const fullname = form.fullname.value;
     const username = form.username.value;
@@ -206,6 +209,9 @@ const Registration = () => {
       })
       .catch((error) => {
         alert("An error occurred during registration: " + error.message);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
   return (
@@ -454,8 +460,8 @@ const Registration = () => {
             </div>
             {/* Register Button */}
             <div className="md:col-span-2">
-              <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300">
-                Register
+              <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled={isSubmitting}>
+                {isSubmitting ? "Registering..." : "Register"}
               </button>
             </div>
           </form>

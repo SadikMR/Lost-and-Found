@@ -13,6 +13,8 @@ const EditProfile = () => {
   const user = getCurrentUser();
   const userId = user.uid;
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     const fetchProfileInfo = async () => {
       try {
@@ -65,9 +67,11 @@ const EditProfile = () => {
 
   const handleEditProfileInfo = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (Object.keys(updatedFields).length === 0) {
       Swal.fire({ title: "Info!", text: "No changes detected.", icon: "info" });
+      setIsSubmitting(false);
       return;
     }
 
@@ -109,9 +113,10 @@ const EditProfile = () => {
     } catch (error) {
       console.error("Error updating profile:", error);
     }
+    setIsSubmitting(false);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="text-center text-xl">Loading...</p>;
 
   return (
     <div className="max-w-2xl mx-auto text-black p-6 mt-7 bg-[#E5E1DA] shadow-md rounded-lg mb-5">
@@ -233,9 +238,10 @@ const EditProfile = () => {
         <div>
           <button
             type="submit"
-            className="w-full btn bg-buttonColor1 text-white hover:bg-buttonColor3 hover:scale-105 transition-all duration-300"
+            className="w-full btn bg-buttonColor1 text-white hover:bg-buttonColor3 transition  focus:outline-none duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled = {isSubmitting}
           >
-            Save Changes
+            {isSubmitting ? "Updating..." : "Update Profile"}
           </button>
         </div>
       </form>

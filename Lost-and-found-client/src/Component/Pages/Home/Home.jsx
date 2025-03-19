@@ -14,6 +14,8 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 9;
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleDateFocus = () => setDateType("date");
   const handleDateBlur = () => setDateType("text");
 
@@ -44,6 +46,7 @@ const Home = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const searchParams = {};
 
@@ -90,6 +93,8 @@ const Home = () => {
     } catch (error) {
       console.error("Error during search:", error);
     }
+
+    setIsSubmitting(false);
   };
 
   useEffect(() => {
@@ -274,9 +279,10 @@ const Home = () => {
 
           <button
             type="submit"
-            className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none w-full sm:w-auto"
+            className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none w-full sm:w-auto disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
           >
-            Search
+            {isSubmitting ? "Searching..." : "Search"}
           </button>
         </form>
       </div>

@@ -10,6 +10,7 @@ const endpoints = import.meta.env.VITE_backendUrl;
 const Login = () => {
   const { logIn } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -22,6 +23,7 @@ const Login = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
@@ -65,6 +67,7 @@ const Login = () => {
       setErrorMessage(error.message); // Show error message
       alert("Invalid email or password");
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -90,7 +93,7 @@ const Login = () => {
             <div className="mt-4">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 "
               >
                 Email
               </label>
@@ -127,8 +130,8 @@ const Login = () => {
             <NavLink to="/login/forgotPassword"><p className="text-sm text-blue-700 mt-2 cursor-pointer text-right ">Forgot password?</p></NavLink>
 
             {/* Login Button */}
-            <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300">
-              Login
+            <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled={isSubmitting}>
+              {isSubmitting ? "Logging in..." : "Login"}
             </button>
           </form>
 

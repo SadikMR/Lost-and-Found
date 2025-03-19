@@ -18,6 +18,8 @@ const LostPost = () => {
   const [zillas, setZillas] = useState([]);
   const [upzillas, setUpzillas] = useState([]);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [imagePreview, setImagePreview] = useState(null);
 
   const user = getCurrentUser();
@@ -81,6 +83,7 @@ const LostPost = () => {
 
   const handleLostpost = (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const form = e.target;
     const category = form.category.value;
     const productName = form.productName.value;
@@ -106,19 +109,7 @@ const LostPost = () => {
       possibleDate,
       image,
     };
-    console.log(
-      firebase_uid,
-      category,
-      productName,
-      color,
-      brand,
-      description,
-      division,
-      zilla,
-      upzilla,
-      possibleDate,
-      image
-    );
+
 
     fetch(`${endpoints}/posts/lost`, {
       method: "POST",
@@ -164,6 +155,9 @@ const LostPost = () => {
           icon: "error",
           confirmButtonText: "OK",
         });
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -387,9 +381,10 @@ const LostPost = () => {
           <div className="md:col-span-2">
             <button
               type="submit"
-              className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300"
+              className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled={isSubmitting}
             >
-              Submit Post
+              {isSubmitting ? "Submitting..." : "Submit Post"}
             </button>
           </div>
         </form>

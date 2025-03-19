@@ -16,6 +16,8 @@ const Post = ({ posts }) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [showReport, setShowReport] = useState(false);
 
+  const [loadingPosts, setLoadingPosts] = useState({});
+
   const fetchAttempts = async (post) => {
     try {
       const response = await fetch(
@@ -38,8 +40,8 @@ const Post = ({ posts }) => {
   };
 
   const handleShowMore = async (post) => {
+    setLoadingPosts((prev) => ({ ...prev, [post._id]: true }));
     const { successfulAttempt } = await fetchAttempts(post);
-    console.log("successful :", successfulAttempt);
 
     if (successfulAttempt) {
       navigate("/details", { state: { post } });
@@ -49,6 +51,8 @@ const Post = ({ posts }) => {
     } else {
       navigate("/details", { state: { post } });
     }
+
+    setLoadingPosts((prev) => ({ ...prev, [post._id]: false }));
   };
 
   const handleVerificationSuccess = () => {
@@ -115,10 +119,12 @@ const Post = ({ posts }) => {
             </ul>
             <div className="card-actions justify-end">
               <button
-                className="btn bg-buttonColor1 text-white text-md hover:bg-buttonColor3 hover:scale-105 transition-all duration-300"
+                className="btn bg-buttonColor1 text-white text-md hover:bg-buttonColor3 hover:scale-105 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled = {loadingPosts[post._id]}
                 onClick={() => handleShowMore(post)}
+                
               >
-                Show more
+                {loadingPosts[post._id] ? "Loading..." : "Show More"}
               </button>
             </div>
           </div>

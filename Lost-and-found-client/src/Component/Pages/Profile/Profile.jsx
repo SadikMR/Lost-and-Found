@@ -105,7 +105,6 @@ const Profile = () => {
 
   // Delete Found Posts
   const handleFoundPostDelete = async (postId) => {
-    console.log("current user found post ID : ", postId);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -132,10 +131,6 @@ const Profile = () => {
                 (post) => post._id !== postId
               );
               setCurrentUserFoundPost(remainingPosts);
-              console.log(
-                "current user found post Info : ",
-                currentUserFoundPost
-              );
             } else {
               Swal.fire("Failed!", "Failed to delete Found post.", "error");
             }
@@ -154,7 +149,6 @@ const Profile = () => {
 
   // Delete Lost Posts
   const handleLostPostDelete = async (postId) => {
-    console.log("current user lost post ID : ", postId);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -170,7 +164,6 @@ const Profile = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.success && data.data.deletedCount > 0) {
               Swal.fire(
                 "Deleted!",
@@ -181,10 +174,6 @@ const Profile = () => {
                 (post) => post._id !== postId
               );
               setCurrentUserLostPost(remainingPosts);
-              console.log(
-                "current user lost post Info : ",
-                currentUserLostPost
-              );
             } else {
               Swal.fire("Failed!", "Failed to delete Lost post.", "error");
             }
@@ -202,11 +191,11 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className="text-center text-xl">Loading...</p>;
   }
 
   if (!profileInfo) {
-    return <p>Error loading profile information.</p>;
+    return <p className="text-center text-xl mt-5">Error loading profile information... <span className="text-red-600">Please Wait</span></p>;
   }
 
   const handleImageClick = (image) => {
@@ -218,8 +207,6 @@ const Profile = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
   };
-
-  // console.log("Current user profile INfo :", profileInfo.data.firebase_uid);
   return (
     <div className="max-w-4xl mx-auto p-6 m-5 bg-[#E5E1DA] shadow-md rounded-lg text-black">
       <div>

@@ -13,6 +13,7 @@ const LostPostUpdate = () => {
     const [loading, setLoading] = useState(true);
     const { _id } = useParams();
     const postId = _id;
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     console.log("post id", postId);
 
@@ -51,6 +52,7 @@ const LostPostUpdate = () => {
 
     const handleLostPostUpdate = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         fetch(`${endpoints}/posts/lost/${postId}`, {
             method: "PUT",
             headers: {
@@ -78,11 +80,12 @@ const LostPostUpdate = () => {
             .catch((error) => {
                 console.error("Error updating lost post:", error);
             });
+        setIsSubmitting(false);
     };
 
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="text-center text-xl">Loading...</div>;
     }
 
     return (
@@ -226,9 +229,10 @@ const LostPostUpdate = () => {
                     <div className="md:col-span-2">
                         <button
                             type="submit"
-                            className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                            className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            disabled={isSubmitting}
                         >
-                            Update Post
+                            {isSubmitting ? "Updating..." : "Update Lost Post"}
                         </button>
                     </div>
                 </form>
