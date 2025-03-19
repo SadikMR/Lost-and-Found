@@ -58,6 +58,7 @@ const Registration = () => {
           text: "Image size is too large. Please upload an image smaller than 5MB.",
           icon: "error",
         });
+        setIsSubmitting(false);
         return;
       }
 
@@ -101,6 +102,7 @@ const Registration = () => {
 
     if (password !== confirmPassword) {
       alert("Password doesn't match");
+      setIsSubmitting(false);
       return;
     }
 
@@ -118,12 +120,14 @@ const Registration = () => {
       !image
     ) {
       alert("All fields are required");
+      setIsSubmitting(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       alert("Invalid email address");
+      setIsSubmitting(false);
       return;
     }
 
@@ -133,6 +137,7 @@ const Registration = () => {
       alert(
         "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
       );
+      setIsSubmitting(false);
       return;
     }
 
@@ -460,7 +465,9 @@ const Registration = () => {
             </div>
             {/* Register Button */}
             <div className="md:col-span-2">
-              <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled={isSubmitting}>
+              <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" 
+              disabled={isSubmitting}
+              >
                 {isSubmitting ? "Registering..." : "Register"}
               </button>
             </div>

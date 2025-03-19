@@ -70,7 +70,7 @@ const Details = () => {
   };
 
   const receiverDataId = receiverInfo?.data?._id;
-  console.log("receiverDataId 12",receiverDataId);
+  console.log("receiverDataId 12", receiverDataId);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -127,15 +127,18 @@ const Details = () => {
         </div>
 
         {/* Right Column: Receiver Info */}
-        <div className="space-y-6">
+        <div className="space-y-6 w-full">
           {/* Receiver Info Header */}
           <div className="bg-white p-4 rounded-lg shadow-md">
             {/* Name and Verified Badge in one row */}
-            <div className="flex items-center justify-between w-full">
-              
-              <NavLink to = {`/details/otherProfile/${receiverDataId}`} state={{ receiverInfo }} className="text-2xl font-semibold text-gray-800"><h2 >
-                {receiverInfo?.data?.fullname}
-              </h2></NavLink>
+            <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-2">
+              <NavLink
+                to={`/details/otherProfile/${receiverDataId}`}
+                state={{ receiverInfo }}
+                className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 text-center sm:text-left"
+              >
+                <h2>{receiverInfo?.data?.fullname}</h2>
+              </NavLink>
 
               {/* Three-dot menu */}
               <div className="relative">
@@ -148,11 +151,10 @@ const Details = () => {
 
                 {/* Dropdown Menu */}
                 {showMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
+                  <div className="absolute right-0 mt-2 w-40 sm:w-48 bg-white border rounded-lg shadow-lg z-10">
                     <button
-                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100 text-sm sm:text-base"
                       onClick={() => {
-                        // Handle report post action here
                         setShowReport(true);
                         setShowMenu(false);
                       }}
@@ -160,26 +162,20 @@ const Details = () => {
                       Report Post
                     </button>
                     <button
-                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
-                      onClick={() => {
-                        // Handle view profile action here
-                        setShowMenu(false);
-                      }}
+                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100 text-sm sm:text-base"
+                      onClick={() => setShowMenu(false)}
                     >
                       View Profile
                     </button>
                     <button
-                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
+                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100 text-sm sm:text-base"
                       onClick={handleCopyURL}
                     >
                       Copy URL
                     </button>
                     <button
-                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
-                      onClick={() => {
-                        // Handle chat action here
-                        setShowMenu(false);
-                      }}
+                      className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100 text-sm sm:text-base"
+                      onClick={() => setShowMenu(false)}
                     >
                       Chat
                     </button>
@@ -189,7 +185,7 @@ const Details = () => {
             </div>
 
             {/* Member Since */}
-            <div className="mt-2 text-sm text-gray-500">
+            <div className="mt-2 text-sm text-gray-500 text-center sm:text-left">
               <p className="font-medium">
                 Member Since: {formatDate(receiverInfo?.data?.createdAt)}
               </p>
@@ -198,33 +194,32 @@ const Details = () => {
 
           {/* Contact Information */}
           <div className="bg-white p-4 border-2 border-blue-400 rounded-lg shadow-sm">
-            <p className="font-semibold text-lg text-gray-700">
+            <p className="font-semibold text-base sm:text-lg text-gray-700 text-center sm:text-left">
               Contact Information
             </p>
-            <div className="mt-4 space-y-3">
-              <p>
+            <div className="mt-4 space-y-2 sm:space-y-3 text-center sm:text-left">
+              <p className="flex flex-wrap break-words min-w-0">
                 <span className="font-semibold text-gray-800">Phone:</span>{" "}
-                {receiverInfo?.data?.phone}
+                <span className="ml-1 break-all">{receiverInfo?.data?.phone}</span>
               </p>
-              <p>
+              <p className="flex flex-wrap break-words min-w-0">
                 <span className="font-semibold text-gray-800">Email:</span>{" "}
-                {receiverInfo?.data?.email}
+                <span className="ml-1 break-all">{receiverInfo?.data?.email}</span>
               </p>
-              <p>
+              <p className="flex flex-wrap break-words min-w-0">
                 <span className="font-semibold text-gray-800">Address:</span>{" "}
-                {receiverInfo?.data?.zilla}
+                <span className="ml-1 break-words">{receiverInfo?.data?.zilla}</span>
               </p>
             </div>
 
             {/* Chat Now Button */}
-            <div className="flex gap-2 items-center justify-between mt-6">
+            <div className="flex flex-col sm:flex-row gap-2 items-center justify-center sm:justify-between mt-6">
               <button
                 onClick={handleClick}
-                className={`flex items-center gap-2 p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  loading || !senderInfo || !receiverInfo
+                className={`flex items-center gap-2 p-3 w-full sm:w-auto justify-center bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${loading || !senderInfo || !receiverInfo
                     ? "cursor-not-allowed opacity-50"
                     : ""
-                }`}
+                  }`}
                 disabled={loading || !senderInfo || !receiverInfo}
               >
                 <ChatBubbleOvalLeftEllipsisIcon className="w-5 h-5 text-white" />
@@ -232,6 +227,9 @@ const Details = () => {
               </button>
             </div>
           </div>
+
+
+
 
           {/* Report Modal */}
           {showReport && (
@@ -247,7 +245,7 @@ const Details = () => {
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

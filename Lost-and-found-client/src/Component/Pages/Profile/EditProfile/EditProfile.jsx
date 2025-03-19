@@ -235,15 +235,13 @@ const EditProfile = () => {
         )}
 
         {/* Submit Button */}
-        <div>
-          <button
+        <button
             type="submit"
-            className="w-full btn bg-buttonColor1 text-white hover:bg-buttonColor3 transition  focus:outline-none duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
-            disabled = {isSubmitting}
+            className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none w-full  disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
           >
-            {isSubmitting ? "Updating..." : "Update Profile"}
+            {isSubmitting ? "Updating Profile..." : "Update Profile"}
           </button>
-        </div>
       </form>
     </div>
   );

@@ -212,29 +212,16 @@ const FoundPostUpdate = () => {
                         ></textarea>
                     </div>
 
-                    {/* Image Upload
-                    <div className="md:col-span-2">
-                        <label htmlFor="image" className="block text-sm font-medium text-black">
-                            Upload Image
-                        </label>
-                        <input
-                            type="file"
-                            id="image"
-                            value={currentfoundpostInfo.image || ""}
-                            onChange={handleInputChange}
-                            className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div> */}
 
                     {/* Submit Button */}
                     <div className="md:col-span-2">
-                        <button
-                            type="submit"
-                            className="mt-6 w-full text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none sm:w-auto disabled:bg-gray-400 disabled:cursor-not-allowed"
-                            disabled = {isSubmitting}
-                        >
-                            {isSubmitting ? "Updating..." : "Update Post"}
-                        </button>
+                    <button
+                        type="submit"
+                        className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none w-full  disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? "Updating..." : "Update Found Post"} 
+                    </button>
                     </div>
                 </form>
             </div>

@@ -15,7 +15,6 @@ const LostPostUpdate = () => {
     const postId = _id;
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    console.log("post id", postId);
 
 
     // Fetch the Specific User found post information
@@ -101,20 +100,6 @@ const LostPostUpdate = () => {
                     onSubmit={handleLostPostUpdate}
                     className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"
                 >
-                    {/* Category
-                    <div>
-                        <label htmlFor="category" className="block text-sm font-medium text-black">
-                            Category *
-                        </label>
-                        <input
-                            type="text"
-                            id="category"
-                            value={currentlostpostInfo.category || ""}
-                            onChange={handleInputChange}
-                            required
-                            className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div> */}
 
                     {/* Product Name */}
                     <div>
@@ -153,50 +138,6 @@ const LostPostUpdate = () => {
                         </select>
                     </div>
 
-                    {/* Brand
-                    <div>
-                        <label htmlFor="brand" className="block text-sm font-medium text-black">
-                            Brand
-                        </label>
-                        <input
-                            type="text"
-                            id="brand"
-                            value={currentlostpostInfo.brand || ""}
-                            onChange={handleInputChange}
-                            className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div> */}
-
-                    {/* Possible Location
-                    <div>
-                        <label htmlFor="division" className="block text-sm font-medium text-black">
-                            Possible Division *
-                        </label>
-                        <input
-                            type="text"
-                            id="division"
-                            value={currentlostpostInfo.division || ""}
-                            onChange={handleInputChange}
-                            required
-                            className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div> */}
-
-                    {/* Possible Date
-                    <div>
-                        <label htmlFor="possibleDate" className="block text-sm font-medium text-black">
-                            Possible Date *
-                        </label>
-                        <input
-                            type="date"
-                            id="possibleDate"
-                            value={currentlostpostInfo.possibleDate || ""}
-                            onChange={handleInputChange}
-                            required
-                            className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div> */}
-
                     {/* Short Description */}
                     <div className="md:col-span-2">
                         <label htmlFor="description" className="block text-sm font-medium text-black">
@@ -211,25 +152,12 @@ const LostPostUpdate = () => {
                         ></textarea>
                     </div>
 
-                    {/* Image Upload
-                    <div className="md:col-span-2">
-                        <label htmlFor="image" className="block text-sm font-medium text-black">
-                            Upload Image
-                        </label>
-                        <input
-                            type="file"
-                            id="image"
-                            value={currentlostpostInfo.image || ""}
-                            onChange={handleInputChange}
-                            className="bg-white text-black mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div> */}
 
                     {/* Submit Button */}
                     <div className="md:col-span-2">
                         <button
                             type="submit"
-                            className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none w-full  disabled:bg-gray-400 disabled:cursor-not-allowed"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? "Updating..." : "Update Lost Post"}
