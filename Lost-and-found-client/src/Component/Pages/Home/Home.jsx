@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import cover from "../../../assets/cover.jpg";
 import Post from "../../../Post/PostCard/PostCard";
 
-
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const Home = () => {
@@ -129,10 +128,10 @@ const Home = () => {
         style={{ backgroundImage: `url(${cover})` }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center px-4 text-center space-y-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white">
             Find What You Lost, Return What You Found
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-300">
+          <p className="text-md sm:text-xl md:text-2xl lg:text-3xl text-gray-300">
             Your trusted platform to reconnect lost items with their rightful
             owners.
           </p>
@@ -140,13 +139,13 @@ const Home = () => {
           <div className="flex gap-4 w-full max-w-md">
             <NavLink
               to="/lost"
-              className="w-1/2 px-6 py-3 text-sm sm:text-lg md:text-xl font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-700 rounded-md text-center"
+              className="w-1/2 px-6 py-3 text-xs sm:text-sm md:text-lg font-bold text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-700 rounded-md text-center"
             >
               Report for Lost
             </NavLink>
             <NavLink
               to="/found"
-              className="w-1/2 px-6 py-3 text-sm sm:text-lg md:text-xl font-bold text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-700 rounded-md text-center"
+              className="w-1/2 px-6 py-3 text-xs sm:text-sm md:text-lg font-bold text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-700 rounded-md text-center"
             >
               Report for Found
             </NavLink>
@@ -160,7 +159,10 @@ const Home = () => {
           Search for Lost & Found Items
         </h2>
 
-        <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <form
+          onSubmit={handleSearch}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+        >
           <select
             id="category"
             name="category"
@@ -286,7 +288,6 @@ const Home = () => {
           </button>
         </form>
       </div>
-
 
       {/* Posts Section */}
       <div className="px-4 sm:px-8 lg:px-32 py-8">

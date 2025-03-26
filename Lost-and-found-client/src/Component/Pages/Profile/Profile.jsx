@@ -5,8 +5,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./modal.css";
 import { Flag } from "lucide-react"; // Report icon
-import ReportModal from "./reportModal";
-import { MoreVertical } from "lucide-react";
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const Profile = () => {
@@ -19,14 +17,6 @@ const Profile = () => {
   const [currentUserLostPost, setCurrentUserLostPost] = useState([]);
   const user = getCurrentUser();
   const currentuser_id = user.uid;
-
-  const [showMenu, setShowMenu] = useState(false);
-  const [showReport, setShowReport] = useState(false);
-
-  const handleCopyURL = () => {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Profile URL copied! 📋");
-  };
 
   const navigate = useNavigate();
   const handleShowMore = (post) => {
@@ -195,7 +185,12 @@ const Profile = () => {
   }
 
   if (!profileInfo) {
-    return <p className="text-center text-xl mt-5">Error loading profile information... <span className="text-red-600">Please Wait</span></p>;
+    return (
+      <p className="text-center text-xl mt-5">
+        Error loading profile information...{" "}
+        <span className="text-red-600">Please Wait</span>
+      </p>
+    );
   }
 
   const handleImageClick = (image) => {
@@ -233,53 +228,6 @@ const Profile = () => {
               </p>
             </div>
           </div>
-
-          {/* Three-dot menu */}
-          <div className="relative">
-            <button
-              className="p-2 rounded-full hover:bg-gray-200"
-              onClick={() => setShowMenu(!showMenu)}
-            >
-              <MoreVertical size={22} />
-            </button>
-
-            {/* Dropdown Menu */}
-            {showMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg">
-                <button
-                  className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
-                  onClick={() => {
-                    setShowReport(true);
-                    setShowMenu(false);
-                  }}
-                >
-                  Report
-                </button>
-                <button
-                  className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
-                  onClick={() => {
-                    // Handle block action here
-                  }}
-                >
-                  Block
-                </button>
-                <button
-                  className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
-                  onClick={handleCopyURL}
-                >
-                  Copy URL
-                </button>
-                <button
-                  className="px-4 py-2 w-full text-gray-700 hover:bg-gray-100"
-                  onClick={() => {
-                    // Handle message action here
-                  }}
-                >
-                  Send Message
-                </button>
-              </div>
-            )}
-          </div>
         </div>
 
         <div className="mt-6 space-y-3">
@@ -309,18 +257,14 @@ const Profile = () => {
           </p>
         </div>
         <div className="card-actions justify-end">
-          <NavLink to="/profile/editProfile" className="btn btn-primary">
+          <NavLink
+            to="/profile/editProfile"
+            state={{ userId: currentuser_id }}
+            className="btn btn-primary"
+          >
             Edit Profile
           </NavLink>
         </div>
-        {/* Report Modal */}
-        {showReport && (
-          <ReportModal
-            reportedUserId={profileInfo.data.firebase_uid}
-            reporterUserId={currentuser_id}
-            onClose={() => setShowReport(false)}
-          />
-        )}
         {/* Modal for full image view */}
         <div
           className={`modal-overlay ${isModalOpen ? "active" : ""}`}
@@ -340,7 +284,9 @@ const Profile = () => {
       <div>
         {/* Found Items Section */}
         <div className="p-2 md:p-4">
-          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Found Items</h2>
+          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">
+            Found Items
+          </h2>
           {currentUserFoundPost.length > 0 ? (
             <div className="overflow-x-auto">
               {/* Table for medium and larger screens */}
@@ -358,9 +304,13 @@ const Profile = () => {
                   {currentUserFoundPost.map((found, index) => (
                     <tr key={index} className="bg-white hover:bg-blue-100">
                       <td className="px-2 md:px-8 py-2">{found.category}</td>
-                      <td className="px-2 md:pl-10 py-2">{found.productName}</td>
+                      <td className="px-2 md:pl-10 py-2">
+                        {found.productName}
+                      </td>
                       <td className="px-2 md:px-4 py-2">{found.zilla}</td>
-                      <td className="px-2 md:px-4 py-2">{found.possibleDate}</td>
+                      <td className="px-2 md:px-4 py-2">
+                        {found.possibleDate}
+                      </td>
                       <td className="px-2 md:px-4 py-2 relative">
                         <div className="dropdown dropdown-hover">
                           <div
@@ -417,7 +367,10 @@ const Profile = () => {
               {/* Card view for small screens */}
               <div className="grid grid-cols-1 gap-4 md:hidden">
                 {currentUserFoundPost.map((found, index) => (
-                  <div key={index} className="bg-white p-4 rounded shadow hover:bg-blue-50">
+                  <div
+                    key={index}
+                    className="bg-white p-4 rounded shadow hover:bg-blue-50"
+                  >
                     <div className="flex justify-between items-center mb-2">
                       <div className="font-bold">{found.productName}</div>
                       <div className="dropdown dropdown-hover">
@@ -486,7 +439,9 @@ const Profile = () => {
 
         {/* Lost Items Section */}
         <div className="p-2 md:p-4">
-          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">Lost Items</h2>
+          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">
+            Lost Items
+          </h2>
           {currentUserLostPost.length > 0 ? (
             <div className="overflow-x-auto">
               {/* Table for medium and larger screens */}
@@ -563,7 +518,10 @@ const Profile = () => {
               {/* Card view for small screens */}
               <div className="grid grid-cols-1 gap-4 md:hidden">
                 {currentUserLostPost.map((lost, index) => (
-                  <div key={index} className="bg-white p-4 rounded shadow hover:bg-blue-50">
+                  <div
+                    key={index}
+                    className="bg-white p-4 rounded shadow hover:bg-blue-50"
+                  >
                     <div className="flex justify-between items-center mb-2">
                       <div className="font-bold">{lost.productName}</div>
                       <div className="dropdown dropdown-hover">

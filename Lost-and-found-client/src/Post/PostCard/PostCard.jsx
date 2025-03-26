@@ -40,6 +40,10 @@ const Post = ({ posts }) => {
   };
 
   const handleShowMore = async (post) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     setLoadingPosts((prev) => ({ ...prev, [post._id]: true }));
     const { successfulAttempt } = await fetchAttempts(post);
 
@@ -60,6 +64,10 @@ const Post = ({ posts }) => {
   };
 
   const handleReportClick = (post) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     setSelectedPost(post);
     setShowReport(true);
   };
@@ -120,9 +128,8 @@ const Post = ({ posts }) => {
             <div className="card-actions justify-end">
               <button
                 className="btn bg-buttonColor1 text-white text-md hover:bg-buttonColor3 hover:scale-105 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                disabled = {loadingPosts[post._id]}
+                disabled={loadingPosts[post._id]}
                 onClick={() => handleShowMore(post)}
-                
               >
                 {loadingPosts[post._id] ? "Loading..." : "Show More"}
               </button>
