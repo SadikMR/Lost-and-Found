@@ -1,18 +1,16 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../../AuthProviders/AuthProvider";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 // import Compressor from "compressorjs"; // Import image compressor
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const EditProfile = () => {
+  const location = useLocation();
+  const userId = location.state?.userId;
   const [editProfileInfo, setEditProfileInfo] = useState(null);
   const [updatedFields, setUpdatedFields] = useState({});
   const [loading, setLoading] = useState(true);
-  const { getCurrentUser } = useContext(AuthContext);
-  const user = getCurrentUser();
-  const userId = user.uid;
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -102,6 +100,13 @@ const EditProfile = () => {
           text: "Profile updated successfully",
           icon: "success",
         });
+        const userInfo = {
+          username: data.data.username,
+          image: data.data.image,
+          fullname: data.data.fullname,
+        };
+
+        localStorage.setItem("user", JSON.stringify(userInfo));
         setUpdatedFields({});
       } else {
         Swal.fire({
@@ -236,12 +241,12 @@ const EditProfile = () => {
 
         {/* Submit Button */}
         <button
-            type="submit"
-            className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none w-full  disabled:bg-gray-400 disabled:cursor-not-allowed"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Updating Profile..." : "Update Profile"}
-          </button>
+          type="submit"
+          className="px-4 py-2 text-white bg-[#0A97B0] rounded-lg hover:bg-[#087F90] focus:outline-none w-full  disabled:bg-gray-400 disabled:cursor-not-allowed"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Updating Profile..." : "Update Profile"}
+        </button>
       </form>
     </div>
   );

@@ -54,6 +54,16 @@ const Login = () => {
       }
 
       setErrorMessage(""); // Clear error on successful login
+
+      // Store user data in localStorage
+      const userInfo = {
+        username: data.data.username,
+        image: data.data.image,
+        fullname: data.data.fullname,
+      };
+
+      localStorage.setItem("user", JSON.stringify(userInfo));
+
       Swal.fire({
         title: "Login Successful",
         icon: "success",
