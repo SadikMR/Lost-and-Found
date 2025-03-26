@@ -92,34 +92,36 @@ const Details = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <div className="grid grid-cols-3 gap-4 bg-[#E5E1DA] text-black shadow-md rounded-lg p-6">
-        {/* Left Column */}
-        <div className="col-span-2">
+    <div className="max-w-6xl mx-auto p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#E5E1DA] text-black shadow-md rounded-lg p-6">
+        {/* Left Column: Post Details */}
+        <div className="col-span-1 md:col-span-2">
           <img
             src={post.image || pic1}
             alt="Shoes"
-            className="w-80 h-64 object-cover rounded-md"
+            className="w-full md:w-80 h-64 object-cover rounded-md"
           />
           <div className="mt-4 space-y-3">
-            <h2 className="text-xl font-bold">{post.productName}</h2>
-            <p>
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">
+              {post.productName}
+            </h2>
+            <p className="text-base md:text-lg lg:text-xl">
               <span className="font-semibold">Category:</span> {post.category}
             </p>
-            <p>
+            <p className="text-base md:text-lg lg:text-xl">
               <span className="font-semibold">Brand:</span> {post.brand}
             </p>
-            <p>
+            <p className="text-base md:text-lg lg:text-xl">
               <span className="font-semibold">Color:</span> {post.color}
             </p>
-            <p>
+            <p className="text-base md:text-lg lg:text-xl">
               <span className="font-semibold">Location:</span>
               {post.division}, {post.zilla}, {post.upzilla}
             </p>
-            <p>
+            <p className="text-base md:text-lg lg:text-xl">
               <span className="font-semibold">Date:</span> {post.possibleDate}
             </p>
-            <p>
+            <p className="text-base md:text-lg lg:text-xl">
               <span className="font-semibold">Description:</span>
               {post.description}
             </p>
@@ -127,7 +129,7 @@ const Details = () => {
         </div>
 
         {/* Right Column: Receiver Info */}
-        <div className="space-y-6 w-full">
+        <div className="space-y-6 w-full md:w-auto">
           {/* Receiver Info Header */}
           <div className="bg-white p-4 rounded-lg shadow-md">
             {/* Name and Verified Badge in one row */}
@@ -135,7 +137,7 @@ const Details = () => {
               <NavLink
                 to={`/details/otherProfile/${receiverDataId}`}
                 state={{ receiverInfo }}
-                className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 text-center sm:text-left"
+                className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 text-center sm:text-left"
               >
                 <h2>{receiverInfo?.data?.fullname}</h2>
               </NavLink>
@@ -185,7 +187,7 @@ const Details = () => {
             </div>
 
             {/* Member Since */}
-            <div className="mt-2 text-sm text-gray-500 text-center sm:text-left">
+            <div className="mt-2 text-sm md:text-base lg:text-lg text-gray-500 text-center sm:text-left">
               <p className="font-medium">
                 Member Since: {formatDate(receiverInfo?.data?.createdAt)}
               </p>
@@ -194,21 +196,27 @@ const Details = () => {
 
           {/* Contact Information */}
           <div className="bg-white p-4 border-2 border-blue-400 rounded-lg shadow-sm">
-            <p className="font-semibold text-base sm:text-lg text-gray-700 text-center sm:text-left">
+            <p className="font-semibold text-base sm:text-lg lg:text-xl text-gray-700 text-center sm:text-left">
               Contact Information
             </p>
             <div className="mt-4 space-y-2 sm:space-y-3 text-center sm:text-left">
-              <p className="flex flex-wrap break-words min-w-0">
+              <p className="flex flex-wrap break-words min-w-0 text-base sm:text-lg lg:text-xl">
                 <span className="font-semibold text-gray-800">Phone:</span>{" "}
-                <span className="ml-1 break-all">{receiverInfo?.data?.phone}</span>
+                <span className="ml-1 break-all">
+                  {receiverInfo?.data?.phone}
+                </span>
               </p>
-              <p className="flex flex-wrap break-words min-w-0">
+              <p className="flex flex-wrap break-words min-w-0 text-base sm:text-lg lg:text-xl">
                 <span className="font-semibold text-gray-800">Email:</span>{" "}
-                <span className="ml-1 break-all">{receiverInfo?.data?.email}</span>
+                <span className="ml-1 break-all">
+                  {receiverInfo?.data?.email}
+                </span>
               </p>
-              <p className="flex flex-wrap break-words min-w-0">
+              <p className="flex flex-wrap break-words min-w-0 text-base sm:text-lg lg:text-xl">
                 <span className="font-semibold text-gray-800">Address:</span>{" "}
-                <span className="ml-1 break-words">{receiverInfo?.data?.zilla}</span>
+                <span className="ml-1 break-words">
+                  {receiverInfo?.data?.zilla}
+                </span>
               </p>
             </div>
 
@@ -216,20 +224,20 @@ const Details = () => {
             <div className="flex flex-col sm:flex-row gap-2 items-center justify-center sm:justify-between mt-6">
               <button
                 onClick={handleClick}
-                className={`flex items-center gap-2 p-3 w-full sm:w-auto justify-center bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${loading || !senderInfo || !receiverInfo
+                className={`flex items-center gap-2 p-3 w-full sm:w-auto justify-center bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  loading || !senderInfo || !receiverInfo
                     ? "cursor-not-allowed opacity-50"
                     : ""
-                  }`}
+                }`}
                 disabled={loading || !senderInfo || !receiverInfo}
               >
                 <ChatBubbleOvalLeftEllipsisIcon className="w-5 h-5 text-white" />
-                <p className="font-semibold">Chat Now</p>
+                <p className="font-semibold text-base sm:text-lg lg:text-xl">
+                  Chat Now
+                </p>
               </button>
             </div>
           </div>
-
-
-
 
           {/* Report Modal */}
           {showReport && (
@@ -245,7 +253,7 @@ const Details = () => {
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
