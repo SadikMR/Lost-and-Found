@@ -22,12 +22,18 @@ const saveInfo = async (req, res) => {
 
     // console.log("User data: ", userData);
 
-    // Check if email already exists
-    const existingUser = await User.findOne({ email: userData.email });
-    if (existingUser) {
-      return handleError(res, null, "User already exists");
-    }
+    const existingUser = await User.findOne({
+      $or: [{ email: userData.email }, { username: userData.username }],
+    });
 
+    if (existingUser) {
+      if (existingUser.email === userData.email) {
+        return handleError(res, null, "Email is already registered.");
+      }
+      if (existingUser.username === userData.username) {
+        return handleError(res, null, "Username is already taken.");
+      }
+    }
     // Debug: Check if password is undefined or empty
     if (!userData.password) {
       return handleError(res, null, "Password is missing");
