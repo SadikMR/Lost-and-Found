@@ -11,6 +11,7 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [recentPosts, setRecentPosts] = useState([]); // Add state for recent lost posts
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const postsPerPage = 9;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,6 +41,8 @@ const Home = () => {
       }
     } catch (error) {
       console.error("Error during fetching recent posts:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -296,7 +299,15 @@ const Home = () => {
         </div>
 
         {/* Render paginated posts */}
-        <Post posts={displayedPosts} />
+        <div className="relative min-h-screen">
+          {loading ? (
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mt-4">
+              <div className="text-2xl text-gray-700">Loading...</div>
+            </div>
+          ) : (
+            <Post posts={displayedPosts} /> // Render posts once loading is complete
+          )}
+        </div>
 
         {/* Pagination Buttons */}
         <div className="flex justify-center space-x-4 mt-6">
