@@ -186,16 +186,18 @@ const Registration = () => {
                       popup: "custom-swal-popup",
                     },
                     draggable: true,
+                  }).then(() => {
+                    setIsSubmitting(false);
+                    signOut(auth);
+                    navigate("/confirmation");
                   });
-                  signOut(auth);
-                  navigate("/confirmation");
                 } else {
                   Swal.fire({
                     title: "Registration Failed",
                     text: data.message,
                     icon: "error",
                     draggable: true,
-                  });
+                  }).then(() => setIsSubmitting(false));
                 }
               })
               .catch((error) => {
@@ -205,17 +207,24 @@ const Registration = () => {
                   text: "Something went wrong while saving your data.",
                   icon: "error",
                   draggable: true,
-                });
+                }).then(() => setIsSubmitting(false));
               });
           })
           .catch((error) => {
             console.log("Error updating user profile:", error);
+            setIsSubmitting(false);
           });
       })
       .catch((error) => {
-        alert("An error occurred during registration: " + error.message);
-      })
-      .finally(() => {
+        if (error.code === "auth/email-already-in-use") {
+          Swal.fire({
+            title: "Registration Failed",
+            text: "Email is already registered. Try logging in.",
+            icon: "error",
+          });
+        } else {
+          alert("An error occurred: " + error.message);
+        }
         setIsSubmitting(false);
       });
   };
@@ -465,8 +474,9 @@ const Registration = () => {
             </div>
             {/* Register Button */}
             <div className="md:col-span-2">
-              <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" 
-              disabled={isSubmitting}
+              <button
+                className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled={isSubmitting}
               >
                 {isSubmitting ? "Registering..." : "Register"}
               </button>

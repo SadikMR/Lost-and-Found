@@ -20,7 +20,6 @@ const Login = () => {
 
   const from = location.state?.from?.pathname || "/";
 
-
   const handleLogin = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
@@ -36,7 +35,6 @@ const Login = () => {
       await user.reload();
       const updatedUser = user; // Get the latest user info
 
-
       //  Fetch user data from API
       const response = await fetch(`${endpoints}/user/getUserInfo/${email}`);
 
@@ -51,6 +49,7 @@ const Login = () => {
           text: "Please check your inbox and verify your email before logging in.",
           icon: "warning",
         });
+        setIsSubmitting(false);
         return;
       }
 
@@ -62,7 +61,6 @@ const Login = () => {
       });
 
       navigate(from, { replace: true });
-
     } catch (error) {
       setErrorMessage(error.message); // Show error message
       alert("Invalid email or password");
@@ -108,7 +106,10 @@ const Login = () => {
 
             {/* Password Input */}
             <div className="relative mt-3">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -127,10 +128,17 @@ const Login = () => {
               </button>
             </div>
 
-            <NavLink to="/login/forgotPassword"><p className="text-sm text-blue-700 mt-2 cursor-pointer text-right ">Forgot password?</p></NavLink>
+            <NavLink to="/login/forgotPassword">
+              <p className="text-sm text-blue-700 mt-2 cursor-pointer text-right ">
+                Forgot password?
+              </p>
+            </NavLink>
 
             {/* Login Button */}
-            <button className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled={isSubmitting}>
+            <button
+              className="mt-6 w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Logging in..." : "Login"}
             </button>
           </form>
