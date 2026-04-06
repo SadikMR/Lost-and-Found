@@ -100,7 +100,7 @@ export const router = createBrowserRouter([
     element: <ForgotPassword></ForgotPassword>,
   },
   {
-    path: "/login/resetPassword/:token",
+    path: "/login/resetPassword",
     element: <ResetPassword></ResetPassword>,
   },
   {
@@ -109,8 +109,8 @@ export const router = createBrowserRouter([
   },
 
   {
-    path: "/verifyEmail/:token",
-    element: <VerifyEmail></VerifyEmail>, // This is not defined in this file
+    path: "/verifyEmail",
+    element: <VerifyEmail></VerifyEmail>,
   },
   {
     path: "/chat",

@@ -1,59 +1,165 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const endpoints = import.meta.env.VITE_backendUrl;
 
 const VerifyEmail = () => {
-  const { token } = useParams();
   const navigate = useNavigate();
-  const [message, setMessage] = useState("Verifying your email...");
-  const [error, setError] = useState(null);
+  const location = useLocation();
 
-  useEffect(() => {
-    axios
-      .get(`${endpoints}/user/verifyEmail/${token}`)
-      .then((res) => {
-        setMessage(res.data.message);
-        setTimeout(() => {
-          navigate("/login"); // Redirect after 3 seconds
-        }, 30000);
-      })
-      .catch(() => {
-        setError("Email verification failed. Invalid or expired token.");
+  // Email may be passed from the confirmation/registration page via router state
+  const [email, setEmail] = useState(location.state?.email || "");
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [resending, setResending] = useState(false);
+  const [resendMsg, setResendMsg] = useState("");
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (!email.trim() || !code.trim()) {
+      setError("Please enter both your email and the verification code.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await axios.post(`${endpoints}/user/verifyEmail`, {
+        email: email.trim(),
+        code: code.trim(),
       });
-  }, [token, navigate]);
+      setSuccess(res.data.message || "Email verified successfully!");
+      setTimeout(() => navigate("/login"), 2500);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Verification failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!email.trim()) {
+      setError("Please enter your email address first.");
+      return;
+    }
+    setResending(true);
+    setResendMsg("");
+    setError("");
+    try {
+      const res = await axios.post(`${endpoints}/user/resendVerificationCode`, {
+        email: email.trim(),
+      });
+      setResendMsg(res.data.message || "New code sent! Check your inbox.");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to resend code. Try again."
+      );
+    } finally {
+      setResending(false);
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-      <div className="bg-white shadow-lg rounded-2xl p-8 text-center w-full max-w-md">
-        {/* Success Icon */}
-        <svg
-          className="w-16 h-16 text-green-500 mx-auto animate-bounce"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M2.25 12a9.75 9.75 0 1117.563 6.477l2.312 2.311a.75.75 0 01-1.06 1.06l-2.313-2.311A9.75 9.75 0 112.25 12zm7.62 3.5a.75.75 0 001.06 0l5-5a.75.75 0 10-1.06-1.06l-4.47 4.47-2.44-2.44a.75.75 0 10-1.06 1.06l3 3z"
-            clipRule="evenodd"
-          />
-        </svg>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 px-4">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+        {/* Icon */}
+        <div className="flex justify-center mb-4">
+          <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
+            <svg
+              className="w-8 h-8 text-indigo-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+        </div>
 
-        <h1 className="text-2xl font-bold mt-4">Email Verified!</h1>
-        <p className="mt-2 text-lg text-green-600">
-          Your email has been successfully verified.
+        <h1 className="text-2xl font-bold text-center text-gray-800 mb-1">
+          Verify Your Email
+        </h1>
+        <p className="text-sm text-center text-gray-500 mb-6">
+          Enter the 6-digit code we sent to your email address.
         </p>
 
-        <div className="mt-6">
-          <NavLink
-            to="/login"
-            className="bg-indigo-600 text-white py-2 px-6 rounded-lg text-lg font-medium transition duration-300 ease-in-out transform hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-2 mb-4">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-2 mb-4">
+            {success} Redirecting to login…
+          </div>
+        )}
+        {resendMsg && (
+          <div className="bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm rounded-lg px-4 py-2 mb-4">
+            {resendMsg}
+          </div>
+        )}
+
+        <form onSubmit={handleVerify} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email Address
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Verification Code
+            </label>
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              placeholder="e.g. 482931"
+              maxLength={6}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm tracking-widest text-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg transition disabled:opacity-60"
           >
-            Back to Login
-          </NavLink>
-        </div>
+            {loading ? "Verifying…" : "Verify Email"}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-gray-500 mt-5">
+          Didn't receive a code?{" "}
+          <button
+            onClick={handleResend}
+            disabled={resending}
+            className="text-indigo-600 hover:underline font-medium disabled:opacity-60"
+          >
+            {resending ? "Sending…" : "Resend Code"}
+          </button>
+        </p>
       </div>
     </div>
   );
