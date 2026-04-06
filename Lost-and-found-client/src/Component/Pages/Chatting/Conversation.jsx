@@ -2,7 +2,6 @@ import { React, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../../AuthProviders/AuthProvider";
-import image from "../../../assets/profilePic.jpg";
 import "./conversation.css";
 
 const endpoints = import.meta.env.VITE_backendUrl;
@@ -13,28 +12,15 @@ const Conversations = () => {
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [styleType, setStyleType] = useState("modern"); // You can toggle this to "classic" for classic style
-
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        console.log("User UID:", user?.uid);
-        if (!user?.uid) {
-          console.error("User UID is not available");
-          return;
-        }
-
+        if (!user?.uid) return;
         setLoading(true);
-
         const res = await axios.get(
           `${endpoints}/chat/getConversations/${user?.uid}`
         );
-        console.log("Full API Response:", res);
-        console.log("Response Data:", res.data);
-
-        const conversationsData = res.data?.data || [];
-        console.log("Fetched Conversations:", conversationsData);
-        setConversations(conversationsData);
+        setConversations(res.data?.data || []);
       } catch (err) {
         console.error("Error fetching conversations:", err);
         setConversations([]);
@@ -43,50 +29,62 @@ const Conversations = () => {
       }
     };
 
-    if (user?.uid) {
-      fetchConversations();
-    } else {
-      console.log("Waiting for user data...");
-    }
+    if (user?.uid) fetchConversations();
   }, [user]);
 
   if (!user)
     return (
-      <div className="flex justify-center items-center h-screen">
-        Loading user...
+      <div className="conv-page">
+        <div className="conv-container">
+          <div className="conv-loading">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="conv-skeleton" />
+            ))}
+          </div>
+        </div>
       </div>
     );
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    if (isNaN(date)) {
-      return "Invalid Date";
-    }
-
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    return date.toLocaleDateString("en-GB", options); // Returns in the format: "10 Sept 2024"
+    if (isNaN(date)) return "";
+    const now = new Date();
+    const diff = (now - date) / 1000;
+    if (diff < 60) return "Just now";
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+    });
   };
 
-  return (
-    <div className="bg-gray-300">
-      <div className="flex flex-col h-screen max-w-4xl mx-auto mt-auto bg-gray-100 p-4 pt-8 pb-8">
-        {/* Header */}
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
-          Conversations
-        </h2>
+  const getInitials = (name) =>
+    name
+      ? name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+          .slice(0, 2)
+      : "?";
 
-        {/* Loading Indicator */}
+  return (
+    <div className="conv-page">
+      <div className="conv-container">
+        <h2 className="conv-title">Messages</h2>
+
+        {/* Skeleton loading */}
         {loading ? (
-          <div className="flex justify-center items-center h-32">
-            <p className="text-gray-600">Loading conversations...</p>
+          <div className="conv-loading">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="conv-skeleton" />
+            ))}
           </div>
         ) : Array.isArray(conversations) && conversations.length > 0 ? (
           conversations.map((conv) => {
             const otherUser =
               conv.senderID === user.uid ? conv.receiver : conv.sender;
-            const conversationStyle =
-              styleType === "modern"
-                ? "modern-conversation"
-                : "classic-conversation";
 
             return (
               <Link
@@ -98,36 +96,47 @@ const Conversations = () => {
                 )}&receiverInfo=${encodeURIComponent(
                   JSON.stringify(otherUser)
                 )}`}
-                className={`block p-4 mb-4 rounded-lg shadow-lg ${conversationStyle} hover:bg-gray-50 transition`}
+                className="conv-card"
               >
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={otherUser?.image}
-                    alt="User"
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div className="flex-1 conversation-info">
-                    <h4 className="font-semibold text-lg">
-                      {otherUser?.fullname || "Unknown User"}
-                    </h4>
-                    <p className="truncate">
-                      {conv.latestMessage || "No messages yet"}
-                    </p>
+                {/* Avatar */}
+                <div className="conv-avatar-wrap">
+                  {otherUser?.image ? (
+                    <img
+                      src={otherUser.image}
+                      alt={otherUser.fullname}
+                      className="conv-avatar"
+                    />
+                  ) : (
+                    <div className="conv-avatar-initials">
+                      {getInitials(otherUser?.fullname)}
+                    </div>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="conv-info">
+                  <div className="conv-name">
+                    {otherUser?.fullname || "Unknown User"}
                   </div>
-                  <div className="text-gray-500 text-xs conversation-date">
-                    <p>{formatDate(conv.createdAt)}</p>{" "}
+                  <div className="conv-last-msg">
+                    {conv.latestMessage || "No messages yet"}
                   </div>
-                  {/* Unread count */}
+                </div>
+
+                {/* Meta */}
+                <div className="conv-meta">
+                  <div className="conv-date">{formatDate(conv.createdAt)}</div>
                   {conv.unreadCount > 0 && (
-                    <div className="unread-count">{conv.unreadCount}</div>
+                    <div className="conv-unread">{conv.unreadCount}</div>
                   )}
                 </div>
               </Link>
             );
           })
         ) : (
-          <div className="text-center text-gray-600">
-            No conversations found.
+          <div className="conv-empty">
+            <div className="conv-empty-icon">💬</div>
+            <div className="conv-empty-text">No conversations yet</div>
           </div>
         )}
       </div>

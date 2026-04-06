@@ -1,129 +1,182 @@
-/* Header Styling */
-.conversations-header {
-  background: linear-gradient(90deg, #1c92d2, #f2fcfe);
-  background-clip: text;
-  color: transparent;
-  font-size: 2.5rem;
-  font-weight: 700;
+/* ============================
+   Conversation List - Premium Style
+   ============================ */
+
+/* Page wrapper */
+.conv-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f7fa 0%, #e8eaf6 100%);
+}
+
+/* Inner container */
+.conv-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+/* Page title */
+.conv-title {
+  font-size: 1.75rem;
+  font-weight: 800;
   text-align: center;
-  margin-bottom: 1.5rem;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  padding-bottom: 10px;
-  border-bottom: 2px solid #f2fcfe; /* Adding underline */
-  animation: fadeInHeader 1s ease-in-out;
+  margin-bottom: 28px;
+  background: linear-gradient(90deg, #0a97b0, #007c8a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
 }
 
-/* Animation for Header */
-@keyframes fadeInHeader {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Loading skeleton pulse */
+.conv-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-/* Modern Design for Conversations */
-.modern-conversation {
-  background: linear-gradient(135deg, #5f6fa5, #4e5d77);
-  color: white;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+.conv-skeleton {
+  height: 72px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #eeeeee 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
 }
 
-.modern-conversation:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-.modern-conversation .conversation-info {
-  padding-left: 1rem;
+/* Empty state */
+.conv-empty {
+  text-align: center;
+  padding: 60px 0;
+  color: #9e9e9e;
 }
 
-.modern-conversation img {
-  border-radius: 50%;
-  border: 3px solid #ffffff;
+.conv-empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
 }
 
-.modern-conversation .conversation-info h4 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 0.5rem;
-}
-
-.modern-conversation .conversation-info p {
+.conv-empty-text {
   font-size: 1rem;
-  color: #d1d1d1;
-  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+/* Conversation card */
+.conv-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
   overflow: hidden;
+}
+
+.conv-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(180deg, #0a97b0, #007c8a);
+  border-radius: 4px 0 0 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.conv-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.conv-card:hover::before {
+  opacity: 1;
+}
+
+/* Avatar circle */
+.conv-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.conv-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid #e0f7fa;
+}
+
+.conv-avatar-initials {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0a97b0, #007c8a);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Info block */
+.conv-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.conv-name {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conv-last-msg {
+  font-size: 0.85rem;
+  color: #757575;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right side meta */
+.conv-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.conv-date {
+  font-size: 0.72rem;
+  color: #bdbdbd;
   white-space: nowrap;
 }
 
-.modern-conversation .conversation-date {
-  font-size: 0.75rem;
-  color: #f0f0f0;
-}
-
-.modern-conversation .unread-count {
-  background-color: #ff6347;
-  color: white;
-  font-size: 0.75rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 50%;
-  min-width: 20px;
-  min-height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-}
-
-/* Classic Design for Conversations */
-.classic-conversation {
-  background-color: #f0f0f0;
-  border: 2px solid #dcdcdc;
-  color: #333;
-}
-
-.classic-conversation .conversation-info {
-  padding-left: 1rem;
-}
-
-.classic-conversation img {
-  border-radius: 50%;
-  border: 2px solid #cccccc;
-}
-
-.classic-conversation .conversation-info h4 {
-  font-size: 1.5rem;
+.conv-unread {
+  background: linear-gradient(135deg, #0a97b0, #007c8a);
+  color: #fff;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: #444;
-  margin-bottom: 0.5rem;
-}
-
-.classic-conversation .conversation-info p {
-  font-size: 1rem;
-  color: #666;
-}
-
-.classic-conversation .conversation-date {
-  font-size: 0.875rem;
-  color: #777;
-}
-
-.classic-conversation .unread-count {
-  background-color: #3498db;
-  color: white;
-  font-size: 0.9rem;
-  padding: 0.4rem;
-  border-radius: 50%;
-  min-width: 24px;
-  min-height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 20px;
+  min-width: 22px;
+  text-align: center;
 }
