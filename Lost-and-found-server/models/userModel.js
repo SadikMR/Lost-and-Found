@@ -14,15 +14,18 @@ const userSchema = new mongoose.Schema(
     village: { type: String },
     image: { type: String, default: "" },
     isVerified: { type: Boolean, default: false },
-    verificationToken: { type: String, select: false },  // ✅ Hides token from queries
-    resetToken: { type: String, select: false , default: ""},  // ✅ Hides token from queries
+    emailVerificationCode: { type: String, select: false },
+    emailVerificationCodeExpiry: { type: Date, select: false },
+    resetCode: { type: String, select: false, default: "" },
+    resetCodeExpiry: { type: Date, select: false },
   },
   { timestamps: true }
 );
 
-// Remove `verificationToken` after successful email verification
-userSchema.methods.clearVerificationToken = async function () {
-  this.verificationToken = undefined;
+// Clear email verification code after successful verification
+userSchema.methods.clearVerificationCode = async function () {
+  this.emailVerificationCode = undefined;
+  this.emailVerificationCodeExpiry = undefined;
   await this.save();
 };
 

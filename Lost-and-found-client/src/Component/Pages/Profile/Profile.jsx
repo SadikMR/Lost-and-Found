@@ -1,591 +1,461 @@
 import React, { useContext, useEffect, useState } from "react";
-import profile_img from "../../../assets/logo.jpg";
 import { AuthContext } from "../../../AuthProviders/AuthProvider";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./modal.css";
-import { Flag } from "lucide-react"; // Report icon
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Edit3,
+  Trash2,
+  Eye,
+  RefreshCw,
+  CheckCircle,
+} from "lucide-react";
+
 const endpoints = import.meta.env.VITE_backendUrl;
 
+/* ── tiny spinner ── */
+const Spinner = () => (
+  <div className="flex justify-center items-center h-screen bg-gradient-to-br from-cyan-50 to-indigo-50">
+    <div className="flex flex-col items-center gap-4">
+      <div
+        className="w-12 h-12 border-4 border-buttonColor1 border-t-transparent rounded-full animate-spin"
+        style={{ animationDuration: "0.7s" }}
+      />
+      <p className="text-gray-500 font-medium tracking-wide">Loading profile…</p>
+    </div>
+  </div>
+);
+
+/* ── stat badge ── */
+const StatBadge = ({ label, count, color }) => (
+  <div
+    className={`flex flex-col items-center px-6 py-3 rounded-2xl ${color} shadow-sm`}
+  >
+    <span className="text-2xl font-extrabold">{count}</span>
+    <span className="text-xs font-semibold uppercase tracking-wide mt-0.5 opacity-80">
+      {label}
+    </span>
+  </div>
+);
+
+/* ── action menu ── */
+const ActionMenu = ({ index, onShowMore, updateLink, onDelete, onDone }) => (
+  <div className="dropdown dropdown-hover">
+    <div
+      tabIndex={index}
+      role="button"
+      className="btn btn-ghost btn-xs text-gray-500 hover:text-gray-800"
+    >
+      ⋮
+    </div>
+    <ul
+      tabIndex={index}
+      className="dropdown-content menu bg-white rounded-xl z-[10] w-44 p-1.5 shadow-lg border border-gray-100"
+    >
+      <li>
+        <button
+          onClick={onShowMore}
+          className="flex items-center gap-2 hover:bg-cyan-50 rounded-lg px-3 py-2 text-sm font-medium"
+        >
+          <Eye size={14} /> Show Details
+        </button>
+      </li>
+      <li>
+        <NavLink
+          to={updateLink}
+          className="flex items-center gap-2 hover:bg-cyan-50 rounded-lg px-3 py-2 text-sm font-medium"
+        >
+          <Edit3 size={14} /> Update
+        </NavLink>
+      </li>
+      <li>
+        <button
+          onClick={onDelete}
+          className="flex items-center gap-2 hover:bg-red-50 text-red-500 rounded-lg px-3 py-2 text-sm font-medium"
+        >
+          <Trash2 size={14} /> Delete
+        </button>
+      </li>
+      <li>
+        <button
+          onClick={onDone}
+          className="flex items-center gap-2 hover:bg-green-50 text-green-600 rounded-lg px-3 py-2 text-sm font-medium"
+        >
+          <CheckCircle size={14} /> Done
+        </button>
+      </li>
+    </ul>
+  </div>
+);
+
 const Profile = () => {
-  const [selectedImage, setSelectedImage] = useState(null); // Declare state for selected image
+  const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profileInfo, setProfileInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("found");
   const { getCurrentUser } = useContext(AuthContext);
   const [currentUserFoundPost, setCurrentUserFoundPost] = useState([]);
   const [currentUserLostPost, setCurrentUserLostPost] = useState([]);
   const user = getCurrentUser();
   const currentuser_id = user.uid;
-
   const navigate = useNavigate();
-  const handleShowMore = (post) => {
-    //alert(post.category);
-    navigate("/details", { state: { post } });
-  };
 
-  //Fetch found post by specific user id
+  const handleShowMore = (post) => navigate("/details", { state: { post } });
+
   useEffect(() => {
     const fetchFoundPosts = async () => {
       try {
-        const response = await fetch(
-          `${endpoints}/posts/found/${currentuser_id}`
-        );
-        if (response.ok) {
-          const data = await response.json();
+        const res = await fetch(`${endpoints}/posts/found/${currentuser_id}`);
+        if (res.ok) {
+          const data = await res.json();
           setCurrentUserFoundPost(data.data || []);
-        } else {
-          console.error("Failed to fetch found posts.");
         }
-      } catch (error) {
-        console.error("Error fetching found posts:", error);
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
     };
-
     if (currentuser_id) fetchFoundPosts();
   }, [currentuser_id]);
 
-  // Fetch lost post by specific user id
   useEffect(() => {
     const fetchLostPosts = async () => {
       try {
-        const response = await fetch(
-          `${endpoints}/posts/lost/${currentuser_id}`
-        );
-        if (response.ok) {
-          const data = await response.json();
+        const res = await fetch(`${endpoints}/posts/lost/${currentuser_id}`);
+        if (res.ok) {
+          const data = await res.json();
           setCurrentUserLostPost(data.data || []);
-        } else {
-          console.error("Failed to fetch lost posts.");
         }
-      } catch (error) {
-        console.error("Error fetching lost posts:", error);
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
     };
-
     if (currentuser_id) fetchLostPosts();
   }, [currentuser_id]);
 
-  // console.log("Profile info current : ", user.uid);
-
-  // Fetch user profile information
   useEffect(() => {
     const fetchProfileInfo = async () => {
       try {
-        const response = await fetch(`${endpoints}/user/getInfo/${user.uid}`);
-        if (response.ok) {
-          const data = await response.json();
+        const res = await fetch(`${endpoints}/user/getInfo/${user.uid}`);
+        if (res.ok) {
+          const data = await res.json();
           setProfileInfo(data);
-        } else {
-          console.error("Failed to fetch profile info.");
         }
-      } catch (error) {
-        console.error("Error fetching profile info:", error);
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
     };
-
     fetchProfileInfo();
   }, []);
 
-  // Delete Found Posts
-  const handleFoundPostDelete = async (postId) => {
+  const handleFoundPostDelete = (postId) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Delete this post?",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#0A97B0",
+      cancelButtonColor: "#e53e3e",
+      confirmButtonText: "Yes, delete",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`${endpoints}/posts/found/${postId}`, {
-          method: "DELETE",
-        })
-          .then((res) => res.json())
+        fetch(`${endpoints}/posts/found/${postId}`, { method: "DELETE" })
+          .then((r) => r.json())
           .then((data) => {
-            console.log(data);
             if (data.success && data.data.deletedCount > 0) {
-              Swal.fire(
-                "Deleted!",
-                "Your Found post has been deleted.",
-                "success"
+              Swal.fire("Deleted!", "Found post removed.", "success");
+              setCurrentUserFoundPost((prev) =>
+                prev.filter((p) => p._id !== postId)
               );
-              const remainingPosts = currentUserFoundPost.filter(
-                (post) => post._id !== postId
-              );
-              setCurrentUserFoundPost(remainingPosts);
             } else {
-              Swal.fire("Failed!", "Failed to delete Found post.", "error");
+              Swal.fire("Failed!", "Could not delete post.", "error");
             }
-          })
-          .catch((error) => {
-            console.error("Error deleting found post:", error);
-            Swal.fire(
-              "Error!",
-              "An error occurred while deleting the post.",
-              "error"
-            );
           });
       }
     });
   };
 
-  // Delete Lost Posts
-  const handleLostPostDelete = async (postId) => {
+  const handleLostPostDelete = (postId) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Delete this post?",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#0A97B0",
+      cancelButtonColor: "#e53e3e",
+      confirmButtonText: "Yes, delete",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`${endpoints}/posts/lost/${postId}`, {
-          method: "DELETE",
-        })
-          .then((res) => res.json())
+        fetch(`${endpoints}/posts/lost/${postId}`, { method: "DELETE" })
+          .then((r) => r.json())
           .then((data) => {
             if (data.success && data.data.deletedCount > 0) {
-              Swal.fire(
-                "Deleted!",
-                "Your Lost post has been deleted.",
-                "success"
+              Swal.fire("Deleted!", "Lost post removed.", "success");
+              setCurrentUserLostPost((prev) =>
+                prev.filter((p) => p._id !== postId)
               );
-              const remainingPosts = currentUserLostPost.filter(
-                (post) => post._id !== postId
-              );
-              setCurrentUserLostPost(remainingPosts);
             } else {
-              Swal.fire("Failed!", "Failed to delete Lost post.", "error");
+              Swal.fire("Failed!", "Could not delete post.", "error");
             }
-          })
-          .catch((error) => {
-            console.error("Error deleting lost post:", error);
-            Swal.fire(
-              "Error!",
-              "An error occurred while deleting the post.",
-              "error"
-            );
           });
       }
     });
   };
 
-  if (loading) {
-    return <p className="text-center text-xl">Loading...</p>;
-  }
+  if (loading) return <Spinner />;
 
-  if (!profileInfo) {
+  if (!profileInfo)
     return (
-      <p className="text-center text-xl mt-5">
-        Error loading profile information...{" "}
-        <span className="text-red-600">Please Wait</span>
-      </p>
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-center text-xl text-gray-500">
+          Error loading profile.{" "}
+          <span className="text-red-500">Please wait…</span>
+        </p>
+      </div>
     );
-  }
 
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
-    setIsModalOpen(true);
-  };
+  const info = profileInfo.data;
+  const getInitials = (name) =>
+    name
+      ? name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+          .slice(0, 2)
+      : "?";
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedImage(null);
-  };
+  const activePosts =
+    activeTab === "found" ? currentUserFoundPost : currentUserLostPost;
+
   return (
-    <div className="max-w-4xl mx-auto p-6 m-5 bg-[#E5E1DA] shadow-md rounded-lg text-black">
-      <div>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            {/* User Profile Picture */}
-            <img
-              src={profileInfo.data.image}
-              alt="User"
-              className="w-32 h-32 rounded-full border border-gray-300 cursor-pointer hover:opacity-80"
-              onClick={() => handleImageClick(profileInfo.data.image)}
-            />
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-indigo-50 py-8 px-4">
+      <div className="max-w-3xl mx-auto space-y-6">
 
-            <div className="flex flex-col justify-center">
-              {/* Full Name */}
-              <h2 className="text-xl sm:text-3xl font-semibold text-black">
-                {profileInfo.data.fullname}
+        {/* ── Profile Card ── */}
+        <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+          {/* Cover banner */}
+          <div
+            className="h-32 w-full"
+            style={{
+              background:
+                "linear-gradient(135deg, #0A97B0 0%, #007C8A 50%, #4e5d77 100%)",
+            }}
+          />
+
+          {/* Avatar + info */}
+          <div className="px-6 pb-6 -mt-16">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              {/* Avatar */}
+              <div className="relative w-28 h-28">
+                {info.image ? (
+                  <img
+                    src={info.image}
+                    alt="Profile"
+                    className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => {
+                      setSelectedImage(info.image);
+                      setIsModalOpen(true);
+                    }}
+                  />
+                ) : (
+                  <div
+                    className="w-28 h-28 rounded-full border-4 border-white shadow-md flex items-center justify-center text-3xl font-bold text-white"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #0A97B0, #007C8A)",
+                    }}
+                  >
+                    {getInitials(info.fullname)}
+                  </div>
+                )}
+              </div>
+
+              {/* Edit button */}
+              <NavLink
+                to="/profile/editProfile"
+                state={{ userId: currentuser_id }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-md transition-all hover:opacity-90 hover:-translate-y-0.5"
+                style={{
+                  background: "linear-gradient(135deg, #0A97B0, #007C8A)",
+                }}
+              >
+                <Edit3 size={15} />
+                Edit Profile
+              </NavLink>
+            </div>
+
+            {/* Name & username */}
+            <div className="mt-4">
+              <h2 className="text-2xl font-extrabold text-gray-900">
+                {info.fullname}
               </h2>
-
-              {/* Username */}
-              <p className=" text-gray-600 mt-1 font-serif font-semibold text-xl">
-                <span className="text-gray-500">@ </span>
-                {profileInfo.data.username || "Nickname"}
+              <p className="text-buttonColor1 font-semibold text-sm mt-0.5">
+                @{info.username || "username"}
               </p>
+            </div>
+
+            {/* Info pills */}
+            <div className="mt-5 flex flex-wrap gap-3">
+              {(info.division || info.zilla) && (
+                <span className="flex items-center gap-1.5 bg-cyan-50 text-cyan-700 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <MapPin size={13} />
+                  {[info.division, info.zilla, info.upzilla, info.village]
+                    .filter(Boolean)
+                    .join(", ")}
+                </span>
+              )}
+              {info.phone && (
+                <span className="flex items-center gap-1.5 bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <Phone size={13} />
+                  {info.phone}
+                </span>
+              )}
+              {info.email && (
+                <span className="flex items-center gap-1.5 bg-purple-50 text-purple-700 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <Mail size={13} />
+                  {info.email}
+                </span>
+              )}
+            </div>
+
+            {/* Stats */}
+            <div className="mt-6 flex gap-4 flex-wrap">
+              <StatBadge
+                label="Found"
+                count={currentUserFoundPost.length}
+                color="bg-green-50 text-green-700"
+              />
+              <StatBadge
+                label="Lost"
+                count={currentUserLostPost.length}
+                color="bg-red-50 text-red-600"
+              />
             </div>
           </div>
         </div>
 
-        <div className="mt-6 space-y-3">
-          <p>
-            <span className="text-lg font-semibold">Division:</span>{" "}
-            {profileInfo.data.division || "N/A"}
-          </p>
-          <p>
-            <span className="text-lg font-semibold">Zilla:</span>{" "}
-            {profileInfo.data.zilla || "N/A"}
-          </p>
-          <p>
-            <span className="text-lg font-semibold">Upzilla:</span>{" "}
-            {profileInfo.data.upzilla || "N/A"}
-          </p>
-          <p>
-            <span className="text-lg font-semibold">Village:</span>{" "}
-            {profileInfo.data.village || "N/A"}
-          </p>
-          <p>
-            <span className="text-lg font-semibold">Contact Number:</span>{" "}
-            {profileInfo.data.phone || "N/A"}
-          </p>
-          <p>
-            <span className="text-lg font-semibold">Email:</span>{" "}
-            {profileInfo.data.email || "N/A"}
-          </p>
-        </div>
-        <div className="card-actions justify-end">
-          <NavLink
-            to="/profile/editProfile"
-            state={{ userId: currentuser_id }}
-            className="btn btn-primary"
-          >
-            Edit Profile
-          </NavLink>
-        </div>
-        {/* Modal for full image view */}
-        <div
-          className={`modal-overlay ${isModalOpen ? "active" : ""}`}
-          onClick={handleCloseModal}
-        >
-          <div className="modal-content">
-            <button onClick={handleCloseModal} className="modal-close-btn">
-              ×
-            </button>
-            <img src={selectedImage} alt="Full view" />
+        {/* ── Posts Card ── */}
+        <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+          {/* Tabs */}
+          <div className="flex border-b border-gray-100">
+            {["found", "lost"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 py-4 text-sm font-semibold capitalize transition-colors ${
+                  activeTab === tab
+                    ? "text-buttonColor1 border-b-2 border-buttonColor1 bg-cyan-50"
+                    : "text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                {tab === "found" ? "🟢" : "🔴"} {tab} Items{" "}
+                <span className="ml-1 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+                  {tab === "found"
+                    ? currentUserFoundPost.length
+                    : currentUserLostPost.length}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="p-4">
+            {activePosts.length === 0 ? (
+              <div className="text-center py-12 text-gray-400">
+                <div className="text-4xl mb-3">
+                  {activeTab === "found" ? "🔍" : "❓"}
+                </div>
+                <p className="font-medium">
+                  No {activeTab} items posted yet.
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-xs uppercase tracking-wide text-gray-400 border-b border-gray-100">
+                      <th className="pb-3 pl-2">Item</th>
+                      <th className="pb-3">Category</th>
+                      <th className="pb-3 hidden sm:table-cell">Location</th>
+                      <th className="pb-3 hidden md:table-cell">Date</th>
+                      <th className="pb-3 text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {activePosts.map((post, index) => (
+                      <tr
+                        key={index}
+                        className="hover:bg-cyan-50/40 transition-colors"
+                      >
+                        <td className="py-3 pl-2 font-semibold text-gray-800">
+                          {post.productName}
+                        </td>
+                        <td className="py-3">
+                          <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                            {post.category}
+                          </span>
+                        </td>
+                        <td className="py-3 text-gray-500 hidden sm:table-cell">
+                          {post.zilla}
+                        </td>
+                        <td className="py-3 text-gray-400 hidden md:table-cell">
+                          {post.possibleDate}
+                        </td>
+                        <td className="py-3 text-center">
+                          <ActionMenu
+                            index={index}
+                            onShowMore={() => handleShowMore(post)}
+                            updateLink={
+                              activeTab === "found"
+                                ? `/foundPostUpdate/${post._id}`
+                                : `/lostPostUpdate/${post._id}`
+                            }
+                            onDelete={() =>
+                              activeTab === "found"
+                                ? handleFoundPostDelete(post._id)
+                                : handleLostPostDelete(post._id)
+                            }
+                            onDone={() => navigate("/done")}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <p className="border my-5 border-black"></p>
 
-      {/* Current user posts section */}
-      <div>
-        {/* Found Items Section */}
-        <div className="p-2 md:p-4">
-          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">
-            Found Items
-          </h2>
-          {currentUserFoundPost.length > 0 ? (
-            <div className="overflow-x-auto">
-              {/* Table for medium and larger screens */}
-              <table className="hidden md:table table-auto w-full">
-                <thead>
-                  <tr className="bg-gray-500 text-white">
-                    <th className="px-2 md:px-4 py-2">Category</th>
-                    <th className="px-2 md:px-4 py-2">Product Name</th>
-                    <th className="px-2 md:px-4 py-2">Location</th>
-                    <th className="px-2 md:px-4 py-2">Date</th>
-                    <th className="px-2 md:px-4 py-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentUserFoundPost.map((found, index) => (
-                    <tr key={index} className="bg-white hover:bg-blue-100">
-                      <td className="px-2 md:px-8 py-2">{found.category}</td>
-                      <td className="px-2 md:pl-10 py-2">
-                        {found.productName}
-                      </td>
-                      <td className="px-2 md:px-4 py-2">{found.zilla}</td>
-                      <td className="px-2 md:px-4 py-2">
-                        {found.possibleDate}
-                      </td>
-                      <td className="px-2 md:px-4 py-2 relative">
-                        <div className="dropdown dropdown-hover">
-                          <div
-                            tabIndex={index}
-                            role="button"
-                            className="ml-2 md:ml-10 font-bold text-xl"
-                          >
-                            &#x22EE;
-                          </div>
-                          <ul
-                            tabIndex={index}
-                            className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow"
-                          >
-                            <li>
-                              <button
-                                onClick={() => handleShowMore(found)}
-                                className="hover:bg-gray-300 font-semibold"
-                              >
-                                Show Details
-                              </button>
-                            </li>
-                            <li>
-                              <NavLink
-                                to={`/foundPostUpdate/${found._id}`}
-                                className="hover:bg-gray-300 font-semibold"
-                              >
-                                Update
-                              </NavLink>
-                            </li>
-                            <li>
-                              <button
-                                onClick={() => handleFoundPostDelete(found._id)}
-                                className="hover:bg-gray-300 font-semibold"
-                              >
-                                Delete
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                to="/done"
-                                className="hover:bg-gray-300 font-semibold"
-                              >
-                                Done
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Card view for small screens */}
-              <div className="grid grid-cols-1 gap-4 md:hidden">
-                {currentUserFoundPost.map((found, index) => (
-                  <div
-                    key={index}
-                    className="bg-white p-4 rounded shadow hover:bg-blue-50"
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="font-bold">{found.productName}</div>
-                      <div className="dropdown dropdown-hover">
-                        <div
-                          tabIndex={index}
-                          role="button"
-                          className="font-bold text-xl"
-                        >
-                          &#x22EE;
-                        </div>
-                        <ul
-                          tabIndex={index}
-                          className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow right-0"
-                        >
-                          <li>
-                            <button
-                              onClick={() => handleShowMore(found)}
-                              className="hover:bg-gray-300 font-semibold"
-                            >
-                              Show Details
-                            </button>
-                          </li>
-                          <li>
-                            <NavLink
-                              to={`/foundPostUpdate/${found._id}`}
-                              className="hover:bg-gray-300 font-semibold"
-                            >
-                              Update
-                            </NavLink>
-                          </li>
-                          <li>
-                            <button
-                              onClick={() => handleFoundPostDelete(found._id)}
-                              className="hover:bg-gray-300 font-semibold"
-                            >
-                              Delete
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              to="/done"
-                              className="hover:bg-gray-300 font-semibold"
-                            >
-                              Done
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div className="font-semibold">Category:</div>
-                      <div>{found.category}</div>
-                      <div className="font-semibold">Location:</div>
-                      <div>{found.zilla}</div>
-                      <div className="font-semibold">Date:</div>
-                      <div>{found.possibleDate}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p className="text-center text-red-600">No found items found.</p>
-          )}
-        </div>
-
-        {/* Lost Items Section */}
-        <div className="p-2 md:p-4">
-          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">
-            Lost Items
-          </h2>
-          {currentUserLostPost.length > 0 ? (
-            <div className="overflow-x-auto">
-              {/* Table for medium and larger screens */}
-              <table className="hidden md:table table-auto w-full">
-                <thead>
-                  <tr className="bg-gray-500 text-white">
-                    <th className="px-2 md:px-4 py-2">Category</th>
-                    <th className="px-2 md:px-4 py-2">Product Name</th>
-                    <th className="px-2 md:px-4 py-2">Location</th>
-                    <th className="px-2 md:px-4 py-2">Date</th>
-                    <th className="px-2 md:px-4 py-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentUserLostPost.map((lost, index) => (
-                    <tr key={index} className="bg-white hover:bg-blue-100">
-                      <td className="px-2 md:px-8 py-2">{lost.category}</td>
-                      <td className="px-2 md:pl-10 py-2">{lost.productName}</td>
-                      <td className="px-2 md:px-4 py-2">{lost.zilla}</td>
-                      <td className="px-2 md:px-4 py-2">{lost.possibleDate}</td>
-                      <td className="px-2 md:px-4 py-2 relative">
-                        <div className="dropdown dropdown-hover">
-                          <div
-                            tabIndex={index}
-                            role="button"
-                            className="ml-2 md:ml-10 font-bold text-xl"
-                          >
-                            &#x22EE;
-                          </div>
-                          <ul
-                            tabIndex={index}
-                            className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow"
-                          >
-                            <li>
-                              <button
-                                onClick={() => handleShowMore(lost)}
-                                className="hover:bg-gray-300 font-semibold"
-                              >
-                                Show Details
-                              </button>
-                            </li>
-                            <li>
-                              <NavLink
-                                to={`/lostPostUpdate/${lost._id}`}
-                                className="hover:bg-gray-300 font-semibold"
-                              >
-                                Update
-                              </NavLink>
-                            </li>
-                            <li>
-                              <button
-                                onClick={() => handleLostPostDelete(lost._id)}
-                                className="hover:bg-gray-300 font-semibold"
-                              >
-                                Delete
-                              </button>
-                            </li>
-                            <li>
-                              <NavLink
-                                to="/done"
-                                className="hover:bg-gray-300 font-semibold"
-                              >
-                                Done
-                              </NavLink>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Card view for small screens */}
-              <div className="grid grid-cols-1 gap-4 md:hidden">
-                {currentUserLostPost.map((lost, index) => (
-                  <div
-                    key={index}
-                    className="bg-white p-4 rounded shadow hover:bg-blue-50"
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="font-bold">{lost.productName}</div>
-                      <div className="dropdown dropdown-hover">
-                        <div
-                          tabIndex={index}
-                          role="button"
-                          className="font-bold text-xl"
-                        >
-                          &#x22EE;
-                        </div>
-                        <ul
-                          tabIndex={index}
-                          className="dropdown-content menu bg-white rounded-box z-[1] w-40 p-2 shadow right-0"
-                        >
-                          <li>
-                            <button
-                              onClick={() => handleShowMore(lost)}
-                              className="hover:bg-gray-300 font-semibold"
-                            >
-                              Show Details
-                            </button>
-                          </li>
-                          <li>
-                            <NavLink
-                              to={`/lostPostUpdate/${lost._id}`}
-                              className="hover:bg-gray-300 font-semibold"
-                            >
-                              Update
-                            </NavLink>
-                          </li>
-                          <li>
-                            <button
-                              onClick={() => handleLostPostDelete(lost._id)}
-                              className="hover:bg-gray-300 font-semibold"
-                            >
-                              Delete
-                            </button>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/done"
-                              className="hover:bg-gray-300 font-semibold"
-                            >
-                              Done
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div className="font-semibold">Category:</div>
-                      <div>{lost.category}</div>
-                      <div className="font-semibold">Location:</div>
-                      <div>{lost.zilla}</div>
-                      <div className="font-semibold">Date:</div>
-                      <div>{lost.possibleDate}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p className="text-red-600 text-center">No lost items found.</p>
-          )}
+      {/* Image Modal */}
+      <div
+        className={`modal-overlay ${isModalOpen ? "active" : ""}`}
+        onClick={() => {
+          setIsModalOpen(false);
+          setSelectedImage(null);
+        }}
+      >
+        <div className="modal-content">
+          <button
+            onClick={() => {
+              setIsModalOpen(false);
+              setSelectedImage(null);
+            }}
+            className="modal-close-btn"
+          >
+            ×
+          </button>
+          <img src={selectedImage} alt="Full view" />
         </div>
       </div>
     </div>

@@ -299,13 +299,33 @@ const Home = () => {
         </div>
 
         {/* Render paginated posts */}
-        <div className="relative min-h-screen">
+        <div className="relative min-h-[400px]">
           {loading ? (
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mt-4">
-              <div className="text-2xl text-gray-700">Loading...</div>
+            <div className="flex flex-col items-center justify-center py-24 gap-5">
+              {/* Spinning ring */}
+              <div className="relative w-16 h-16">
+                <div className="absolute inset-0 rounded-full border-4 border-gray-200" />
+                <div
+                  className="absolute inset-0 rounded-full border-4 border-transparent border-t-buttonColor1 animate-spin"
+                  style={{ animationDuration: "0.75s" }}
+                />
+              </div>
+              {/* Bouncing dots */}
+              <div className="flex gap-2">
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    className="w-2.5 h-2.5 rounded-full bg-buttonColor1 inline-block animate-bounce"
+                    style={{ animationDelay: `${i * 0.15}s` }}
+                  />
+                ))}
+              </div>
+              <p className="text-gray-400 font-medium tracking-wide text-sm">
+                Fetching posts…
+              </p>
             </div>
           ) : (
-            <Post posts={displayedPosts} /> // Render posts once loading is complete
+            <Post posts={displayedPosts} />
           )}
         </div>
 

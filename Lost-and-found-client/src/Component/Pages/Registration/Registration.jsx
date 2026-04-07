@@ -180,7 +180,7 @@ const Registration = () => {
                 if (data.success) {
                   Swal.fire({
                     title: "User Registered Successfully",
-                    html: '<p style="color: red; font-weight: bold;">Email Verification link has been sent to your email address.</p>',
+                    html: '<p style="color: green; font-weight: bold;">A 6-digit verification code has been sent to your email address.</p>',
                     icon: "success",
                     customClass: {
                       popup: "custom-swal-popup",
@@ -189,7 +189,7 @@ const Registration = () => {
                   }).then(() => {
                     setIsSubmitting(false);
                     signOut(auth);
-                    navigate("/confirmation");
+                    navigate("/confirmation", { state: { email } });
                   });
                 } else {
                   Swal.fire({
